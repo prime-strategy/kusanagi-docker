@@ -55,6 +55,7 @@ RUN mkdir -p /var/log/nginx /etc/nginx/conf.d /etc/httpd/conf.d \
 VOLUME /home/kusanagi
 VOLUME /etc/nginx/conf.d
 VOLUME /etc/httpd/conf.d
+VOLUME /etc/kusanagi.d
 
 #//----------------------------------------------------------------------------
 #// 自己証明書の作成と /usr/lib/kusanagi/lib/virt.sh の実行

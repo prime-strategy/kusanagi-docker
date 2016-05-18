@@ -11,6 +11,7 @@ services:
       - /var/lib/mysql
       - /etc/nginx/conf.d
       - /etc/httpd/conf.d
+      - /etc/kusanagi.d
       - /home/kusanagi
     command: /bin/sh
   
