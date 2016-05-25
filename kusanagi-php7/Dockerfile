@@ -5,12 +5,13 @@ FROM php:7.0.6-fpm-alpine
 MAINTAINER d-higuchi@creationline.com
 
 RUN apk update \
-	&& apk add mysql \
+	&& apk add $PHPIZE_DEPS mysql \
 	&& docker-php-ext-install mysqli opcache \
 	&& pecl install apcu-5.1.3 \
 	&& docker-php-ext-enable apcu \
 	&& pecl install apcu_bc-1.0.3 \
-	&& docker-php-ext-enable apc
+	&& docker-php-ext-enable apc \
+	&& apk del $PHPIZE_DEPS
 
 COPY files/*.ini /usr/local/etc/php/conf.d/
 RUN mkdir -p /etc/php.d/
