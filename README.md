@@ -1,2 +1,2 @@
 # kusanagi-docker
-KUSANAGI for Docker
+KUSANAGI Runs on Docker
