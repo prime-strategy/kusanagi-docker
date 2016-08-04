@@ -17,7 +17,7 @@ services:
   
   kusanagi-nginx:
     container_name: kusanagi-nginx
-    build: kusanagi-nginx
+    image: primestrategy/kusanagi-nginx:1.10.0-1
     environment:
       PROFILE: kusanagi
       FQDN: kusanagi.example.jp
@@ -45,7 +45,7 @@ services:
   
   kusanagi-php7:
     container_name: kusanagi-php7
-    build: kusanagi-php7
+    image: primestrategy/kusanagi-php7:7.0.6-1
     links:
       - kusanagi-mariadb:mysql
     volumes_from:
@@ -53,7 +53,7 @@ services:
 
   kusanagi-php5:
     container_name: kusanagi-php5
-    build: kusanagi-php5
+    image: primestrategy/kusanagi-php5:5.6.20-1
     links:
       - kusanagi-mariadb:mysql
     volumes_from:
