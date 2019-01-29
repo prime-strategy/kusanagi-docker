@@ -1,0 +1,61 @@
+version: '3'
+
+volumes:
+  kusanagi:
+  database:
+
+services:
+  nginx:
+    container_name: ${PROFILE}_nginx
+    image: $NGINX
+    env_file:
+      - .kusanagi
+    volumes:
+      - database:/var/run/mysqld
+      - kusanagi:/home/kusanagi
+    ports:
+      - "80:80"
+      - "443:443"
+  
+${NOUSE_DB}  mariadb:
+${NOUSE_DB}    container_name: ${PROFILE}_mariadb
+${NOUSE_DB}    image: $MARIADB
+${NOUSE_DB}    user: "999"
+${NOUSE_DB}    env_file:
+${NOUSE_DB}      - .kusanagi
+${NOUSE_DB}    network_mode: "service:nginx"
+${NOUSE_DB}    volumes:
+${NOUSE_DB}      - database:/var/run/mysqld
+${NOUSE_DB}      - database:/var/lib/mysql
+ 
+  php7:
+    container_name: ${PROFILE}_php7
+    image: $PHP
+    env_file:
+      - .kusanagi
+    network_mode: "service:nginx"
+    volumes:
+      - database:/var/run/mysqld
+      - kusanagi:/home/kusanagi
+
+  wpcli:
+    container_name: ${PROFILE}_wpcli
+    image: $WP
+    user: "1000"
+    network_mode: "service:nginx"
+    env_file:
+      - .kusanagi
+    volumes:
+      - database:/var/run/mysqld
+      - kusanagi:/home/kusanagi
+    command: wp --version
+
+${NOUSE_FTP}  ftp:
+${NOUSE_FTP}    container_name: ${PROFILE}_ftp
+${NOUSE_FTP}    image: FTP
+${NOUSE_FTP}    network_mode: "service:nginx"
+${NOUSE_FTP}    env_file:
+${NOUSE_FTP}      - .kusanagi
+${NOUSE_FTP}    volumes:
+${NOUSE_FTP}      - kusanagi:/home/kusanagi
+

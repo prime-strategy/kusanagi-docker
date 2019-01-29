@@ -1,0 +1,73 @@
+#!/bin/bash
+# KUSANAGI Docker command
+# (C)2019 Prime-Strategy co,Ltd
+# Licenced by GNU GPLv2
+#
+
+BASEDIR=$(dirname $(dirname $0))
+COMMAND=$(basename $0)
+LIBDIR=$BASEDIR/lib
+BINDIR=$BASEDIR/bin
+
+source $LIBDIR/functions.sh
+
+case ${1}
+	init)
+		k_init $@
+		;;
+	target)
+		k_target $@
+		;;
+	provision)
+		source $LIBDIR/provision.sh
+		k_provision $@
+		;;
+	remove)
+		k_remove $@
+		;;
+	start)
+	stop)
+	restart)
+		k_startstop $@
+		;;
+	status)
+		k_status $@
+		;;
+	httpd)
+		k_httpd $@
+		;;
+	nginx)
+		k_nginx $@
+		;;
+	ssl)
+		k_ssl $@
+		;;
+	config)
+		k_config $@
+		;;
+	export)
+		k_export $@
+		;;
+	import)
+		k_import $@
+		;;
+	wp)
+		k_wp $@
+		;;
+	update)
+		k_update $@
+		;;
+
+	-v|-V|--version)
+		k_version
+		;;
+	-h|--help|help)
+		k_help
+		;;
+	*)
+	echo "no such sub command $1" 1>&2
+	echo "Try $COMMAND -h"
+		;;
+esac
+check_status
+exit ${_RETURN}
