@@ -26,22 +26,22 @@ function certbot_version {
 	echo ${_ver:-latast}
 }
 
-KUSANAGI_NGINX_VERSION=$(kusanagi_version kusanagi-nginx)
-KUSANAGI_HTTPD_VERSION=$(kusanagi_version kusanagi-httpd)
-KUSANAGI_PHP7_VERSION=$(kusanagi_version kusanagi-php7)
-KUSANAGI_MARIADB_VERSION=$(kusanagi_version kusanagi-mariadb)
-KUSANAGI_FTPD_VERSION=$(kusanagi_version kusanagi-ftpd)
-POSTGRESQL_VERSION=$(postgresql_version)
-WPCLI_VERSION=$(wpcli_version)
-CERTBOT_VERSION=$(certbot_version)
+KUSANAGI_NGINX_IMAGE=primestrategy/kusanagi-nginx:$(kusanagi_version kusanagi-nginx)
+KUSANAGI_HTTPD_IMAGE=primestrategy/kusanagi-httpd:$(kusanagi_version kusanagi-httpd)
+KUSANAGI_PHP7_IMAGE=primestrategy/kusanagi-http:$(kusanagi_version kusanagi-php7)
+KUSANAGI_MARIADB_IMAGE=primestrategy/kusanagi-mariadb:$(kusanagi_version kusanagi-mariadb)
+KUSANAGI_FTPD_IMAGE=primestrategy/kusanagi-ftpd:$(kusanagi_version kusanagi-ftpd)
+POSTGRESQL_IMAGE=postgres:$(postgresql_version)
+WPCLI_IMAGE=wordpress:cli-$(wpcli_version)-php7.3
+CERTBOT_IMAGE=certbot/certbot:$(certbot_version)
 
-cat <<EOF > ${KUSANAGIDIR:-.}/.version
-KUSANAGI_NGINX_VERSION=$KUSANAGI_NGINX_VERSION
-KUSANAGI_HTTPD_VERSION=$KUSANAGI_HTTPD_VERSION
-KUSANAGI_PHP7_VERSION=$KUSANAGI_PHP7_VERSION
-KUSANAGI_MARIADB_VERSION=$KUSANAGI_MARIADB_VERSION
-KUSANAGI_FTPD_VERSION=$KUSANAGI_FTPD_VERSION
-POSTGRESQL_VERSION=$POSTGRESQL_VERSION
-WPCLI_VERSION=$WPCLI_VERSION
-CERTBOT_VERSION=$CERTBOT_VERSION
+cat <<EOF > ${KUSANAGILIBDIR:-.}/.version
+KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX_IMAGE
+KUSANAGI_HTTPD_IMAGE=$KUSANAGI_HTTPD_IMAGE
+KUSANAGI_PHP7_IMAGE=$KUSANAGI_PHP7_IMAGE
+KUSANAGI_MARIADB_IMAGE=$KUSANAGI_MARIADB_IMAGE
+KUSANAGI_FTPD_IMAGE=$KUSANAGI_FTPD_IMAGE
+POSTGRESQL_IMAGE=$POSTGRESQL_IMAGE
+WPCLI_IMAGE=$WPCLI_IMAGE
+CERTBOT_IMAGE=$CERTBOT_IMAGE
 EOF

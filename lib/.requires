@@ -3,6 +3,8 @@ git
 sed
 awk
 grep
+gettext
+envsubst
 docker
 docker-compose
 docker-machine

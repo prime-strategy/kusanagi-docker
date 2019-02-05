@@ -1,0 +1,35 @@
+version: '3'
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 9000
+
+services:
+  httpd:
+    container_name: ${PROFILE}_httpd
+    image: $HTTPD_IMAGE
+    env_file:
+      - .kusanagi
+      - .kusanagi.httpd
+    volumes:
+      - kusanagi:/home/kusanagi
+      - kusanagi:/etc/letsencrypt
+      - kusanagi:/usr/share/httpd/html/.well-known
+    ports:
+      - "80:80"
+      - "443:443"
+
+  certbot:
+    container_name: ${PROFILE}_certbot
+    image: $CERTBOT_IMAGE
+    network_mode: "service:httpd"
+    env_file:
+      - .kusanagi.httpd
+    volumes:
+      - kusanagi:/usr/share/httpd/html/.well-known
+      - kusanagi:/etc/letsencrypt
+    command:
+      - --version
+

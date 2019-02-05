@@ -1,0 +1,11 @@
+## FTPD
+  ftp:
+    container_name: ${PROFILE}_ftp
+    image: $KUSANAGI_FTPD_IMAGE
+    network_mode: "service:httpd"
+    env_file:
+      - .kusanagi
+      - .kusanagi.wp
+    volumes:
+      - kusanagi:/home/kusanagi
+
