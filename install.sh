@@ -18,4 +18,4 @@ for r in $(cat $KUSANAGILIBDIR/.requires) ; do
 done
 echo -e "\e[32m"kusanagi-docker command install completes."\e["
 echo -e "\e[32m"Please add these line to .bashrc or .zshrc"\e["
-echo -e export PATH=$KUSANAGIDIR/bin:\$PATH
+echo  export PATH=$KUSANAGIDIR/bin:\$PATH
