@@ -16,6 +16,6 @@ for r in $(cat $KUSANAGILIBDIR/.requires) ; do
 	which $r 2>&1 > /dev/null \
 	|| echo -e "\e[31myou needs installing $r.\e[m"
 done
-echo -e "\e[32m"kusanagi-docker command installed."\e["
+echo -e "\e[32m"kusanagi-docker command install completes."\e["
 echo -e "\e[32m"Please add these line to .bashrc or .zshrc"\e["
 echo -e export PATH=$KUSANAGIDIR/bin:\$PATH
