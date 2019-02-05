@@ -23,7 +23,7 @@ function k_provision () {
 	do
 		# skip 1st argment "provision"
 		if [ $OPT_WPLANG ] ; then
-			if [ "$OPT" =  "en_US" -o "$OPT" = "ja" ] ; then
+			if [ "$OPT" =  "en_US" ] -o [ "$OPT" = "ja" ] ; then
 				WPLANG="$OPT"
 				OPT_WPLANG=
 			else
@@ -262,13 +262,13 @@ function k_provision () {
 	
 	## option check
 	if [ $OPT_NGINX -a $OPT_HTTPD ] ; then
-		k_print_error $(eval_gettext "Failed. --nginx and --httpd is can not specify both nginx and httpd at the same time.")
+		k_print_error $(eval_gettext "--nginx and --httpd is can not specify both at the same time.")
 		return 1
 	fi
 
 	## check profile name and directory 
 	if [[ ! $NEW_PROFILE =~ ^[a-zA-Z0-9._-]{3,24}$ ]]; then
-		k_print_error $(eval_gettext "Failed. Profile name requires [a-zA-Z0-9._-] 3-24 characters.")
+		k_print_error $(eval_gettext "Target name requires [a-zA-Z0-9._-] 3-24 characters.")
 		return 1
 	fi
 	

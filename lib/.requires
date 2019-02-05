@@ -3,7 +3,7 @@ git
 sed
 awk
 grep
-gettext
+gettext.sh
 envsubst
 docker
 docker-compose

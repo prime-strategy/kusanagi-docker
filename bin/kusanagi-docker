@@ -11,7 +11,7 @@ BINDIR=$BASEDIR/bin
 
 source $LIBDIR/functions.sh
 
-case ${1}
+case ${1} in
 	init)
 		k_init $@
 		;;
@@ -25,9 +25,7 @@ case ${1}
 	remove)
 		k_remove $@
 		;;
-	start)
-	stop)
-	restart)
+	start|stop|restart)
 		k_startstop $@
 		;;
 	status)

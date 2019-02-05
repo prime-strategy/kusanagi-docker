@@ -5,6 +5,9 @@
 #
 GLOBAL_KUSANAGI_FILE=$HOME/.kusanagi/.kusanagi
 LOCAL_KUSANAGI_FILE=.kusanagi
+TEXTDOMAIN="kusanagi-docker" 
+TEXTDOMAINDIR="$KUSANAGILIBDIR/lib/locale"
+source /usr/bin/gettext.sh
 
 # make random username
 function k_mkusername() {
@@ -101,10 +104,10 @@ function check_status() {
 	# 'Done.' Or 'Failed.' Is displayed by the return value of the previous command.
 	# Please attach ${_RETURN} to the argument of exit.
 	if [ "$?" -eq 0 ]; then
-		echo $(eval_gettext "Done.")
+		k_print_info $(eval_gettext "Done.")
 		exit 0
 	else
-		echo $(eval_gettext "Failed.")
+		k_print_error $(eval_gettext "Failed.")
 		exit 1
 	fi
 }
