@@ -96,16 +96,14 @@ function k_provision () {
 			fi
 		elif [ $OPT_DBSYSTEM ] ; then
 			case in "$OPT";
-			'mysql')
-			'mariadb')
+			'mysql'|'mariadb')
 				if [ "x$KUSANAGI_DB_SYSTEM" = "x" -o "$KUSANAGI_DB_SYSTEM" = "mariadb" ] ; then
 					KUSANAGI_DB_SYSTEM=mariadb
 				else
 					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not be specified with:") --postgresql|--pgsql.
 				fi
 				;;
-			'postgresql')
-			'pgsql')
+			'postgresql'|'pgsql')
 				if [ "x$KUSANAGI_DB_SYSTEM" = "x" -o "$KUSANAGI_DB_SYSTEM" = "mariadb" ] ; then
 					KUSANAGI_DB_SYSTEM=pgsql
 				else
