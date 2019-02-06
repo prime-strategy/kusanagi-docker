@@ -6,33 +6,33 @@
 
 source .kusanagi
 source .kusanagi.wp
-source $KUSANAGILIBDIR/.version
+source $LIBDIR/.version
 
-IMAGE=$([ $OPT_NGINX ] && echo $KUSANAGI_NGINX_IMAGE || [ $OPT_HTTPD ] && echo $KUSANGI_HTTPD_IMAGE)
+IMAGE=$([ $OPT_NGINX ] && echo $KUSANAGI_NGINX_IMAGE || ([ $OPT_HTTPD ] && echo $KUSANGI_HTTPD_IMAGE))
 # create docker-compose.yml
 env PROFILE=$PROFILE \
-    KUSANAGI_HTTPD_IMAGE=$IMAGE \
+    HTTPD_IMAGE=$IMAGE \
     KUSANAGI_PHP7_IMAGE=$KUSANAGI_PHP7_IMAGE \
     WPCLI_IMAGE=$WPCLI_IMAGE \
     CERTBOT_IMAGE=$CERTBOT_IMAGE \
-	envsubst "$$PROFILE $$HTTPD_IMAGE
+	envsubst '$$PROFILE $$HTTPD_IMAGE
 	$$KUSANAGI_PHP7_IMAGE $$KUSANAGI_FTPD_IMAGE
-	$$WPCLI_IMAGE $$CERTBOT_IMAGE" \
+	$$WPCLI_IMAGE $$CERTBOT_IMAGE' \
 	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/wpcli.template) > docker-compose.yml
-if [[ $DBHOST =~ "^localhost:" ]] ; then
+if [[ $DBHOST =~ ^localhost: ]] ; then
 	env PROFILE=$PROFILE KUSANAGI_MARIADB_IMAGE=$KUSANAGI_MARIADB_IMAGE \
-	envsubst "$$PROFILE $$KUSANAGI_MARIADB_IMAGE" \
-	< $LIBDIR/templates/mariadb.template >> docker-compose.yml
+	envsubst '$$PROFILE $$KUSANAGI_MARIADB_IMAGE' \
+	< $LIBDIR/templates/mysql.template >> docker-compose.yml
 fi
 if ! [ $NO_USE_FTP ] ; then
     env PROFILE=$PROFILE KUSANAGI_FTPD_IMAGE=$KUSANAGI_FTPD_IMAGE  \
-	envsubst "$$PROFILE $$KUSANAGI_FTP_IMAGE" \
+	envsubst '$$PROFILE $$KUSANAGI_FTPD_IMAGE' \
 	< $LIBDIR/templates/ftpd.template >> docker-compose.yml
 fi
 echo >> docker-compose.yml
 echo 'volumes:' >> docker-compose.yml
 echo '  kusanagi:' >>  docker-compose.yml
-[[ $DBHOST =~ "^localhost:" ]] && echo '  database:' >>  docker-compose.yml
+[[ $DBHOST =~ ^localhost: ]] && echo '  database:' >> docker-compose.yml
 
 
 docker-compose up -d \

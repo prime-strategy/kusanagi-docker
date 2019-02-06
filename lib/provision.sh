@@ -257,11 +257,16 @@ function k_provision () {
 		PRE_OPT=$OPT
 	done
 	APP=${APP:-wp}
+	KUSANAGI_DB_SYSTEM=${KUSANAGI_DB_SYSTEM:-mariadb}
 	
 	## option check
 	if [ $OPT_NGINX -a $OPT_HTTPD ] ; then
-		k_print_error $(eval_gettext "option --nginx and --httpd is can not specify both at the same time.")
-		return 1
+		if [ "x$OPT_NGINX" = "x" ] ; then
+			OPT_NGINX=1
+		else
+			k_print_error $(eval_gettext "option --nginx and --httpd is can not specify both at the same time.")
+			return 1
+		fi
 	fi
 
 	## check profile name and directory 
@@ -271,8 +276,9 @@ function k_provision () {
 	fi
 	
 	# for config
+	PROFILE=$NEW_PROFILE
 	KUSANAGI_TYPE=$APP
-	KUSANAGI_DIR=$TARGET_DIR
+	KUSANAGI_DIR=$(pwd)/$PROFILE
 	
 	## fqdn
 	if [ -z "$FQDN" ]; then
@@ -281,13 +287,14 @@ function k_provision () {
 	fi
 
 	if [ "wp" = $APP ]; then
+		WP_TITLE=${WP_TITLE:-WordPress}
 		WPLANG=${WPLANG:-ja}
 		## kusanagi user password
-		KUSANAGI_PASS=${KUSANAGI_PASS:-$(k_mkpassword)}
+		KUSANAGI_PASS=${KUSANAGI_PASS:-$(k_mkpasswd)}
 		# admin user
 		ADMIN_USER=${ADMIN_USER:-$(k_mkusername)}
 		# admin password
-		ADMIN_PASS=${ADMIN_PASS:-$(k_mkpassword)}
+		ADMIN_PASS=${ADMIN_PASS:-$(k_mkpasswd)}
 		# admin email address
 		ADMIN_EMAIL=${ADMIN_EMAIL:-$ADMIN_USER\@$FQDN}
 		export NOUSE_FTP=${OPT_NO_FTP}
@@ -295,16 +302,16 @@ function k_provision () {
 	
 	## db configuration
 	DBHOST=${DBHOST:-localhost}
-	if [ "x$DBHOST" = 'xlocalhost' ] ; then
-		$DBROOTPASS=${DBROOTPASS:-$(k_mkpassword)}
+	if [ "$DBHOST" = 'localhost' ] ; then
+		DBROOTPASS=${DBROOTPASS:-$(k_mkpasswd)}
 		USE_INTERNALDB=1
-		if [ "$KUSANAGI_DB_SYSTEM" = "mysql" ]; then
+		if [ "$KUSANAGI_DB_SYSTEM" = "mariadb" ]; then
 			$DBHOST="localhost:/var/run/mysqld/mysqld.sock";
 		fi
 	fi
 	DBNAME=${DBNAME:-$(k_mkusername)}
 	DBUSER=${DBUSER:-$(k_mkusername)}
-	DBPASS=${DBPASS:-$(k_mkpassword)}
+	DBPASS=${DBPASS:-$(k_mkpasswd)}
 	if [ $DBHOST = "localhost" ] ; then
 		[ $APP = "wp" ] && DBHOST=localhost:/var/run/mysqld/mysqld.sock
 	else
@@ -312,7 +319,7 @@ function k_provision () {
 	fi
 
 #	KUSANAGI_PSQL=no
-	MACHINE=$(k_mahcine)
+	MACHINE=$(k_machine)
 	
 	mkdir $PROFILE
 	cat <<EOF > $PROFILE/.kusanagi
@@ -344,7 +351,7 @@ BUSER=$DBUSER
 DBPASS=$DBPASS
 EOF
 	if [ $USE_INTERNALDB -eq 1 ] ; then
-		if [ "$KUSANAGI_DB_SYSTEM" = "mysql" ] ; then
+		if [ "$KUSANAGI_DB_SYSTEM" = "mariadb" ] ; then
 			cat <<EOF > $PROFILE/.kusanagi.mysql
 MYSQL_ROOT_PASSWORD=$DBROOTPASS
 MYSQL_DATABASE=$DBNAME
@@ -364,7 +371,8 @@ EOF
 	k_target $PROFILE
 	cd $PROFILE
 	[ "$MACHINE" != "localhost" ] && eval $(docker-machine $MACHINE env)
-	source $LIBDIR/$APP.sh || return 1
+	[ -f "$LIBDIR/$APP.sh" ] || (k_print_error "$WP $(eval_gettext "is not implimented.")" && return 1)
+	source "$LIBDIR/$APP.sh" || return 1
 
 	local ENTRY=1
 	while [ "x$ENTRY" != "x" ] ; do
