@@ -29,7 +29,7 @@ function k_target() {
 			TARGET="$_target:$(pwd)/$_target"
 		# target directory is not found
 		else
-			k_print_error "$_target "$(eval_gettext "not found.")
+			k_print_error "$_target $(eval_gettext 'not found.')"
 		fi
 	# when LOCAL_KUSANAGIFILE is found, use this files TARGET entry
 	elif [ -f $LOCAL_KUSANAGI_FILE ] ; then
@@ -41,7 +41,7 @@ function k_target() {
 
 	# when TARGET is not defind, error exit.
 	if [ "x$TARGET" = "x" ] ; then
-		k_print_error $(eval_gettext "TARGET has not been set.")
+		k_print_error "$(eval_gettext 'TARGET has not been set.')"
 		false
 	else
 		export TARGETDIR=${TARGET##:*} TARGET=${TARGET%%:*}
@@ -71,21 +71,22 @@ function k_machine() {
 	elif [ "$_machine" != "localhost" ] ; then
 		docker-machine ls | grep $_machine 2>&1 > /dev/null
 		if [ $? -eq 1 ] ; then
-			k_print_error $(eval_gettext $_machine " has not found.")
+			k_print_error "$_machine$(eval_gettext ' has not found.')"
 			return false
 		fi
 	fi
 
 	if [ "$_machine" = "localhost" -o "$MACHINE" = "localhost" ] ; then
 		[ "x$TARGETDIR" != "x" ] && \
-		       	(cd $TARGETDIR && docker-compose ps) || docker ps
+		       	(cd $TARGETDIR && docker-compose ps 1>&2 ) || docker ps 1>&2
 	else
 		[ "x$TARGETDIR" != "x" ]  \
 		       	&& (cd $TARGETDIR && \
 		       		eval $(docker-machine env $_machine) && \
-			       		docker-compose ps) \
-			||  (eval $(docker-machine env $_machine) && docker ps) 
+			       		docker-compose ps) 1>&2 \
+			||  (eval $(docker-machine env $_machine) && docker ps 1>&2) 
 	fi
+	echo $MACHINE
 }
 
 function k_rewrite() {
@@ -133,17 +134,17 @@ function k_version () {
 
 # display info message
 function k_print_info () {
-	k_print_green "INFO: $1"
+	k_print_green "INFO: $*"
 }
 
 # display error message
 function k_print_error () {
-	k_print_red "ERROR: $1"
+	k_print_red "ERROR: $*"
 }
 
 # display notice message
 function k_print_notice () {
-	k_print_yellow "NOTICE: $1"
+	k_print_yellow "NOTICE: $*"
 }
 
 function k_print_red () {
