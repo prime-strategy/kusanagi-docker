@@ -5,8 +5,8 @@
 #
 GLOBAL_KUSANAGI_FILE=$HOME/.kusanagi/.kusanagi
 LOCAL_KUSANAGI_FILE=.kusanagi
-TEXTDOMAIN="kusanagi-docker" 
-TEXTDOMAINDIR="$KUSANAGILIBDIR/lib/locale"
+export TEXTDOMAIN="kusanagi-docker" 
+export TEXTDOMAINDIR="$LIBDIR/locale"
 source /usr/bin/gettext.sh
 
 # make random username

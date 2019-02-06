@@ -95,7 +95,7 @@ function k_provision () {
 				return 1
 			fi
 		elif [ $OPT_DBSYSTEM ] ; then
-			case in "$OPT"
+			case "$OPT" in
 			'mysql'|'mariadb')
 				if [ "x$KUSANAGI_DB_SYSTEM" = "x" ] ; then
 					KUSANAGI_DB_SYSTEM=mariadb
@@ -260,7 +260,7 @@ function k_provision () {
 	
 	## option check
 	if [ $OPT_NGINX -a $OPT_HTTPD ] ; then
-		k_print_error $(eval_gettext "--nginx and --httpd is can not specify both at the same time.")
+		k_print_error $(eval_gettext "option --nginx and --httpd is can not specify both at the same time.")
 		return 1
 	fi
 
