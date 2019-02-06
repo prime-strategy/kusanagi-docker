@@ -47,7 +47,7 @@ function k_provision () {
 				return 1
 			fi
 		elif [ $OPT_DBHOST ] ; then
-			if [[ "$OPT" =~ ^(([a-zA-Z][a-zA-Z0-9-]{0,22}[a-zA-Z0-9]\.?)+|(([0-9A-Fa-f]{0,4}::?)+[0-9A-Fa-f]{0,4})$ ]] ; then
+			if [[ "$OPT" =~ ^(([a-zA-Z][a-zA-Z0-9-]{0,22}[a-zA-Z0-9]\.?)+|(([0-9A-Fa-f]{0,4}::?)+[0-9A-Fa-f]{0,4}))$ ]] ; then
 				DBHOST="$OPT"
 				OPT_DBHOST=
 			else
@@ -95,7 +95,7 @@ function k_provision () {
 				return 1
 			fi
 		elif [ $OPT_DBSYSTEM ] ; then
-			case in "$OPT";
+			case in "$OPT"
 			'mysql'|'mariadb')
 				if [ "x$KUSANAGI_DB_SYSTEM" = "x" ] ; then
 					KUSANAGI_DB_SYSTEM=mariadb
