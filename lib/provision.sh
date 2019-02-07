@@ -4,156 +4,231 @@
 # Licenced by GNU GPL v2
 #
 
+function k_set_wplang() {
+	local PRE_OPT="$1"
+	local OPT="$2"
+	if [ "$OPT" =  "en_US" -o "$OPT" = "ja" ] ; then
+		echo "$OPT"
+	else
+		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input 'en_US' or 'ja'.")
+	fi
+}
+function k_set_fqdn() {
+	local PRE_OPT="$1"
+	local OPT="$2"
+	if [[ "$OPT" =~ ^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]))+\.?$ ]] && \
+	       	[[ "$OPT" =~ ^[a-zA-Z0-9\.\-]{3,253}$ ]] ; then
+		echo "$OPT"
+	else
+		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input valid hostname.")
+	fi
+}
+function k_set_email() {
+	local PRE_OPT="$1"
+	local OPT="$2"
+	if [[ "${OPT,,}" =~ ^[a-z0-9!$\&*.=^\`|~#%\'+\/?_{}-]+@([a-z0-9_-]+\.)+(xx--[a-z0-9]+|[a-z]{2,})$ ]] ; then #'`
+		echo "$OPT"
+	else
+		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input valid email address.")
+	fi
+}
+function k_set_port() {
+	local PRE_OPT="$1"
+	local OPT="$2"
+	if [[ "$OPT" =~ ^[0-9]+ ]] && [ $OPT -gt 0 -a $OPT -lt 65536 ] ; then
+		echo "$OPT"
+	else
+		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input valid port number.")
+	fi
+}
+function k_set_host() {
+	local PRE_OPT="$1"
+	local OPT="$2"
+	if [[ "$OPT" =~ ^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]))+\.?$ ]] && \
+	       	[[ "$OPT" =~ ^[a-zA-Z0-9\.\-]{3,253}$ ]] ; then
+		echo "$OPT"
+	elif [[ "$OPT" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]] ; then
+		echo "$OPT"
+	elif [[ "$OPT" =~ ^(([0-9A-Fa-f]{0,4}::?){1,7}[0-9A-Fa-f]{0,4})$ ]] ; then
+		echo "$OPT"
+	else
+		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input valid hostname.")
+	fi
+}
+function k_set_dbname() {
+	local PRE_OPT="$1"
+	local OPT="$2"
+	if [[ "$OPT" =~ ^[a-zA-Z0-9._-]{3,64}$ ]]; then
+		echo "$OPT"
+	else
+		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input [a-zA-Z0-9._-] 3 to 64 characters.")
+	fi
+}
+function k_set_dbuser() {
+	local PRE_OPT="$1"
+	local OPT="$2"
+	if [[ "$OPT" =~ ^[a-zA-Z0-9._-]{3,16}$ ]] ; then
+		echo "$OPT"
+	else
+		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "Enter username for database. USE [a-zA-Z0-9._-] 3 to 16 characters.")
+	fi
+}
+function k_set_dbpass() {
+	local PRE_OPT="$1"
+	local OPT="$2"
+	local USER="$3"
+	if [[ "$OPT" =~ ^[a-zA-Z0-9\.\!\#\%\+\_\-]{8,}$ ]] ; then
+		echo "$OPT"
+	else
+		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "Enter password for database user '\$USER'. USE [a-zA-Z0-9.!#%+_-] 8 characters minimum.")
+	fi
+}
+function k_set_adminuser() {
+	local PRE_OPT="$1"
+	local OPT="$2"
+	if [[ "$OPT" =~ ^[a-zA-Z0-9._-]{4,}$ ]] ; then
+		echo "$OPT"
+	else
+		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "Enter admin username for WordPress. USE [a-zA-Z0-9._-] 4 characters minimum.")
+	fi
+}
+function k_set_dbsystem() {
+	local PRE_OPT="$1"
+	local OPT="$2"
+	local DB="$3"
+	case "$OPT" in
+	'mysql'|'mariadb')
+		if [ "x$DB" = "x" ] ; then
+			echo mariadb
+		else
+			k_print_notice $(eval_gettext "option:") $OPT: $(eval_gettext "can not be specified with another db system.")
+		fi
+		;;
+	'postgresql'|'pgsql')
+		if [ "x$DB" = "x" ] ; then
+			echo pgsql
+		else
+			k_print_notice $(eval_gettext "option:") $OPT: $(eval_gettext "can not be specified with another db system.")
+		fi
+		;;
+	'*')
+		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "can not be specified.")
+	esac
+}
+function k_set_passwd() {
+	local PRE_OPT="$1"
+	local OPT="$2"
+	local USER="$3"
+	if [[ "$OPT" =~ ^[a-zA-Z0-9\.\!\#\%\+\_\-]{8,}$ ]] ; then
+		echo "$OPT"
+	else
+		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "Enter \$USER password for WordPress. USE [a-zA-Z0-9.!#%+_-] 8 characters minimum.")
+	fi
+}
+function k_set_title() {
+	local PRE_OPT="$1"
+	local OPT="$2"
+	if [[ "$OPT" =~ ^.{1,}$ ]] ; then
+		echo "$OPT"
+	else
+		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "Enter Title for for WordPress. USE 1 characters minimum.")
+	fi
+}
+function k_set_file() {
+	local PRE_OPT="$1"
+	local OPT="$2"
+	if [ -f "$OPT" ] ; then
+		echo "$OPT"
+	else
+		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "file not found.")
+	fi
+}
+
 function k_provision () {
 	local OPT_WOO=	# use WooCommerce option(1 = use/other no use)
 	local OPT_WPLANG OPT_FQDN OPT_EMAIL OPT_DBHOST OPT_DBROOTPASS
 	local OPT_DBNAME OPT_DBUSER OPT_DBPASS OPT_KUSANAGI_PASS OPT_DBSYSTEM
+	local OPT_NGINX OPT_HTTPD OPT_HTTP_PORT OPT_TLS_PORT
+	local OPT PRE_OPT
 	local WPLANG=en_US FQDN= MAILADDR= DBHOST= DBROOTPASS= DBNAME= DBUSER= DBPASS=
 	local ADMIN_USER= ADMIN_PASS= KUSANAGI_PASS= WP_TITLE= GITPATH= TARPATH=
-	local OPT_NGINX= OPT_HTTPD=
-	local OPT PRE_OPT
+	local OPT_NO_FTP= OPT_NO_EMAIL=1
+	local HTTP_PORT=80 HTTP_TLS_PORT=443
+	local KUSANAGI_DB_SYSTEM= USE_INTERNALDB=0
 	local APP=
-	local OPT_NO_EMAIL=1
-	local OPT_NO_FTP=
-	local USE_INTERNALDB=0
-	local KUSANAGI_DB_SYSTEM=
 	## perse arguments
 	shift
 	for OPT in "$@"
 	do
 		# skip 1st argment "provision"
 		if [ $OPT_WPLANG ] ; then
-			if [ "$OPT" =  "en_US" ] -o [ "$OPT" = "ja" ] ; then
-				WPLANG="$OPT"
-				OPT_WPLANG=
-			else
-				k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input 'en_US' or 'ja'.")
-				return 1
-			fi
+			WP_LANG=$(k_set_wplang "$PRE_OPT" "$OPT")
+			[ -z $WP_LANG ] && return 1
+			OPT_WPLANG=
 		elif [ $OPT_FQDN ] ; then
-			if [[ "$OPT" =~ ^[a-zA-Z0-9._-]{3,}$ ]]; then
-				FQDN="$OPT"
-				OPT_FQDN=
-			else
-				k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input [a-zA-Z0-9._-] 3 characters minimum.")
-				return 1
-			fi
+			FQDN=$(k_set_fqdn "$PRE_OPT" "$OPT")
+			[ -z $FQDN ] && return 1
+			OPT_FQDN=
 		elif [ $OPT_EMAIL ] ; then
-			if [[ "${OPT,,}" =~ ^[a-z0-9!$\&*.=^\`|~#%\'+\/?_{}-]+@([a-z0-9_-]+\.)+(xx--[a-z0-9]+|[a-z]{2,})$ ]] ; then #'`
-				MAILADDR="$OPT"
-				OPT_EMAIL=
-			else
-				k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input Valid email address.")
-				return 1
-			fi
+			MAILADDR=$(k_set_email "$PRE_OPT" "$OPT")
+			[ -z $MAILADDR ] && return 1
+			OPT_EMAIL=
+		elif [ $OPT_HTTP_PORT ] ; then
+			HTTP_PORT=$(k_set_port "$PRE_OPT" "$OPT")
+			[ -z $HTTP_PORT ] && return 1
+			OPT_hTTP_PORT=
+		elif [ $OPT_TLS_PORT ] ; then
+			HTTP_TLS_PORT=$(k_set_port "$PRE_OPT" "$OPT")
+			[ -z $HTTP_TLS_PORT ] && return 1
+			OPT_TLS_PORT=
 		elif [ $OPT_DBHOST ] ; then
-			if [[ "$OPT" =~ ^(([a-zA-Z][a-zA-Z0-9-]{0,22}[a-zA-Z0-9]\.?)+|(([0-9A-Fa-f]{0,4}::?)+[0-9A-Fa-f]{0,4}))$ ]] ; then
-				DBHOST="$OPT"
-				OPT_DBHOST=
-			else
-				k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input valid hostname.")
-				return 1
-			fi
+			DBHOST=$(k_set_host "$PRE_OPT" "$OPT")
+			[ -z $DBHOST ] && return 1
+			OPT_DBHOST=
 		elif [ $OPT_DBNAME ] ; then
-			if [[ "$OPT" =~ ^[a-zA-Z0-9._-]{3,64}$ ]]; then
-				DBNAME="$OPT"
-				OPT_DBNAME=
-			else
-				k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input [a-zA-Z0-9._-] 3 to 64 characters.")
-				return 1
-			fi
+			DBNAME=$(k_set_dbname "$PRE_OPT" "$OPT")
+			[ -z $DBNAME ] && return 1
+			OPT_DBNAME=
 		elif [ $OPT_DBUSER ] ; then
-			if [[ "$OPT" =~ ^[a-zA-Z0-9._-]{3,16}$ ]] ; then
-				DBUSER="$OPT"
-				OPT_DBUSER=
-			else
-				k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "Enter username for database. USE [a-zA-Z0-9.!#%+_-] 3 to 16 characters.")
-				return 1
-			fi
+			DBUSER=$(k_set_dbuser "$PRE_OPT" "$OPT")
+			[ -z $DBUSER ] && return 1
+			OPT_DBUSER=
 		elif [ $OPT_DBPASS ] ; then
-			if [[ "$OPT" =~ ^[a-zA-Z0-9\.\!\#\%\+\_\-]{8,}$ ]] ; then
-				DBPASS="$OPT"
-				OPT_DBPASS=
-			else
-				k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "Enter password for database user 'DBUSER'. USE [a-zA-Z0-9.!#%+_-] 8 characters minimum.")
-				return 1
-			fi
+			DBPASS=$(k_set_dbpass "$PRE_OPT" "$OPT" DBUSER)
+			[ -z $DBPASS ] && return 1
+			OPT_DBPASS=
 		elif [ $OPT_DBROOTPASS ] ; then
-			if [[ "$OPT" =~ ^[a-zA-Z0-9\.\!\#\%\+\_\-]{8,}$ ]] ; then
-				DBROOTPASS="$OPT"
-				OPT_DBROOTPASS=
-			else
-				k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "Enter password for database user 'root'. USE [a-zA-Z0-9.!#%+_-] 8 characters minimum.")
-				return 1
-			fi
-			elif [ $OPT_ADMIN_USER ] ; then
-			if [[ "$OPT" =~ ^[a-zA-Z0-9._-]{4,}$ ]] ; then
-				ADMIN_USER="$OPT"
-				OPT_ADMIN_USER=
-			else
-				k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "Enter admin username for WordPress. USE [a-zA-Z0-9._-] 4 characters minimum.")
-				return 1
-			fi
+			DBROOTPASS=$(k_set_dbpass "$PRE_OPT" "$OPT" root)
+			[ -z $DBROOTPASS ] && return 1
+			OPT_DBROOTPASS=
+		elif [ $OPT_ADMIN_USER ] ; then
+			ADMIN_USER=$(k_set_adminuser "$PRE_OPT" "$OPT")
+			[ -z $ADMIN_USER ] && return 1
+			OPT_ADMIN_USER=
 		elif [ $OPT_DBSYSTEM ] ; then
-			case "$OPT" in
-			'mysql'|'mariadb')
-				if [ "x$KUSANAGI_DB_SYSTEM" = "x" ] ; then
-					KUSANAGI_DB_SYSTEM=mariadb
-				else
-					k_print_notice $(eval_gettext "option:") $OPT: $(eval_gettext "can not be specified with another db system.")
-				fi
-				;;
-			'postgresql'|'pgsql')
-				if [ "x$KUSANAGI_DB_SYSTEM" = "x" ] ; then
-					KUSANAGI_DB_SYSTEM=pgsql
-				else
-					k_print_notice $(eval_gettext "option:") $OPT: $(eval_gettext "can not be specified with another db system.")
-				fi
-				;;
-			'*')
-				k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "can not be specified.")
-			esac
+			KUSANAGI_DB_SYSTEM=$(k_set_dbsystem "$PRE_OPT" "$OPT" "$KUSANAGI_DB_SYSTEM")
+			[ -z $KUSANAGI_DB_SYSTEM ] && return 1
 			OPT_DBSYSTEM=
 		elif [ $OPT_ADMIN_PASS ] ; then
-			if [[ "$OPT" =~ ^[a-zA-Z0-9\.\!\#\%\+\_\-]{8,}$ ]] ; then
-				ADMIN_PASS="$OPT"
-				OPT_ADMIN_PASS=
-			else
-				k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "Enter admin password for WordPress. USE [a-zA-Z0-9.!#%+_-] 8 characters minimum.")
-				return 1
-			fi
+			ADMIN_PASS=$(k_set_passwd "$PRE_OPT" "$OPT" admin)
+			[ -z $ADMIN_PASS ] && return 1
+			OPT_ADMIN_USER=
 		elif [ $OPT_KUSANAGI_PASS ] ; then
-			if [[ "$OPT" =~ ^[a-zA-Z0-9\.\!\#\%\+\_\-]{8,}$ ]] ; then
-				KUSANAGI_PASS="$OPT"
-				OPT_KUSANAGI_PASS=
-			else
-				k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "Enter kusanagi user password for WordPress. USE [a-zA-Z0-9.!#%+_-] 8 characters minimum.")
-				return 1
-			fi
+			KUSANAGI_PASS=$(k_set_passwd "$PRE_OPT" "$OPT" kusanagi)
+			[ -z $KUSANAGI_PASS ] && return 1
+			OPT_KUSANAGI_USER=
 		elif [ $OPT_WP_TITLE ] ; then
-			if [[ "$OPT" =~ ^.{1,}$ ]] ; then
-				WP_TITLE="$OPT"
-				OPT_WP_TITLE=
-			else
-				k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "Enter Title for for WordPress. USE 1 characters minimum.")
-				return 1
-			fi
+			WP_TITLE=$(k_set_title "$PRE_OPT" "$OPT")
+			[ -z $WP_TITLE ] && return 1
+			OPT_WP_TITLE=
 		elif [ $OPT_GIT ] ; then
-			if [ -f "$OPT" ] ; then
-				GITPATH="$OPT"
-				OPT_GIT=
-			else
-				k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "file not found.")
-				return 1
-			fi
+			GITPATH=$(k_set_path "$PRE_OPT" "$OPT")
+			[ -z $GITPATH ] && return 1
+			OPT_GIT=
 		elif [ $OPT_TAR ] ; then
-			if [ -f "$OPT" ] ; then
-				TARPATH="$OPT"
-				OPT_TAR=
-			else
-				k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "file not found.")
-				return 1
-			fi
+			TARPATH=$(k_set_path "$PRE_OPT" "$OPT")
+			[ -z $TARPATH ] && return 1
+			OPT_TAR=
 		else
 			case "${OPT}" in
 			'--woo'|'--WooCommerce')
@@ -193,27 +268,74 @@ function k_provision () {
 			'--wplang')
 				OPT_WPLANG=1
 				;;
+			--wplang=*)
+				WP_LANG=$(k_set_wplang "${OPT%%=*}" "${OPT#*=}")
+				[ -z $WP_LANG ] && return 1
+				;;
 			'--fqdn')
 				OPT_FQDN=1
+				;;
+			--fqdn=*)
+				FQDN=$(k_set_fqdn "${OPT%%=*}" "${OPT#*=}")
+				[ -z $FQDN ] && return 1
+				;;
+			'--http-port')
+				OPT_HTTP_PORT=1
+				;;
+			--http-port=*)
+				HTTP_PORT=$(k_set_port "${OPT%%=*}" "${OPT#*=}")
+				[ -z $HTTP_PORT ] && return 1
+				;;
+			'--tls-port'|'--https-port')
+				OPT_TLS_PORT=1
+				;;
+			--tls-port=*|--http-port=*)
+				HTTP_TLS_PORT=$(k_set_port "${OPT%%=*}" "${OPT#*=}")
+				[ -z $HTTP_TLS_PORT ] && return 1
 				;;
 			'--email'|'--ssl')
 				OPT_EMAIL=1
 				OPT_NO_EMAIL=0
 				;;
+			--email=*|--ssl=*)
+				MAILADDR=$(k_set_email "${OPT%%=*}" "${OPT#*=}")
+				[ -z $MAILADDR ] && return 1
+				OPT_NO_EMAIL=0
+				;;
 			'--dbhost')
 				OPT_DBHOST=1
+				;;
+			--dbhost=*)
+				DBHOST=$(k_set_host "${OPT%%=*}" "${OPT#*=}")
+				[ -z $DBHOST ] && return 1
 				;;
 			'--dbrootpass')
 				OPT_DBROOTPASS=1
 				;;
+			--dbrootpass=*)
+				DBROOTPASS=$(k_set_dbpass "${OPT%%=*}" "${OPT#*=}" root)
+				[ -z $DBUSER ] && return 1
+				;;
 			'--dbname')
 				OPT_DBNAME=1
+				;;
+			--dbname=*)
+				DBNAME=$(k_set_dbname "${OPT%%=*}" "${OPT#*=}")
+				[ -z $DBNAME ] && return 1
 				;;
 			'--dbuser')
 				OPT_DBUSER=1
 				;;
+			--dbuser=*)
+				DBUSER=$(k_set_dbuser "${OPT%%=*}" "${OPT#*=}")
+				[ -z $DBUSER ] && return 1
+				;;
 			'--dbpass')
 				OPT_DBPASS=1
+				;;
+			--dbpass=*)
+				DBPASS=$(k_set_dbpass "${OPT%%=*}" "${OPT#*=}" DBUSER)
+				[ -z $DBPASS ] && return 1
 				;;
 			'--noftp'|'--no-ftp')
 				OPT_NO_FTP=1
@@ -227,25 +349,53 @@ function k_provision () {
 			'--admin_user')
 				OPT_ADMIN_USER=1
 				;;
+			--admin_user=*)
+				ADMIN_USER=$(k_set_adminuser "${OPT%%=*}" "${OPT#*=}")
+				[ -z $ADMIN_USER ] && return 1
+				;;
 			'--kusanagi-pass')
 				OPT_KUSANAGI_PASS=1
+				;;
+			--kusanagi-pass=*)
+				KUSANAGI_PASS=$(k_set_passwd "${OPT%%=*}" "${OPT#*=}" kusanagi)
+				[ -z $KUSANAGI_PASS ] && return 1
 				;;
 			'--admin_pass')
 				OPT_ADMIN_PASS=1
 				;;
+			--admin_pass=*)
+				ADMIN_PASS=$(k_set_passwd "${OPT%%=*}" "${OPT#*=}" admin)
+				[ -z $ADMIN_PASS ] && return 1
+				;;
 			'--wp-title')
 				OPT_WP_TITLE=1
+				;;
+			--wp-title=*)
+				WP_TITLE=$(k_set_title "${OPT%%=*}" "${OPT#*=}")
+				[ -z $WP_TITLE ] && return 1
 				;;
 			'--git')
 				OPT_GIT=1
 				;;
+			--git=*)
+				GITPATH=$(k_set_path "${OPT%%=*}" "${OPT#*=}")
+				[ -z $GITPATH ] && return 1
+				;;
 			'--tar'|'--tarball')
 				OPT_TAR=1
+				;;
+			--tar=*|--tarball=*)
+				TARPATH=$(k_set_path "${OPT%%=*}" "${OPT#*=}")
+				[ -z $TARPATH ] && return 1
 				;;
 			'--dbsystem')
 				OPT_DBSYSTEM=1
 				;;
-			-*)				# skip other option
+			--dbsystem=*)
+				KUSANAGI_DB_SYSTEM=$(k_set_dbsystem "${OPT%%=*}" "${OPT#*=}" "$KUSANAGI_DB_SYSTEM")
+				[ -z $KUSANAGI_DB_SYSTEM ] && return 1
+				;;
+			-*)	# skip other option
 				k_print_error $(eval_gettext "Cannot use option") $OPT
 				return 1
 				;;
@@ -318,7 +468,6 @@ function k_provision () {
 		export NOUSE_DB=1
 	fi
 
-#	KUSANAGI_PSQL=no
 	MACHINE=$(k_machine)
 	
 	mkdir $PROFILE
@@ -371,7 +520,7 @@ EOF
 	k_target $PROFILE
 	cd $PROFILE
 	[ "$MACHINE" != "localhost" ] && eval $(docker-machine $MACHINE env)
-	[ -f "$LIBDIR/$APP.sh" ] || (k_print_error "$WP $(eval_gettext "is not implimented.")" && return 1)
+	[ -f "$LIBDIR/$APP.sh" ] || (k_print_error "$APP $(eval_gettext "is not implimented.")" && return 1)
 	source "$LIBDIR/$APP.sh" || return 1
 
 	local ENTRY=1

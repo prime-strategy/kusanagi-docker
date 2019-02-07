@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kusanagi-docker 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-06 09:16+0900\n"
+"POT-Creation-Date: 2019-02-07 10:46+0900\n"
 "PO-Revision-Date: 2019-02-11 00:00+0900\n"
 "Last-Translator: Satoru MIYAZAKI<satoru@prime-strategy.co.jp>\n"
 "Language-Team: Satoru MIYAZAKI<satoru@prime-strategy.co.jp>\n"
@@ -26,135 +26,124 @@ msgstr "見つかりません"
 msgid "TARGET has not been set."
 msgstr "TARGET が指定されていません"
 
-#: lib/functions.sh:107
+#: lib/functions.sh:74
+#, sh-format
+msgid " has not found."
+msgstr "見つかりません"
+
+#: lib/functions.sh:108
 #, sh-format
 msgid "Done."
 msgstr "完了しました。"
 
-#: lib/functions.sh:110
+#: lib/functions.sh:111
 #, sh-format
 msgid "Failed."
 msgstr "失敗しました。"
 
-#: lib/provision.sh:30 lib/provision.sh:38 lib/provision.sh:46
-#: lib/provision.sh:54 lib/provision.sh:62 lib/provision.sh:70
-#: lib/provision.sh:78 lib/provision.sh:86 lib/provision.sh:94
-#: lib/provision.sh:103 lib/provision.sh:110 lib/provision.sh:114
-#: lib/provision.sh:122 lib/provision.sh:130 lib/provision.sh:138
-#: lib/provision.sh:146 lib/provision.sh:154 lib/provision.sh:161
-#: lib/provision.sh:165 lib/provision.sh:171 lib/provision.sh:177
-#: lib/provision.sh:183 lib/provision.sh:189
+#: lib/provision.sh:13 lib/provision.sh:23 lib/provision.sh:32
+#: lib/provision.sh:41 lib/provision.sh:55 lib/provision.sh:64
+#: lib/provision.sh:73 lib/provision.sh:83 lib/provision.sh:92
+#: lib/provision.sh:104 lib/provision.sh:111 lib/provision.sh:115
+#: lib/provision.sh:125 lib/provision.sh:134 lib/provision.sh:143
+#: lib/provision.sh:236 lib/provision.sh:240 lib/provision.sh:246
+#: lib/provision.sh:252 lib/provision.sh:258 lib/provision.sh:264
 #, sh-format
 msgid "option:"
 msgstr "オプション:"
 
-#: lib/provision.sh:30
+#: lib/provision.sh:13
 #, sh-format
 msgid "please input 'en_US' or 'ja'."
 msgstr "'en_US' か 'ja' を指定してください。"
 
-#: lib/provision.sh:38
-#, sh-format
-msgid "please input [a-zA-Z0-9._-] 3 characters minimum."
-msgstr "[a-zA-Z0-9._-] の組み合わせの、3 文字以上の文字列を指定してください。"
-
-#: lib/provision.sh:46
-#, sh-format
-msgid "please input Valid email address."
-msgstr "有効なEメールアドレスを指定してください。"
-
-#: lib/provision.sh:54
+#: lib/provision.sh:23 lib/provision.sh:55
 #, sh-format
 msgid "please input valid hostname."
 msgstr "有効なホスト名を指定してください。"
 
-#: lib/provision.sh:62
+#: lib/provision.sh:32
+#, sh-format
+msgid "please input valid email address."
+msgstr "有効なEメールアドレスを指定してください。"
+
+#: lib/provision.sh:41
+#, sh-format
+msgid "please input valid port number."
+msgstr "有効なポート番号を指定してください。"
+
+#: lib/provision.sh:64
 #, sh-format
 msgid "please input [a-zA-Z0-9._-] 3 to 64 characters."
 msgstr "[a-zA-Z0-9._-] の組み合わせの、3～64文字の文字列を指定してください。"
 
-#: lib/provision.sh:70
+#: lib/provision.sh:73
 #, sh-format
-msgid "Enter username for database. USE [a-zA-Z0-9.!#%+_-] 3 to 16 characters."
-msgstr "データベースユーザ名を指定してください。3～16文字の[a-zA-Z0-9.!#%+_-]を含む文字列が使用できます。"
+msgid "Enter username for database. USE [a-zA-Z0-9._-] 3 to 16 characters."
+msgstr "データベースユーザ名を指定してください。3～16文字の[a-zA-Z0-9._-]を含む文字列が使用できます。"
 
-#: lib/provision.sh:78
-#, sh-format
-msgid "Enter password for database user 'DBUSER'. USE [a-zA-Z0-9.!#%+_-] 8 characters minimum."
-msgstr "データベースユーザ'DBUSER'のパスワードを指定してください。8文字以上の[a-zA-Z0-9.!#%+_-]の文字列が使用できます。"
-
-#: lib/provision.sh:86
-#, sh-format
-msgid "Enter password for database user 'root'. USE [a-zA-Z0-9.!#%+_-] 8 characters minimum."
-msgstr "データベースユーザrootのパスワードを指定してください。8文字以上の[a-zA-Z0-9.!#%+_-]の文字列が使用できます。"
-
-#: lib/provision.sh:94
+#: lib/provision.sh:92
 #, sh-format
 msgid "Enter admin username for WordPress. USE [a-zA-Z0-9._-] 4 characters minimum."
 msgstr "WordPressの管理者ユーザを指定してください。4文字以上の[a-zA-Z0-9._-] の文字列が使用できます。"
 
-#: lib/provision.sh:103 lib/provision.sh:110
+#: lib/provision.sh:104 lib/provision.sh:111
 #, sh-format
 msgid "can not be specified with another db system."
 msgstr "他のDBと共に指定することは出来ません。"
 
-#: lib/provision.sh:114
+#: lib/provision.sh:115
 #, sh-format
 msgid "can not be specified."
 msgstr "指定することが出来ません。"
 
-#: lib/provision.sh:122
-#, sh-format
-msgid "Enter admin password for WordPress. USE [a-zA-Z0-9.!#%+_-] 8 characters minimum."
-msgstr "WordPressの管理者ユーザのパスワードを指定してください。8文字以上の[a-zA-Z0-9.!#%+_-]の文字列が使用できます。"
-
-#: lib/provision.sh:130
-#, sh-format
-msgid "Enter kusanagi user password for WordPress. USE [a-zA-Z0-9.!#%+_-] 8 characters minimum."
-msgstr "WordPress用にkusanagiユーザのパスワードを指定してください。8文字以上の[a-zA-Z0-9.!#%+_-]の文字列が使用できます。"
-
-#: lib/provision.sh:138
+#: lib/provision.sh:134
 #, sh-format
 msgid "Enter Title for for WordPress. USE 1 characters minimum."
 msgstr "WordPressのタイトルを指定してください。1文字以上の文字列が使用できます。"
 
-#: lib/provision.sh:146 lib/provision.sh:154
+#: lib/provision.sh:143
 #, sh-format
 msgid "file not found."
 msgstr "ファイルが見つかりません。"
 
-#: lib/provision.sh:161
+#: lib/provision.sh:236
 #, sh-format
 msgid "not implimented."
 msgstr "実装されていません。"
 
-#: lib/provision.sh:165 lib/provision.sh:171 lib/provision.sh:177
-#: lib/provision.sh:183 lib/provision.sh:189
+#: lib/provision.sh:240 lib/provision.sh:246 lib/provision.sh:252
+#: lib/provision.sh:258 lib/provision.sh:264
 #, sh-format
 msgid "can not specified with another application."
 msgstr "他のアプリケーションと共に指定することは出来ません。"
 
-#: lib/provision.sh:249
+#: lib/provision.sh:399
 #, sh-format
 msgid "Cannot use option"
 msgstr "このオプションは使用できません。"
 
-#: lib/provision.sh:263
+#: lib/provision.sh:417
 #, sh-format
-msgid "--nginx and --httpd is can not specify both at the same time."
-msgstr "--nginxと--httpdを同時に指定することは出来ません。"
+msgid "option --nginx and --httpd is can not specify both at the same time."
+msgstr "オプション--nginxと--httpdを同時に指定することは出来ません。"
 
-#: lib/provision.sh:269
+#: lib/provision.sh:424
 #, sh-format
 msgid "Target name requires [a-zA-Z0-9._-] 3-24 characters."
 msgstr "ターゲット名は3～24文字の[a-zA-Z0-9._-]の文字列を指定してください。"
 
-#: lib/provision.sh:279
+#: lib/provision.sh:435
 #, sh-format
 msgid "require option --fqdn for your website. ex) kusanagi.tokyo."
 msgstr "Webサイトで使用するホスト名(FQDN)を入力してください。 例) kusanagi.tokyo"
 
-#: lib/provision.sh:391
+#: lib/provision.sh:523
+#, sh-format
+msgid "is not implimented."
+msgstr "実装されていません。"
+
+#: lib/provision.sh:548
 #, sh-format
 msgid "Cannot get Let's Encrypt SSL Certificate files."
 msgstr "Let's EncryptのSSL証明書を取得できませんでした。"
