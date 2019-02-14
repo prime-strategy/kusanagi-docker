@@ -5,6 +5,7 @@
 #
 GLOBAL_KUSANAGI_FILE=$HOME/.kusanagi/.kusanagi
 LOCAL_KUSANAGI_FILE=.kusanagi
+CONFIGCMD="docker-compose run --rm config"
 export TEXTDOMAIN="kusanagi-docker" 
 export TEXTDOMAINDIR="$LIBDIR/locale"
 source /usr/bin/gettext.sh
@@ -19,6 +20,71 @@ function k_mkpasswd() {
 	openssl rand -base64 1024 | fold -w 23 | egrep -e '^[!-/a-zA-Z0-9]+$'| head -1
 }
 
+function k_version() {
+	[ -f $KUSANAGIDIR/.version] && cat $KUSANAGIDIR/.version || (k_print_error "version not defined."; false)
+}
+
+function k_help() {
+	cat << EOD
+///////////////////////////////////////////////////
+High-Performance WordPress VirtualMachine
+///////////////////////////////////////////////////
+     __ ____  _______ ___    _   _____   __________
+    / //_/ / / / ___//   |  / | / /   | / ____/  _/
+   / ,< / / / /\__ \/ /| | /  |/ / /| |/ / __ / /
+  / /| / /_/ /___/ / ___ |/ /|  / ___ / /_/ // /
+ /_/ |_\____//____/_/  |_/_/ |_/_/  |_\____/___/
+
+KUSANAGI-DOCKER CLI Subcommand inforamtion
+Manual : http://en.kusanagi.tokyo/document/command/
+---------------------
+- help -
+# kusanagi-docker [-h | --help | help]
+show this snippet.
+---------------------
+- configuration -
+init [docker-machine|localhost]
+  - print docker machine
+  - set docker machine
+provision [options] --fqdn domainname target
+	--fqdn domainname(like kusanagi.tokyo)
+        [--WordPress [--wplang en_US|ja]
+	  [--admin-user admin] [--admin-passwd pass] [--admin-email email]
+	  [--wp-title title] [--kusanagi-pass pass] [--notfp|--no-ftp] |
+	 --lamp|--concrete5|--drupal]
+        [--email|-ssl email@example.com]
+        [--dbhost host] [--dbname dbname]
+	[--dbuser username] [--dbpass password]
+	[--git giturl|--tar tarball]
+ssl [options] target
+        [--email|--ssl email@example.com]
+	[--cert file --key file]
+        [--redirect|--noredirect]
+        [--hsts  {on|off}]
+        [--oscp  [on|off]]
+        [--ct  [on|off] [--no-register|--noregister]]
+        [--renew]
+config command target
+	bcache [on|off]
+	fcache [on|off]
+	pull
+	push
+	tag tag
+	log
+	commit [--tag tag]
+	checkout [--tag tag]
+	dbdump
+	dbrestore
+	backup
+	restore
+remove [-y] [target]
+---------------------
+- status -
+[-V|--version]
+start|stop|restart|status [httpd|php7|db] [target]
+----------------------
+EOD
+}
 
 function k_target() {
 	local _target="$1"
@@ -45,9 +111,11 @@ function k_target() {
 		false
 	else
 		export TARGETDIR=${TARGET##:*} TARGET=${TARGET%%:*}
+		export CONTENTDIR=$TARGETDIR/contents 
+		export BASEDIR=$(dirname $DOCUMENTROOT)
 		if [ "$_target" != "$TARGET" ] ; then
-		#	k_rewrite TARGET "$TARGET:$TARGETDIR" $LOCAL_KUSANGI_FILE && \
-			k_rewrite TARGET "$TARGET:$TARGETDIR" $GLOBAL_KUSANGI_FILE 
+		#	k_rewrite TARGET "$TARGET:$TARGETDIR" $LOCAL_KUSANAGI_FILE && \
+			k_rewrite TARGET "$TARGET:$TARGETDIR" $GLOBAL_KUSANAGI_FILE 
 		fi
 	fi
 }
@@ -64,14 +132,14 @@ function k_machine() {
 		if [ -f "$TARGETDIR/$LOCAL_KUSANAGI_FILE" ] ; then
 			eval $(grep ^MACHINE= "$TARGETDIR/$LOCAL_KUSANAGI_FILE")
 		elif [ -f "$GLOBAL_KUSANAGI_FILE" ] ; then
-			eval $(grep ^MACHINE= "$GLOBAL_KUSANGI_FILE")
+			eval $(grep ^MACHINE= "$GLOBAL_KUSANAGI_FILE")
 		else
 			MACHINE=localhost
 		fi
 	elif [ "$_machine" != "localhost" ] ; then
 		docker-machine ls | grep $_machine 2>&1 > /dev/null
 		if [ $? -eq 1 ] ; then
-			k_print_error "$_machine$(eval_gettext ' has not found.')"
+			k_print_error "$_machine $(eval_gettext 'is not found.')"
 			return false
 		fi
 	fi
@@ -89,6 +157,93 @@ function k_machine() {
 	echo $MACHINE
 }
 
+function k_wpconfig() {
+	local WPCONFIG=$($CONFIGCMD ls $BASEDIR/wp-config.php 2> /dev/null)
+	[ "x$WPCONFIG" = "x" ] && WPCONFIG=$($CONFIGCMD ls $DOCUMENTROOT/wp-config.php 2> /dev/null)
+	if [ $WPCONFIG ] ; then
+		k_print_error "wp-config.php $(eval_gettext 'is not found.')"
+		return false
+	fi
+	echo $WPCONFIG
+}
+
+function k_strartstop() {
+	local _cmd=$1
+	local _arg2=$2
+	local _arg3=$3
+	local _service _target
+	case "$_arg2" in
+		httpd|php7|mysql)
+			_service=$_arg2
+			;;
+		"")
+			;;
+		*)
+		if [ -z $_arg3 ] ; then
+			_target=$_arg2
+		else
+			k_print_error $_cmd: $_arg2 $(eval_gettext "service not found.")
+			return 1
+		fi
+	esac
+	k_target $_target
+	k_machine > /dev/null
+
+	cd $TARGETDIR && docker-compose $_cmd $_service
+}
+
+function k_remove() {
+	k_target $2
+	k_machine > /dev/null
+
+	local _PWD=$(pwd)
+	cd $TARGETDIR \
+	&& docker-compose stop -d \
+	&& cd .. \
+	&& rm -rf $TARGETDIR \
+	&& ([ -d $_PWD ] && cd $_PWD || true)
+}
+
+function k_httpd() {
+	k_print_error "$1 $(eval_gettext "is not implemented.")" 
+}
+function k_nginx() {
+	k_print_error "$1 $(eval_gettext "is not implemented.")"
+}
+function k_update() {
+	k_print_error "$1 $(eval_gettext "is not implemented.")"
+}
+
+function k_check_file() {
+	local PRE_OPT="$1"
+	local OPT="$2"
+	if [ -f "$OPT" ] ; then
+		echo "$OPT"
+	else
+		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "file not found.")
+	fi
+}
+
+function k_check_email() {
+	local PRE_OPT="$1"
+	local OPT="$2"
+	if [[ "${OPT,,}" =~ ^[a-z0-9!$\&*.=^\`|~#%\'+\/?_{}-]+@([a-z0-9_-]+\.)+(xx--[a-z0-9]+|[a-z]{2,})$ ]] ; then #'`
+		echo "$OPT"
+	else
+		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input valid email address.")
+	fi
+}
+
+function k_check_onoff() {
+	local PRE_OPT="$1"
+	local OPT="$2"
+	if [ "$OPT" = "on" -o "$OPT" = "off"] ; then
+		echo "$OPT"
+	else
+		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input on/off.")
+	fi
+}
+
 function k_rewrite() {
 	local _var=$1
 	local _val=$2
@@ -97,7 +252,7 @@ function k_rewrite() {
 	if [ $? -eq 0 ] ; then
 		sed -i "s/^$_var=.*$/$_var=$_val/" $_file
 	else
-		echo $_var=$_val >> $_file
+		echo "$_var=$_val" >> $_file
 	fi
 }
 
@@ -127,8 +282,7 @@ function k_is_fuction_exists () {
 
 # check the current KUSANAGI version.
 function k_version () {
-	cd $BASEDIR
-	git tag -l | egrep '^[0-9\.\-]+$' | tail -1
+	cat $BASEDIR/.version
 	return 0
 }
 

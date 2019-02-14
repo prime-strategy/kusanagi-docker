@@ -16,7 +16,7 @@ services:
     volumes:
       - kusanagi:/home/kusanagi
       - kusanagi:/etc/letsencrypt
-      - kusanagi:/usr/share/httpd/html/.well-known
+      - kusanagi:/var/www/html/.well-known
     ports:
       - "$HTTP_PORT:80"
       - "$HTTP_TLS_PORT:443"
@@ -28,7 +28,7 @@ services:
     env_file:
       - .kusanagi.httpd
     volumes:
-      - kusanagi:/usr/share/httpd/html/.well-known
+      - kusanagi:/var/www/html/.well-known
       - kusanagi:/etc/letsencrypt
     command:
       - --version

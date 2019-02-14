@@ -25,11 +25,8 @@ case ${1} in
 	remove)
 		k_remove $@
 		;;
-	start|stop|restart)
+	start|stop|restart|status)
 		k_startstop $@
-		;;
-	status)
-		k_status $@
 		;;
 	httpd)
 		k_httpd $@
@@ -41,15 +38,19 @@ case ${1} in
 		k_ssl $@
 		;;
 	config)
+		source $LIBDIR/config.sh
 		k_config $@
 		;;
 	export)
-		k_export $@
+		source $LIBDIR/config.sh
+		k_config push $@ && k_config dbrestore $@
 		;;
 	import)
-		k_import $@
+		source $LIBDIR/config.sh
+		k_config pull $@ && k_config dbdump $@
 		;;
 	wp)
+		source $LIBDIR/config.sh
 		k_wp $@
 		;;
 	update)

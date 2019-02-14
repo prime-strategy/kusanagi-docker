@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kusanagi-docker 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-07 10:46+0900\n"
+"POT-Creation-Date: 2019-02-14 16:32+0900\n"
 "PO-Revision-Date: 2019-02-11 00:00+0900\n"
 "Last-Translator: Satoru MIYAZAKI<satoru@prime-strategy.co.jp>\n"
 "Language-Team: Satoru MIYAZAKI<satoru@prime-strategy.co.jp>\n"
@@ -16,135 +16,186 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: lib/functions.sh:32
+#: lib/config.sh:15
+#, sh-format
+msgid "WordPress is not provision."
+msgstr "WordPressがプロビジョンされていません。"
+
+#: lib/config.sh:31
+#, sh-format
+msgid "bcache is on"
+msgstr "bcache は有効です"
+
+#: lib/config.sh:33
+#, sh-format
+msgid "bcache is off"
+msgstr "bcache は無効です"
+
+#: lib/config.sh:58
+#, sh-format
+msgid "fcache is on"
+msgstr "fcache は有効です"
+
+#: lib/config.sh:60
+#, sh-format
+msgid "fcache is off"
+msgstr "fcache は無効です"
+
+#: lib/config.sh:190
+#, sh-format
+msgid "is unknown subcommand."
+msgstr ""
+
+#: lib/functions.sh:98
 #, sh-format
 msgid "not found."
 msgstr "見つかりません"
 
-#: lib/functions.sh:44
+#: lib/functions.sh:110
 #, sh-format
 msgid "TARGET has not been set."
 msgstr "TARGET が指定されていません"
 
-#: lib/functions.sh:74
+#: lib/functions.sh:142 lib/functions.sh:164
 #, sh-format
-msgid " has not found."
+msgid "is not found."
 msgstr "見つかりません"
 
-#: lib/functions.sh:108
+#: lib/functions.sh:185
+#, sh-format
+msgid "service not found."
+msgstr "サービスが見つかりません。"
+
+#: lib/functions.sh:208 lib/functions.sh:211 lib/functions.sh:214
+#: lib/provision.sh:525
+#, sh-format
+msgid "is not implemented."
+msgstr "実装されていません。"
+
+#: lib/functions.sh:223 lib/functions.sh:233 lib/functions.sh:243
+#: lib/provision.sh:13 lib/provision.sh:24 lib/provision.sh:34
+#: lib/provision.sh:43 lib/provision.sh:58 lib/provision.sh:68
+#: lib/provision.sh:78 lib/provision.sh:89 lib/provision.sh:99
+#: lib/provision.sh:112 lib/provision.sh:119 lib/provision.sh:123
+#: lib/provision.sh:134 lib/provision.sh:144 lib/provision.sh:237
+#: lib/provision.sh:241 lib/provision.sh:247 lib/provision.sh:253
+#: lib/provision.sh:259 lib/provision.sh:265
+#, sh-format
+msgid "option:"
+msgstr "オプション:"
+
+#: lib/functions.sh:223
+#, sh-format
+msgid "file not found."
+msgstr "ファイルが見つかりません。"
+
+#: lib/functions.sh:233 lib/provision.sh:34
+#, sh-format
+msgid "please input valid email address."
+msgstr "有効なEメールアドレスを指定してください。"
+
+#: lib/functions.sh:243
+#, sh-format
+msgid "please input on/off."
+msgstr "onかoffを指定してください。"
+
+#: lib/functions.sh:263
 #, sh-format
 msgid "Done."
 msgstr "完了しました。"
 
-#: lib/functions.sh:111
+#: lib/functions.sh:266
 #, sh-format
 msgid "Failed."
 msgstr "失敗しました。"
-
-#: lib/provision.sh:13 lib/provision.sh:23 lib/provision.sh:32
-#: lib/provision.sh:41 lib/provision.sh:55 lib/provision.sh:64
-#: lib/provision.sh:73 lib/provision.sh:83 lib/provision.sh:92
-#: lib/provision.sh:104 lib/provision.sh:111 lib/provision.sh:115
-#: lib/provision.sh:125 lib/provision.sh:134 lib/provision.sh:143
-#: lib/provision.sh:236 lib/provision.sh:240 lib/provision.sh:246
-#: lib/provision.sh:252 lib/provision.sh:258 lib/provision.sh:264
-#, sh-format
-msgid "option:"
-msgstr "オプション:"
 
 #: lib/provision.sh:13
 #, sh-format
 msgid "please input 'en_US' or 'ja'."
 msgstr "'en_US' か 'ja' を指定してください。"
 
-#: lib/provision.sh:23 lib/provision.sh:55
+#: lib/provision.sh:24 lib/provision.sh:58
 #, sh-format
 msgid "please input valid hostname."
 msgstr "有効なホスト名を指定してください。"
 
-#: lib/provision.sh:32
-#, sh-format
-msgid "please input valid email address."
-msgstr "有効なEメールアドレスを指定してください。"
-
-#: lib/provision.sh:41
+#: lib/provision.sh:43
 #, sh-format
 msgid "please input valid port number."
 msgstr "有効なポート番号を指定してください。"
 
-#: lib/provision.sh:64
+#: lib/provision.sh:68
 #, sh-format
 msgid "please input [a-zA-Z0-9._-] 3 to 64 characters."
 msgstr "[a-zA-Z0-9._-] の組み合わせの、3～64文字の文字列を指定してください。"
 
-#: lib/provision.sh:73
+#: lib/provision.sh:78
 #, sh-format
 msgid "Enter username for database. USE [a-zA-Z0-9._-] 3 to 16 characters."
 msgstr "データベースユーザ名を指定してください。3～16文字の[a-zA-Z0-9._-]を含む文字列が使用できます。"
 
-#: lib/provision.sh:92
+#: lib/provision.sh:99
 #, sh-format
 msgid "Enter admin username for WordPress. USE [a-zA-Z0-9._-] 4 characters minimum."
 msgstr "WordPressの管理者ユーザを指定してください。4文字以上の[a-zA-Z0-9._-] の文字列が使用できます。"
 
-#: lib/provision.sh:104 lib/provision.sh:111
+#: lib/provision.sh:112 lib/provision.sh:119
 #, sh-format
 msgid "can not be specified with another db system."
 msgstr "他のDBと共に指定することは出来ません。"
 
-#: lib/provision.sh:115
+#: lib/provision.sh:123
 #, sh-format
 msgid "can not be specified."
 msgstr "指定することが出来ません。"
 
-#: lib/provision.sh:134
+#: lib/provision.sh:144
 #, sh-format
 msgid "Enter Title for for WordPress. USE 1 characters minimum."
 msgstr "WordPressのタイトルを指定してください。1文字以上の文字列が使用できます。"
 
-#: lib/provision.sh:143
-#, sh-format
-msgid "file not found."
-msgstr "ファイルが見つかりません。"
-
-#: lib/provision.sh:236
+#: lib/provision.sh:237
 #, sh-format
 msgid "not implimented."
 msgstr "実装されていません。"
 
-#: lib/provision.sh:240 lib/provision.sh:246 lib/provision.sh:252
-#: lib/provision.sh:258 lib/provision.sh:264
+#: lib/provision.sh:241 lib/provision.sh:247 lib/provision.sh:253
+#: lib/provision.sh:259 lib/provision.sh:265
 #, sh-format
 msgid "can not specified with another application."
 msgstr "他のアプリケーションと共に指定することは出来ません。"
 
-#: lib/provision.sh:399
+#: lib/provision.sh:400 lib/ssl.sh:96
 #, sh-format
 msgid "Cannot use option"
 msgstr "このオプションは使用できません。"
 
-#: lib/provision.sh:417
+#: lib/provision.sh:418
 #, sh-format
 msgid "option --nginx and --httpd is can not specify both at the same time."
 msgstr "オプション--nginxと--httpdを同時に指定することは出来ません。"
 
-#: lib/provision.sh:424
+#: lib/provision.sh:425
 #, sh-format
 msgid "Target name requires [a-zA-Z0-9._-] 3-24 characters."
 msgstr "ターゲット名は3～24文字の[a-zA-Z0-9._-]の文字列を指定してください。"
 
-#: lib/provision.sh:435
+#: lib/provision.sh:436
 #, sh-format
 msgid "require option --fqdn for your website. ex) kusanagi.tokyo."
 msgstr "Webサイトで使用するホスト名(FQDN)を入力してください。 例) kusanagi.tokyo"
 
-#: lib/provision.sh:523
-#, sh-format
-msgid "is not implimented."
-msgstr "実装されていません。"
-
-#: lib/provision.sh:548
+#: lib/provision.sh:550
 #, sh-format
 msgid "Cannot get Let's Encrypt SSL Certificate files."
 msgstr "Let's EncryptのSSL証明書を取得できませんでした。"
 
+#: lib/ssl.sh:109
+#, sh-format
+msgid "specified in same time."
+msgstr ""
+
+#: lib/ssl.sh:112
+#, sh-format
+msgid "can not specified in same time."
+msgstr "同時に指定することは出来ません。"

@@ -1,7 +1,7 @@
-## WPCLI
-  wpcli:
-    container_name: ${PROFILE}_wpcli
-    image: $WPCLI_IMAGE
+## CONFIG
+  config:
+    container_name: ${PROFILE}_config
+    image: $CONFIG_IMAGE
     user: "1000"
     network_mode: "service:httpd"
     env_file:
