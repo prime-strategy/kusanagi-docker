@@ -18,8 +18,10 @@ services:
       - kusanagi:/etc/letsencrypt
       - kusanagi:/var/www/html/.well-known
     ports:
-      - "$HTTP_PORT:80"
-      - "$HTTP_TLS_PORT:443"
+      - "$HTTP_PORT:8080"
+      - "$HTTP_TLS_PORT:8443"
+    logging:
+      driver: journald
 
   certbot:
     container_name: ${PROFILE}_certbot
@@ -32,4 +34,6 @@ services:
       - kusanagi:/etc/letsencrypt
     command:
       - --version
+    logging:
+      driver: journald
 

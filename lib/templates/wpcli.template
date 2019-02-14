@@ -2,7 +2,7 @@
   config:
     container_name: ${PROFILE}_config
     image: $CONFIG_IMAGE
-    user: "1000"
+    user: "1000:1000"
     network_mode: "service:httpd"
     env_file:
       - .kusanagi
@@ -11,5 +11,7 @@
       - database:/var/run/mysqld
       - kusanagi:/home/kusanagi
     command: wp --version
+    logging:
+      driver: journald
 
 

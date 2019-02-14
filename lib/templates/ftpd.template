@@ -8,4 +8,6 @@
       - .kusanagi.wp
     volumes:
       - kusanagi:/home/kusanagi
+    logging:
+      driver: journald
 

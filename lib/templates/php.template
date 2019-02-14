@@ -9,4 +9,6 @@
     volumes:
       - database:/var/run/mysqld
       - kusanagi:/home/kusanagi
+    logging:
+      driver: journald
 
