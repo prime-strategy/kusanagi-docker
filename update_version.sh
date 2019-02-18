@@ -1,28 +1,27 @@
 #!/bin/bash
 
+DOCKER_REPO=https://registry.hub.docker.com/v1/repositories
+function docker_repo_tag {
+	curl -s $DOCKER_REPO/${1}/tags | sed "s/,/\n/g" | awk -F\" '/name/ {print $4}'
+}
 function kusanagi_version {
 	local _kusanagi=$1
-	local _ver=$(git ls-remote -t https://github.com/prime-strategy/$_kusanagi.git 2>&1 |awk '{print $2}' | awk -F/ '/^[0-9\.\-a-zA-Z\/]+$/ {print $NF}'|sort -rV | head -1)
-	echo ${_ver:-latest}
-}
-
-function mariadb_version {
-	local _ver=$(curl -L https://raw.githubusercontent.com/docker-library/mariadb/master/10.4/Dockerfile 2> /dev/null  | awk -F'[ +~:]' '/ENV +MARIADB_VERSION/ {printf "%s-%s\n",$4,$6}')
+	local _ver=$(docker_repo_tag primestrategy/$_kusanagi | grep -v latest | sort -Vr | head -1)
 	echo ${_ver:-latest}
 }
 
 function postgresql_version {
-	local _ver=$(curl -L  https://raw.githubusercontent.com/docker-library/postgres/master/11/alpine/Dockerfile 2> /dev/null | awk '/ENV +PG_VERSION/ {print $NF"-alpine"}')
+	local _ver=$(docker_repo_tag postgres | grep '^[0-9]' | sort -Vr | head -1)
 	echo ${_ver:-latest}
 }
 
 function wpcli_version {
-	local _ver=$(curl -L https://raw.githubusercontent.com/docker-library/wordpress/master/php7.3/cli/Dockerfile 2> /dev/null | awk '/ENV +WORDPRESS_CLI_VERSION/ {print $NF}')
+	local _ver=$(docker_repo_tag wordpress | grep '^cli-[0-9]' | sort -r | head -1)
 	echo ${_ver:-latest}
 }
 
 function certbot_version {
-	local _ver=$(git ls-remote -t https://github.com/certbot/certbot.git |awk '{print $2}' | awk -F/ '/^[0-9\.\-a-zA-Z\/]+$/ {print $NF}'|sort -Vr | head -1)
+	local _ver=$(docker_repo_tag certbot/certbot | sort -Vr | head -1)
 	echo ${_ver:-latest}
 }
 
@@ -32,7 +31,7 @@ KUSANAGI_PHP7_IMAGE=primestrategy/kusanagi-http:$(kusanagi_version kusanagi-php7
 KUSANAGI_MARIADB_IMAGE=primestrategy/kusanagi-mariadb:$(kusanagi_version kusanagi-mariadb)
 KUSANAGI_FTPD_IMAGE=primestrategy/kusanagi-ftpd:$(kusanagi_version kusanagi-ftpd)
 POSTGRESQL_IMAGE=postgres:$(postgresql_version)
-WPCLI_IMAGE=wordpress:cli-$(wpcli_version)-php7.3
+WPCLI_IMAGE=wordpress:$(wpcli_version)
 CERTBOT_IMAGE=certbot/certbot:$(certbot_version)
 
 cat <<EOF > ${KUSANAGILIBDIR:-.}/.version
