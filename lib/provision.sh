@@ -524,14 +524,40 @@ EOF
 	[ "$MACHINE" != "localhost" ] && eval $(docker-machine $MACHINE env)
 	[ -f "$LIBDIR/$APP.sh" ] || (k_print_error "$APP $(eval_gettext "is not implemented.")" && return 1)
 	source "$LIBDIR/$APP.sh" || return 1
+	source "$LIBDIR/config.sh" || return 1
+	mkdir contents/DocumentRoot
+	if [ "x$TARPATH" != "x" -a -f $TARPATH ] ; then
+		tar xf $TARFILE -C contents/DocumentRoot
+		k_content push
+	elif [  "x$GITPATH" != "x" -a-f $GITPATH ] ; then 
+		git clone $GITPATH contents/DocumentRoot
+		k_content push
+	else
+		k_content pull
+	fi
 
 	local ENTRY=1
 	while [ "x$ENTRY" != "x" ] ; do
 		ENTRY=$(docker-compose exec nginx ps | grep 'docker-entrypoint.sh') 
 	done
 
-	mkdir contents
-	docker-compose exec httpd tar cf - -C $DOCUMENTROOT . | tar xf - contents
+
+	# save SSL_DHPARAM
+	SSL_DHPARAM=$(docker-compose exec httpd cat /etc/*/dhparam.key)
+	echo "SSL_DHPARAM=$SSL_DHPARAM" >> $PROFILE/.kusanagi.httpd
+
+	# use let's encrypt
+	if [ "x$MAILADDR" != "x" ] ; then
+		docker-compose run certbot certonly --text \
+	else
+		$CONFIGCMD tar cf - -C $DOCUMENTROOT . | tar xf - -C contents
+	fi
+
+	local ENTRY=1
+	while [ "x$ENTRY" != "x" ] ; do
+		ENTRY=$(docker-compose exec nginx ps | grep 'docker-entrypoint.sh') 
+	done
+
 
 	# save SSL_DHPARAM
 	SSL_DHPARAM=$(docker-compose exec httpd cat /etc/*/dhparam.key)
@@ -555,5 +581,9 @@ EOF
 		docker-compose down httpd
 		docker-compose up -d httpd
 	fi
+
+	git init -q
+	git add .kusanagi* contents
+	git commit -m 'initial commit'
 }
 

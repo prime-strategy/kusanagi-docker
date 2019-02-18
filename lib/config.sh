@@ -89,16 +89,19 @@ function k_content() {
 	k_target $_target || return false
 	k_machine || return false
 	source $TARGETDIR/.kusanagi
+	CONTENTDIR=$TARGETDIR/contents 
 	
 	if ! [ -d $CONTENTDIR ] ; then
 	       	mkdir -p $CONTENTDIR
-		(cd $CONTENTDIR; git init -q )
+		git init -q
 	fi
 	case $_cmd in
 	pull|backup)
 		$CONFIGCMD tar cf - -C $BASEDIR . | tar xf - -C $CONTENTDIR
+		#git commit -a -m "pull at "$(date +%Y%m%dT%H%M%S%z)
 		;;
 	push|restore)
+		#git commit -a -m "push at "$(date +%Y%m%dT%H%M%S%z)
 		tar cf - -C $CONTENTDIR --exclude-from=$CONTENTDIR/.gitignore . | $CONFIGCMD tar xf - -C $BASEDIR 
 		;;
 	commit)
@@ -124,6 +127,7 @@ function k_dbdump() {
 	k_machine || return false
 	source $TARGETDIR/.kusanagi
 	source $TARGETDIR/.kusanagi.db
+	CONTENTDIR=$TARGETDIR/contents 
 
 	if [ $KUSANAGI_PROVISION = wp ] ; then
 		$CONFIGCMD db export > $CONTENTDIR/dbdump 

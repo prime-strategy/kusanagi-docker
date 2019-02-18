@@ -38,25 +38,34 @@ echo '  kusanagi:' >>  docker-compose.yml
 [[ $DBHOST =~ ^localhost: ]] && echo '  database:' >> docker-compose.yml
 
 
-CONFIGCMD="docker-compose run --rm config"
-
 docker-compose up -d \
-&& $CONFIGCMD chmod 755 /home/kusanagi \
-&& $CONFIGCMD mkdir -p $DOCUMENTROOT \
-&& $CONFIGCMD core download --path=${DOCUMENTROOT} ${WP_LANG:+ --locale=$WP_LANG} \
-&& $CONFIGCMD core config --path=${DOCUMENTROOT} \
-	--dbname=${DBNAME} --dbuser=${DBUSER} --dbpass=${DBPASS} \
-	${DBPREFIX:+--dbprefix $DBPREFIX} \
-	--dbcharset=${MYSQL_CHARSET:-utf8mb4} --extra-php < $LIBDIR/wp/wp-config-extra.php \
-&& $CONFIGCMD core install --path=$DOCUMENTROOT --url=http://${FQDN} \
-	--title=${WP_TITLE} --admin_user=${ADMIN_USER} \
-	--admin_password=${ADMIN_PASSWORD} --admin_email=${ADMIN_EMAIL} \
-&& tar cf - -C $LIBDIR/wp mu-plugins | $CONFIGCMD tar xf - -C $DOCUMENTROOT/wp-content/ \
-&& tar cf - -C $LIBDIR/wp tools settings | $CONFIGCMD tar xf - -C $DOCUMENTROOT/ \
-&& $CONFIGCMD mkdir -p $DOCUMENTROOT/wp-content/languages \
-&& $CONFIGCMD chmod 0777 $DOCUMENTROOT $DOCUMENTROOT/wp-content $DOCUMENTROOT/wp-content/uploads \
-&& $CONFIGCMD chmod -R 0777 $DOCUMENTROOT $DOCUMENTROOT/wp-content/languages $DOCUMENTROOT/wp-content/plugins \
-&& $CONFIGCMD sed -i "s/fqdn/$FQDN/g" $DOCUMENTROOT/tools/bcache.clear.php || return 1
+&& $CONFIGCMD chmod 751 /home/kusanagi \
+&& $CONFIGCMD mkdir -p $DOCUMENTROOT || return 1
+if [ "x$TARPATH" != "x" -a -f $TARPATH ] ; then
+	:
+elif [  "x$GITPATH" != "x" -a-f $GITPATH ] ; then 
+	:
+else
+
+	$CONFIGCMD core download --path=${DOCUMENTROOT} ${WP_LANG:+ --locale=$WP_LANG} \
+	&& $CONFIGCMD core config --path=${DOCUMENTROOT} \
+		--dbname=${DBNAME} --dbuser=${DBUSER} --dbpass=${DBPASS} \
+		${DBPREFIX:+--dbprefix $DBPREFIX} \
+		--dbcharset=${MYSQL_CHARSET:-utf8mb4} --extra-php < $LIBDIR/wp/wp-config-extra.php \
+	&& $CONFIGCMD core install --path=$DOCUMENTROOT --url=http://${FQDN} \
+		--title=${WP_TITLE} --admin_user=${ADMIN_USER} \
+		--admin_password=${ADMIN_PASSWORD} --admin_email=${ADMIN_EMAIL} \
+	&& $CONFIGCMD chmod 440 $DOCUMENTROOT/wp-config.php \
+	&& $CONFIGCMD mv $DOCUMENTROOT/wp-config.php $BASEDIR \
+	&& tar cf - -C $LIBDIR/wp mu-plugins | $CONFIGCMD tar xf - -C $DOCUMENTROOT/wp-content/ \
+	&& tar cf - -C $LIBDIR/wp tools settings | $CONFIGCMD tar xf - -C $DOCUMENTROOT/ \
+	&& $CONFIGCMD mkdir -p $DOCUMENTROOT/wp-content/languages \
+	&& $CONFIGCMD chmod 0750 $DOCUMENTROOT $DOCUMENTROOT/wp-content
+	&& $CONFIGCMD chmod 0770 $DOCUMENTROOT/wp-content/uploads \
+	&& $CONFIGCMD chmod -R 0770 $DOCUMENTROOT $DOCUMENTROOT/wp-content/languages $DOCUMENTROOT/wp-content/plugins \
+	&& $CONFIGCMD sed -i "s/fqdn/$FQDN/g" $DOCUMENTROOT/tools/bcache.clear.php \
+|| return 1
+fi
 
 #if [ $OPT_WOO ] ; then
 #	$CONFIGCMD theme install storefront
