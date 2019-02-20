@@ -151,7 +151,7 @@ function k_provision () {
 	local OPT_DBNAME OPT_DBUSER OPT_DBPASS OPT_KUSANAGI_PASS OPT_DBSYSTEM
 	local OPT_NGINX OPT_HTTPD OPT_HTTP_PORT OPT_TLS_PORT
 	local OPT PRE_OPT
-	local WPLANG=en_US FQDN= MAILADDR= DBHOST= DBROOTPASS= DBNAME= DBUSER= DBPASS=
+	local WP_LANG=en_US FQDN= MAILADDR= DBHOST= DBROOTPASS= DBNAME= DBUSER= DBPASS=
 	local ADMIN_USER= ADMIN_PASS= KUSANAGI_PASS= WP_TITLE= GITPATH= TARPATH=
 	local OPT_NO_FTP= OPT_NO_EMAIL=1
 	local HTTP_PORT=80 HTTP_TLS_PORT=443
@@ -434,7 +434,7 @@ function k_provision () {
 	## fqdn
 	if [ -z "$FQDN" ]; then
 		k_print_error $(eval_gettext "require option --fqdn for your website. ex) kusanagi.tokyo.")
-		return false
+		return 1
 	fi
 
 	if [ "wp" = $APP ]; then
@@ -447,36 +447,33 @@ function k_provision () {
 		# admin password
 		ADMIN_PASS=${ADMIN_PASS:-$(k_mkpasswd)}
 		# admin email address
-		ADMIN_EMAIL=${ADMIN_EMAIL:-$ADMIN_USER\@$FQDN}
-		export NOUSE_FTP=${OPT_NO_FTP}
+		ADMIN_EMAIL=${ADMIN_EMAIL:-${ADMIN_USER}@${FQDN}}
+		export NO_USE_FTP=${OPT_NO_FTP}
 	fi
 	
 	## db configuration
 	DBHOST=${DBHOST:-localhost}
 	if [ "$DBHOST" = 'localhost' ] ; then
 		DBROOTPASS=${DBROOTPASS:-$(k_mkpasswd)}
-		USE_INTERNALDB=1
 		if [ "$KUSANAGI_DB_SYSTEM" = "mariadb" ]; then
-			$DBHOST="localhost:/var/run/mysqld/mysqld.sock";
+			DBHOST="localhost:/var/run/mysqld/mysqld.sock";
 		fi
+	else
+		export NO_USE_DB=1
 	fi
 	DBNAME=${DBNAME:-$(k_mkusername)}
 	DBUSER=${DBUSER:-$(k_mkusername)}
 	DBPASS=${DBPASS:-$(k_mkpasswd)}
-	if [ $DBHOST = "localhost" ] ; then
-		[ $APP = "wp" ] && DBHOST=localhost:/var/run/mysqld/mysqld.sock
-	else
-		export NOUSE_DB=1
-	fi
 
 	MACHINE=$(k_machine)
 	
 	mkdir $PROFILE
+	DOCUMENTROOT=/home/kusanagi/$PROFILE/DocumentRoot
 	cat <<EOF > $PROFILE/.kusanagi
 PROFILE=$NEW_PROFILE
 MACHINE=$MACHINE
 TARGET=$PROFILE:$(pwd)/$PROFILE
-DOCUMENTROOT=/home/kusanagi/$PROFILE
+DOCUMENTROOT=$DOCUMENTROOT
 KUSANAGI_PROVISION=$APP
 KUSANAGI_DB_SYSTEM=$KUSANAGI_DB_SYSTEM
 EOF
@@ -487,21 +484,26 @@ DONOT_USE_NAXSI=1
 NO_USE_SSLST=1
 NO_SSL_REDIRECT=1
 EOF
+cat <<EOF > $PROFILE/.kusanagi.php
+EOF
+cat <<EOF > $PROFILE/.kusanagi.mail
+MAILSERVER=localhost
+EOF
 	[ "x$APP" = "xwp" ] && cat <<EOF > $PROFILE/.kusanagi.wp
 KUSANAGIPASS=$KUSANAGI_PASS
 WP_TITLE=$WP_TITLE
 DONOT_USE_BCACHE=1
 ADMIN_USER=$ADMIN_USER
 ADMIN_PASSWORD=$ADMIN_PASS
-ADMIN_EMAIL=$ADMIN_PASS
+ADMIN_EMAIL=$ADMIN_EMAIL
 EOF
 	cat <<EOF > $PROFILE/.kusanagi.db
-DBHOST=$HOST
+DBHOST=$DBHOST
 DBNAME=$DBNAME
-BUSER=$DBUSER
+DBUSER=$DBUSER
 DBPASS=$DBPASS
 EOF
-	if [ $USE_INTERNALDB -eq 1 ] ; then
+	if ! [ $NO_USE_DB ] ; then
 		if [ "$KUSANAGI_DB_SYSTEM" = "mariadb" ] ; then
 			cat <<EOF > $PROFILE/.kusanagi.mysql
 MYSQL_ROOT_PASSWORD=$DBROOTPASS
@@ -525,11 +527,11 @@ EOF
 	[ -f "$LIBDIR/$APP.sh" ] || (k_print_error "$APP $(eval_gettext "is not implemented.")" && return 1)
 	source "$LIBDIR/$APP.sh" || return 1
 	source "$LIBDIR/config.sh" || return 1
-	mkdir contents/DocumentRoot
-	if [ "x$TARPATH" != "x" -a -f $TARPATH ] ; then
+	mkdir -p contents/DocumentRoot
+	if [ "x$TARPATH" != "x" ] && [ -f $TARPATH ] ; then
 		tar xf $TARFILE -C contents/DocumentRoot
 		k_content push
-	elif [  "x$GITPATH" != "x" -a-f $GITPATH ] ; then 
+	elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then 
 		git clone $GITPATH contents/DocumentRoot
 		k_content push
 	else
@@ -538,30 +540,14 @@ EOF
 
 	local ENTRY=1
 	while [ "x$ENTRY" != "x" ] ; do
-		ENTRY=$(docker-compose exec nginx ps | grep 'docker-entrypoint.sh') 
+		ENTRY=$(docker-compose exec httpd ps | grep 'docker-entrypoint.sh') 
+		sleep 10
 	done
 
-
 	# save SSL_DHPARAM
-	SSL_DHPARAM=$(docker-compose exec httpd cat /etc/*/dhparam.key)
-	echo "SSL_DHPARAM=$SSL_DHPARAM" >> $PROFILE/.kusanagi.httpd
-
-	# use let's encrypt
-	if [ "x$MAILADDR" != "x" ] ; then
-		docker-compose run certbot certonly --text \
-	else
-		$CONFIGCMD tar cf - -C $DOCUMENTROOT . | tar xf - -C contents
-	fi
-
-	local ENTRY=1
-	while [ "x$ENTRY" != "x" ] ; do
-		ENTRY=$(docker-compose exec nginx ps | grep 'docker-entrypoint.sh') 
-	done
-
-
-	# save SSL_DHPARAM
-	SSL_DHPARAM=$(docker-compose exec httpd cat /etc/*/dhparam.key)
-	echo "SSL_DHPARAM=$SSL_DHPARAM" >> $PROFILE/.kusanagi.httpd
+	SSL_DHPARAM=$(docker-compose exec httpd cat /etc/nginx/dhparam.key)
+	[ $? -ne 0 ] && SSL_DHPARAM=$(docker-compose exec httpd cat /etc/httpd/dhparam.key)
+	echo "SSL_DHPARAM=$SSL_DHPARAM" >> .kusanagi.httpd
 
 	# use let's encrypt
 	if [ "x$MAILADDR" != "x" ] ; then
@@ -576,14 +562,14 @@ EOF
 			k_print_error $(eval_gettext "Cannot get Let\'s Encrypt SSL Certificate files.") #'
 			return 1
 		fi
-		echo "SSL_CERT=${LETSENCRYPTDIR}/fullchain.pem" >> $PROFILE/.kusanagi.httpd
-		echo "SSL_KEY=${LETSENCRYPTDIR}/privkey.pem" >> $PROFILE/.kusanagi.httpd
+		echo "SSL_CERT=${LETSENCRYPTDIR}/fullchain.pem" >> .kusanagi.httpd
+		echo "SSL_KEY=${LETSENCRYPTDIR}/privkey.pem" >> .kusanagi.httpd
 		docker-compose down httpd
 		docker-compose up -d httpd
 	fi
 
 	git init -q
-	git add .kusanagi* contents
-	git commit -m 'initial commit'
+	git add .kusanagi* contents > /dev/null
+	git commit -m 'initial commit' > /dev/null
 }
 

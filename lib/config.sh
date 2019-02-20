@@ -8,25 +8,25 @@
 function b_cache () {
 	shift
 	local cmd=$1
-	k_target $2 || return false
-	k_machine || return false
+	k_target $2 || return 1
+	k_machine || return 1
 	source $TARGETDIR/.kusanagi
 	if [ $KUSANAGI_PROVISION = "wp" ] ; then
 		k_print_error $(eval_gettext "WordPress is not provision.")
-		return false
+		return 1
 	fi
 
 	WPCONFIG=$(k_wpconfig)
 	case $cmd in
 	on)
-		$CONFIGCMD sed -i "s/^\s*define\s*(\s*'WP_CACHE'.*$/define('WP_CACHE', true);/" $WPCONFIG	
-		$CONFIGCMD sed -i "s/^\s*[#\/]\+\s*define\s*(\s*'WP_CACHE'.*$/define('WP_CACHE', true);/" $WPCONFIG
+		k_configcmd sed -i "s/^\s*define\s*(\s*'WP_CACHE'.*$/define('WP_CACHE', true);/" $WPCONFIG	
+		k_configcmd sed -i "s/^\s*[#\/]\+\s*define\s*(\s*'WP_CACHE'.*$/define('WP_CACHE', true);/" $WPCONFIG
 		;;
 	off)
-		$CONFIGCMD sed -i "s/^\s*define\s*(\s*'WP_CACHE'.*$/#define('WP_CACHE', true);/" $WPCONFIG
+		k_configcmd sed -i "s/^\s*define\s*(\s*'WP_CACHE'.*$/#define('WP_CACHE', true);/" $WPCONFIG
 		;;
 	clear)
-                local RET=$($CONFIGCMD grep -e "^[[:space:]]*define[[:space:]]*([[:space:]]*'WP_CACHE'" $WPCONFIG | grep 'true')
+                local RET=$(k_configcmd grep -e "^[[:space:]]*define[[:space:]]*([[:space:]]*'WP_CACHE'" $WPCONFIG | grep 'true')
 		if [ "$RET" ]; then
 			k_print_info $(eval_gettext "bcache is on")
 		else
@@ -40,8 +40,8 @@ function b_cache () {
 function k_fcache() {
 	shift
 	local cmd=$1
-	k_target $2 || return false
-	k_machine || return false
+	k_target $2 || return 1
+	k_machine || return 1
 	source $TARGETDIR/.kusanagi
 	case $cmd in
 	on)
@@ -71,10 +71,10 @@ function k_wp() {
 		_target=${_opts[-1]}
 		unset _opts[-1]
 	fi
-	k_target $_target || return false
-	k_machine || return false
+	k_target $_target || return 1
+	k_machine || return 1
 
-	$CONFIGCMD ${_opts[@]}
+	k_configcmd ${_opts[@]}
 }
 	
 function k_content() {
@@ -86,8 +86,8 @@ function k_content() {
 		_target=${_opts[-1]}
 		unset _opts[-1]
 	fi
-	k_target $_target || return false
-	k_machine || return false
+	k_target $_target || return 1
+	k_machine || return 1
 	source $TARGETDIR/.kusanagi
 	CONTENTDIR=$TARGETDIR/contents 
 	
@@ -97,12 +97,16 @@ function k_content() {
 	fi
 	case $_cmd in
 	pull|backup)
-		$CONFIGCMD tar cf - -C $BASEDIR . | tar xf - -C $CONTENTDIR
+		k_configcmd tar cf $BASEDIR/../content.tar -C $BASEDIR .
+		docker cp ${PROFILE}_httpd:$BASEDIR/../content.tar .
+		k_configcmd rm $BASEDIR/../content.tar
+		tar xf content.tar -C $CONTENTDIR
+		rm content.tar
 		#git commit -a -m "pull at "$(date +%Y%m%dT%H%M%S%z)
 		;;
 	push|restore)
 		#git commit -a -m "push at "$(date +%Y%m%dT%H%M%S%z)
-		tar cf - -C $CONTENTDIR --exclude-from=$CONTENTDIR/.gitignore . | $CONFIGCMD tar xf - -C $BASEDIR 
+		tar cf - -C $CONTENTDIR --exclude-from=$CONTENTDIR/.gitignore . | k_configcmd tar xf - -C $BASEDIR 
 		;;
 	commit)
 		(cd $CONTENTDIR; git commit ${_opts[@]})
@@ -123,22 +127,22 @@ function k_content() {
 
 function k_dbdump() {
 	shift
-	k_target $1 || return false
-	k_machine || return false
+	k_target $1 || return 1
+	k_machine || return 1
 	source $TARGETDIR/.kusanagi
 	source $TARGETDIR/.kusanagi.db
 	CONTENTDIR=$TARGETDIR/contents 
 
 	if [ $KUSANAGI_PROVISION = wp ] ; then
-		$CONFIGCMD db export > $CONTENTDIR/dbdump 
+		k_configcmd db export > $CONTENTDIR/dbdump 
 	else
 		[[ $DBHOST =~ ^localhost ]] && DBHOST= || DBHOST="-h $DBHOST"
 		case $KUSANAGI_DB_SYSTEM in
 		mysql)
-			$CONFIGCMD mysqldump -u$DBUSER $DBHOST -p"$DBPASS" $DBNAME > $CONTENTDIR/dbdump
+			k_configcmd mysqldump -u$DBUSER $DBHOST -p"$DBPASS" $DBNAME > $CONTENTDIR/dbdump
 			;;
 		pgsql)
-			$CONFIGCMD pg_dump $DBHOST $DBNAME > $CONTENTDIR/dbdump
+			k_configcmd pg_dump $DBHOST $DBNAME > $CONTENTDIR/dbdump
 			;;
 		*)
 			;;
@@ -149,22 +153,22 @@ function k_dbdump() {
 
 function k_dbrestore() {
 	shift
-	k_target $1 || return false
-	k_machine || return false
+	k_target $1 || return 1
+	k_machine || return 1
 	source $TARGETDIR/.kusanagi
 	source $TARGETDIR/.kusanagi.db
 	CONTENTDIR=$TARGETDIR/contents 
 
 	if [ $KUSANAGI_PROVISION = wp ] ; then
-		$CONFIGCMD db import < $CONTENTDIR/dbdump 
+		k_configcmd db import < $CONTENTDIR/dbdump 
 	else
 		[[ $DBHOST =~ ^localhost ]] && DBHOST= || DBHOST="-h $DBHOST"
 		case $KUSANAGI_DB_SYSTEM in
 		mysql)
-			$CONFIGCMD mysql -u$DBUSER $DBHOST -p"$DBPASS" $DBNAME < $CONTENTDIR/dbdump
+			k_configcmd mysql -u$DBUSER $DBHOST -p"$DBPASS" $DBNAME < $CONTENTDIR/dbdump
 			;;
 		pgsql)
-			$CONFIGCMD pg_restore $DBHOST -d $DBNAME < $CONTENTDIR/dbdump
+			k_configcmd pg_restore $DBHOST -d $DBNAME < $CONTENTDIR/dbdump
 			;;
 		*)
 			;;
@@ -173,6 +177,7 @@ function k_dbrestore() {
 }
 
 function k_config () {
+	shift
 	# sub command
 	case "$1" in
 	bcache)# [on|off]

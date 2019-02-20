@@ -5,6 +5,7 @@
 #
 
 BASEDIR=$(dirname $(dirname $0))
+(echo $BASEDIR | grep '^/' > /dev/null) || BASEDIR=$(pwd)/$BASEDIR
 COMMAND=$(basename $0)
 LIBDIR=$BASEDIR/lib
 BINDIR=$BASEDIR/bin
@@ -35,6 +36,7 @@ case ${1} in
 		k_nginx $@
 		;;
 	ssl)
+		source $LIBDIR/ssl.sh
 		k_ssl $@
 		;;
 	config)

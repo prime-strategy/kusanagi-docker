@@ -9,6 +9,10 @@ CONFIGCMD="docker-compose run --rm config"
 export TEXTDOMAIN="kusanagi-docker" 
 export TEXTDOMAINDIR="$LIBDIR/locale"
 source /usr/bin/gettext.sh
+  
+function k_configcmd() {
+	$CONFIGCMD $@ 2>&1 > /dev/null
+}
 
 # make random username
 function k_mkusername() {
@@ -17,7 +21,7 @@ function k_mkusername() {
 
 # make random password
 function k_mkpasswd() {
-	openssl rand -base64 1024 | fold -w 23 | egrep -e '^[!-/a-zA-Z0-9]+$'| head -1
+	openssl rand -base64 1024 | fold -w 23 | egrep -e '^[!-/a-zA-Z0-9]+$'| head -1 | sed 's|/|%|g'
 }
 
 function k_version() {
@@ -110,8 +114,9 @@ function k_target() {
 		k_print_error "$(eval_gettext 'TARGET has not been set.')"
 		false
 	else
-		export TARGETDIR=${TARGET##:*} TARGET=${TARGET%%:*}
+		export TARGETDIR=${TARGET##*:} TARGET=${TARGET%%:*}
 		export CONTENTDIR=$TARGETDIR/contents 
+		export DOCUMENTROOT=/home/kusanagi/$TARGET/DocumentRoot
 		export BASEDIR=$(dirname $DOCUMENTROOT)
 		if [ "$_target" != "$TARGET" ] ; then
 		#	k_rewrite TARGET "$TARGET:$TARGETDIR" $LOCAL_KUSANAGI_FILE && \
@@ -133,14 +138,13 @@ function k_machine() {
 			eval $(grep ^MACHINE= "$TARGETDIR/$LOCAL_KUSANAGI_FILE")
 		elif [ -f "$GLOBAL_KUSANAGI_FILE" ] ; then
 			eval $(grep ^MACHINE= "$GLOBAL_KUSANAGI_FILE")
-		else
-			MACHINE=localhost
 		fi
+		MACHINE=${MACHINE:-localhost}
 	elif [ "$_machine" != "localhost" ] ; then
 		docker-machine ls | grep $_machine 2>&1 > /dev/null
 		if [ $? -eq 1 ] ; then
 			k_print_error "$_machine $(eval_gettext 'is not found.')"
-			return false
+			return 1
 		fi
 	fi
 
@@ -162,18 +166,18 @@ function k_wpconfig() {
 	[ "x$WPCONFIG" = "x" ] && WPCONFIG=$($CONFIGCMD ls $DOCUMENTROOT/wp-config.php 2> /dev/null)
 	if [ $WPCONFIG ] ; then
 		k_print_error "wp-config.php $(eval_gettext 'is not found.')"
-		return false
+		return 1
 	fi
 	echo $WPCONFIG
 }
 
-function k_strartstop() {
+function k_startstop() {
 	local _cmd=$1
 	local _arg2=$2
 	local _arg3=$3
 	local _service _target
 	case "$_arg2" in
-		httpd|php7|mysql)
+		httpd|php|mysql|ftp)
 			_service=$_arg2
 			;;
 		"")
@@ -188,8 +192,13 @@ function k_strartstop() {
 	esac
 	k_target $_target
 	k_machine > /dev/null
+	case $_cmd in
+	'start'|'stop'|'restart')
+		cd $TARGETDIR && docker-compose $_cmd $_service
+		;;
+	*)
+	esac
 
-	cd $TARGETDIR && docker-compose $_cmd $_service
 }
 
 function k_remove() {
@@ -198,7 +207,7 @@ function k_remove() {
 
 	local _PWD=$(pwd)
 	cd $TARGETDIR \
-	&& docker-compose stop -d \
+	&& docker-compose down -v \
 	&& cd .. \
 	&& rm -rf $TARGETDIR \
 	&& ([ -d $_PWD ] && cd $_PWD || true)
@@ -250,7 +259,7 @@ function k_rewrite() {
 	local _file=$3
 	grep "^$_var=" $_file 2>&1 > /dev/null
 	if [ $? -eq 0 ] ; then
-		sed -i "s/^$_var=.*$/$_var=$_val/" $_file
+		sed -i "s|^$_var=.*$|$_var=$_val|" $_file
 	else
 		echo "$_var=$_val" >> $_file
 	fi
