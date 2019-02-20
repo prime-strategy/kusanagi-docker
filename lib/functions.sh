@@ -96,17 +96,18 @@ function k_target() {
 	if [ "x$_target" != "x" ] ; then
 		# target directory is found
 		if [ -d "$_target" ] ; then
-			TARGET="$_target:$(pwd)/$_target"
+			TARGET="$_target"
+			TARGETDIR="$(pwd)/$_target"
 		# target directory is not found
 		else
 			k_print_error "$_target $(eval_gettext 'not found.')"
 		fi
 	# when LOCAL_KUSANAGIFILE is found, use this files TARGET entry
 	elif [ -f $LOCAL_KUSANAGI_FILE ] ; then
-		eval $(grep ^TARGET= "$LOCAL_KUSANAGI_FILE" 2> /dev/null)
+		source $LOCAL_KUSANAGI_FILE
 	# when GLOBAL_KUSANAGI_FILE is not found, error exit.
 	else 
-		TARGET=$(grep ^TARGET= "$GLOBAL_KUSANAGI_FILE" 2> /dev/null)
+		source $GLOBAL_KUSANAGI_FILE
 	fi
 
 	# when TARGET is not defind, error exit.
@@ -114,13 +115,13 @@ function k_target() {
 		k_print_error "$(eval_gettext 'TARGET has not been set.')"
 		false
 	else
-		export TARGETDIR=${TARGET##*:} TARGET=${TARGET%%:*}
 		export CONTENTDIR=$TARGETDIR/contents 
 		export DOCUMENTROOT=/home/kusanagi/$TARGET/DocumentRoot
 		export BASEDIR=$(dirname $DOCUMENTROOT)
 		if [ "$_target" != "$TARGET" ] ; then
 		#	k_rewrite TARGET "$TARGET:$TARGETDIR" $LOCAL_KUSANAGI_FILE && \
-			k_rewrite TARGET "$TARGET:$TARGETDIR" $GLOBAL_KUSANAGI_FILE 
+			k_rewrite TARGET "$TARGET" $GLOBAL_KUSANAGI_FILE 
+			k_rewrite TARGETDIR "$TARGETDIR" $GLOBAL_KUSANAGI_FILE 
 		fi
 	fi
 }
