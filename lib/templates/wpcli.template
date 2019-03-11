@@ -3,7 +3,6 @@
     container_name: ${PROFILE}_config
     image: $CONFIG_IMAGE
     user: "1000:1001"
-    network_mode: "service:httpd"
     env_file:
       - .kusanagi
       - .kusanagi.wp

@@ -3,7 +3,6 @@
 # (C)2019 Prime-Strategy Co,Ltd
 # Licenced by GNU GPL v2
 #
-GLOBAL_KUSANAGI_FILE=$HOME/.kusanagi/.kusanagi
 LOCAL_KUSANAGI_FILE=.kusanagi
 CONFIGCMD="docker-compose run --rm config"
 export TEXTDOMAIN="kusanagi-docker" 
@@ -11,7 +10,9 @@ export TEXTDOMAINDIR="$LIBDIR/locale"
 source /usr/bin/gettext.sh
   
 function k_configcmd() {
-	$CONFIGCMD $@ 2>&1 > /dev/null
+	local _dir=$1
+	shift
+	docker-compose run --rm -w $_dir config $@
 }
 
 # make random username
@@ -60,7 +61,7 @@ provision [options] --fqdn domainname target
         [--dbhost host] [--dbname dbname]
 	[--dbuser username] [--dbpass password]
 	[--git giturl|--tar tarball]
-ssl [options] target
+ssl [options] 
         [--email|--ssl email@example.com]
 	[--cert file --key file]
         [--redirect|--noredirect]
@@ -68,7 +69,7 @@ ssl [options] target
         [--oscp  [on|off]]
         [--ct  [on|off] [--no-register|--noregister]]
         [--renew]
-config command target
+config command 
 	bcache [on|off]
 	fcache [on|off]
 	pull
@@ -85,7 +86,7 @@ remove [-y] [target]
 ---------------------
 - status -
 [-V|--version]
-start|stop|restart|status [httpd|php7|db] [target]
+start|stop|restart|status [httpd|php7|db] 
 ----------------------
 EOD
 }
@@ -105,9 +106,6 @@ function k_target() {
 	# when LOCAL_KUSANAGIFILE is found, use this files TARGET entry
 	elif [ -f $LOCAL_KUSANAGI_FILE ] ; then
 		source $LOCAL_KUSANAGI_FILE
-	# when GLOBAL_KUSANAGI_FILE is not found, error exit.
-	else 
-		source $GLOBAL_KUSANAGI_FILE
 	fi
 
 	# when TARGET is not defind, error exit.
@@ -118,27 +116,21 @@ function k_target() {
 		export CONTENTDIR=$TARGETDIR/contents 
 		export DOCUMENTROOT=/home/kusanagi/$TARGET/DocumentRoot
 		export BASEDIR=$(dirname $DOCUMENTROOT)
-		if [ "$_target" != "$TARGET" ] ; then
-		#	k_rewrite TARGET "$TARGET:$TARGETDIR" $LOCAL_KUSANAGI_FILE && \
-			k_rewrite TARGET "$TARGET" $GLOBAL_KUSANAGI_FILE 
-			k_rewrite TARGETDIR "$TARGETDIR" $GLOBAL_KUSANAGI_FILE 
-		fi
 	fi
 }
 
 function k_init {
 	local _init=$2
 	k_target
-	export MACHINE=$(k_machine "$_init")
+	export MACHINE=$(k_machine "$_init" 1)
 }
 
 function k_machine() {
 	local _machine=$1
+	local _is_print=$2
 	if [ "x$_machine" = "x" ] ; then
 		if [ -f "$TARGETDIR/$LOCAL_KUSANAGI_FILE" ] ; then
 			eval $(grep ^MACHINE= "$TARGETDIR/$LOCAL_KUSANAGI_FILE")
-		elif [ -f "$GLOBAL_KUSANAGI_FILE" ] ; then
-			eval $(grep ^MACHINE= "$GLOBAL_KUSANAGI_FILE")
 		fi
 		MACHINE=${MACHINE:-localhost}
 	elif [ "$_machine" != "localhost" ] ; then
@@ -147,29 +139,34 @@ function k_machine() {
 			k_print_error "$_machine $(eval_gettext 'is not found.')"
 			return 1
 		fi
+		MACHINE=$_machine
 	fi
 
-	if [ "$_machine" = "localhost" -o "$MACHINE" = "localhost" ] ; then
-		[ "x$TARGETDIR" != "x" ] && \
-		       	(cd $TARGETDIR && docker-compose ps 1>&2 ) || docker ps 1>&2
-	else
-		[ "x$TARGETDIR" != "x" ]  \
-		       	&& (cd $TARGETDIR && \
-		       		eval $(docker-machine env $_machine) && \
-			       		docker-compose ps) 1>&2 \
-			||  (eval $(docker-machine env $_machine) && docker ps 1>&2) 
+	if [ $_is_print ] ; then
+		if [ "$_machine" = "localhost" -o "$MACHINE" = "localhost" ] ; then
+			[ "x$TARGETDIR" != "x" ] && \
+			       	(cd $TARGETDIR && docker-compose ps 1>&2 ) || docker ps 1>&2
+		else
+			[ "x$TARGETDIR" != "x" ]  \
+			       	&& (cd $TARGETDIR && \
+			       		eval $(docker-machine env $_machine) && \
+				       		docker-compose ps) 1>&2 \
+				||  (eval $(docker-machine env $_machine) && docker ps 1>&2) 
+		fi
 	fi
 	echo $MACHINE
 }
 
 function k_wpconfig() {
-	local WPCONFIG=$($CONFIGCMD ls $BASEDIR/wp-config.php 2> /dev/null)
-	[ "x$WPCONFIG" = "x" ] && WPCONFIG=$($CONFIGCMD ls $DOCUMENTROOT/wp-config.php 2> /dev/null)
-	if [ $WPCONFIG ] ; then
+	local _dir
+	k_configcmd $BASEDIR test -f $BASEDIR/wp-config.php && _dir=$BASEDIR
+	k_configcmd $DOCUMENTROOT test -f $BASEDIR/wp-config.php && _dir=$DOCUMENTROOT
+	if [ "x$_dir" = "x" ] ; then
 		k_print_error "wp-config.php $(eval_gettext 'is not found.')"
 		return 1
+	else
+		echo $_dir
 	fi
-	echo $WPCONFIG
 }
 
 function k_startstop() {

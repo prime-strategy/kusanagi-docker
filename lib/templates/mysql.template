@@ -1,6 +1,6 @@
 ## MYSQL 
-  mysql:
-    container_name: ${PROFILE}_mysql
+  db:
+    container_name: ${PROFILE}_db
     image: $KUSANAGI_MARIADB_IMAGE
     user: "999:999"
     env_file:

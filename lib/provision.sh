@@ -539,15 +539,19 @@ EOF
 		k_content pull
 	fi
 
+	echo -n -e "\e[32m" $(eval_gettext "Waiting HTTPD init process")
 	local ENTRY=1
 	while [ "x$ENTRY" != "x" ] ; do
+		echo -n "."
 		ENTRY=$(docker-compose exec httpd ps | grep 'docker-entrypoint.sh') 
 		sleep 10
 	done
+	echo -e "\e[m"
 
 	# save SSL_DHPARAM
-	SSL_DHPARAM=$(docker-compose exec httpd cat /etc/nginx/dhparam.key)
-	[ $? -ne 0 ] && SSL_DHPARAM=$(docker-compose exec httpd cat /etc/httpd/dhparam.key)
+	DHPARAM=$(docker-compose exec httpd cat /etc/nginx/dhparam.key)
+	[ $? -ne 0 ] && DHPARAM=$(docker-compose exec httpd cat /etc/httpd/dhparam.key)
+	SSL_DHPARAM=$(echo $DHPARAM | sed -e 's/\n/ /g' -e 's/\r//g')
 	echo "SSL_DHPARAM=$SSL_DHPARAM" >> .kusanagi.httpd
 
 	# use let's encrypt
@@ -570,7 +574,8 @@ EOF
 	fi
 
 	git init -q
-	git add .kusanagi* contents > /dev/null
+	echo '*~' > .gitignore
+	git add .kusanagi* contents docker-compose.yml > /dev/null
 	git commit -m 'initial commit' > /dev/null
 }
 

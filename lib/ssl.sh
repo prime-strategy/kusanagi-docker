@@ -139,15 +139,15 @@ function k_ssl () {
 		NO_SSL_REDIRECT=0
 		if [ $KUSANAGI_PROVISION = "wp" ] ; then
 			WPCONFIG=$(k_wpconfig)
-			CONFIGCMD sed -i  "s/^[#\s]\+define('FORCE_SSL_ADMIN/define('FORCE_SSL_ADMIN/g" $WPCONFIG
-			CONFIGCMD search-replace http://$FQDN https://$FQDN --path=$DOCUMENTROOT --all-tables > /dev/null
+			k_configcmd $WPCONFIG sed -i  "s/^[#\s]\+define('FORCE_SSL_ADMIN/define('FORCE_SSL_ADMIN/g" wp-config.php
+			k_configcmd $DOCUMENTROOT search-replace http://$FQDN https://$FQDN --all-tables
 		fi
 	elif ! [ $OPT_REDIRECT -a $NO_SSL_REDIRECT ] ; then
 		NO_SSL_REDIRECT=1
 		if [ $KUSANAGI_PROVISION = "wp" ] ; then
 			WPCONFIG=$(k_wpconfig)
-			CONFIGCMD sed -i  "s/^\s\+define('FORCE_SSL_ADMIN/#define('FORCE_SSL_ADMIN/g" $WPCONFIG
-			CONFIGCMD search-replace https://$FQDN http://$FQDN --path=$DOCUMENTROOT --all-tables > /dev/null
+			k_configcmd $WPCONFIG sed -i  "s/^\s\+define('FORCE_SSL_ADMIN/#define('FORCE_SSL_ADMIN/g" wp-config.php
+			k_configcmd $DOCUMENTROOT search-replace https://$FQDN http://$FQDN --all-tables
 		fi
 	fi
 	USE_SSL_CT=${CT:-off}

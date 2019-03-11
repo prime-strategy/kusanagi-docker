@@ -40,8 +40,8 @@ echo '  kusanagi:' >>  docker-compose.yml
 
 docker-compose up -d \
 && docker-compose run -u0 --rm config chown 1000:1001 /home/kusanagi  \
-&& k_configcmd chmod 751 /home/kusanagi \
-&& k_configcmd mkdir -p $DOCUMENTROOT || return 1
+&& k_configcmd "/" chmod 751 /home/kusanagi \
+&& k_configcmd "/" mkdir -p $DOCUMENTROOT || return 1
 if [ "x$TARPATH" != "x" ] && [ -f $TARPATH ] ; then
 	:
 elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then 
@@ -54,49 +54,49 @@ else
 		while [ $ENTRY -eq 1 ] ; do
 			echo -n "."
 			sleep 5
-			journalctl CONTAINER_NAME=${PROFILE}_mysql | tail -30 | grep "MySQL init process done. Ready for start up."
+			journalctl CONTAINER_NAME=${PROFILE}_db | tail -30 | grep "MySQL init process done. Ready for start up."
 			ENTRY=$?
 		done
 		echo -e "\e[m"
 	fi
 
 	k_print_green "$(eval_gettext 'Provision WordPress')"
-	k_configcmd core download --path=${DOCUMENTROOT} ${WP_LANG:+ --locale=$WP_LANG} \
+	k_configcmd $DOCUMENTROOT core download ${WP_LANG:+ --locale=$WP_LANG} \
 	&& sleep 1 \
-	&& k_configcmd core config --path=${DOCUMENTROOT} \
+	&& k_configcmd $DOCUMENTROOT core config \
 		--dbhost=${DBHOST} \
 		--dbname="${DBNAME}" --dbuser="${DBUSER}" --dbpass="${DBPASS}" \
 		${DBPREFIX:+--dbprefix $DBPREFIX} \
 		--dbcharset=${MYSQL_CHARSET:-utf8mb4} --extra-php < $LIBDIR/wp/wp-config-sample/$WP_LANG/wp-config-extra.php \
 	&& sleep 1 \
-	&& k_configcmd core install --path=$DOCUMENTROOT --url=http://${FQDN} \
+	&& k_configcmd $DOCUMENTROOT core install --url=http://${FQDN} \
 		--title=${WP_TITLE} --admin_user=${ADMIN_USER} \
 		--admin_password=${ADMIN_PASSWORD} --admin_email="${ADMIN_EMAIL}" \
-	&& k_configcmd chmod 440 $DOCUMENTROOT/wp-config.php \
-	&& k_configcmd mv $DOCUMENTROOT/wp-config.php $BASEDIR \
-	&& tar cf - -C $LIBDIR/wp mu-plugins | k_configcmd tar xf - -C $DOCUMENTROOT/wp-content/ \
-	&& tar cf - -C $LIBDIR/wp tools settings | k_configcmd tar xf - -C $DOCUMENTROOT/ \
-	&& k_configcmd mkdir -p $DOCUMENTROOT/wp-content/languages \
-	&& k_configcmd chmod 0750 $DOCUMENTROOT $DOCUMENTROOT/wp-content \
-	&& k_configcmd chmod 0770 $DOCUMENTROOT/wp-content/uploads \
-	&& k_configcmd chmod -R 0770 $DOCUMENTROOT $DOCUMENTROOT/wp-content/languages $DOCUMENTROOT/wp-content/plugins \
-	&& k_configcmd sed -i "s/fqdn/$FQDN/g" $DOCUMENTROOT/tools/bcache.clear.php \
+	&& k_configcmd $DOCUMENTROOT chmod 440 wp-config.php \
+	&& k_configcmd $DOCUMENTROOT mv wp-config.php .. \
+	&& tar cf - -C $LIBDIR/wp/ mu-plugins | k_configcmd $DOCUMENTROOT/wp-content tar xf - \
+	&& tar cf - -C $LIBDIR/wp/ tools settings | k_configcmd $BASEDIR tar xf - \
+	&& k_configcmd $DOCUMENTROOT mkdir -p ./wp-content/languages \
+	&& k_configcmd $DOCUMENTROOT chmod 0750 . ./wp-content \
+	&& k_configcmd $DOCUMENTROOT chmod 0770 ./wp-content/uploads \
+	&& k_configcmd $DOCUMENTROOT chmod -R 0770 . ./wp-content/languages ./wp-content/plugins \
+	&& k_configcmd $BASEDIR sed -i "s/fqdn/$FQDN/g" tools/bcache.clear.php \
 || return 1
 fi
 
 #if [ $OPT_WOO ] ; then
-#	k_configcmd theme install storefront
+#	k_configcmd "" theme install storefront
 #	docker cp $PROFILE_httpd $KUSANAGILIBDIR/wp/wc4jp-gmo-pg.1.2.0.zip $PROFILE_httpd:$DOCUMENTROOT
-#	k_configcmd unzip -q -d $DOCUMENTROOT/wp-content/plugins $DOCUMENTROOT/wc4jp-gmo-pg.1.2.0.zip
-#	k_configcmd rm $DOCUMENTROOT/wc4jp-gmo-pg.1.2.0.zip
+#	k_configcmd "" unzip -q -d $DOCUMENTROOT/wp-content/plugins $DOCUMENTROOT/wc4jp-gmo-pg.1.2.0.zip
+#	k_configcmd "" rm $DOCUMENTROOT/wc4jp-gmo-pg.1.2.0.zip
 #	if [ "WPLANG" = "ja" ] ; then
-#		k_configcmd plugin install woocommerce-for-japan
-#		k_configcmd language plugin install woocommerce-for-japan ja
-#		k_configcmd language theme install storefront ja
-#		k_configcmd plugin activate woocommerce-for-japan
+#		k_configcmd "" plugin install woocommerce-for-japan
+#		k_configcmd "" language plugin install woocommerce-for-japan ja
+#		k_configcmd "" language theme install storefront ja
+#		k_configcmd "" plugin activate woocommerce-for-japan
 #	fi
-#	k_configcmd theme activate storefront
-#	k_configcmd plugin activate wc4jp-gmo-pg
+#	k_configcmd "" theme activate storefront
+#	k_configcmd "" plugin activate wc4jp-gmo-pg
 #
 #fi
 

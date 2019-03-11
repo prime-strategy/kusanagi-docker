@@ -16,9 +16,6 @@ case ${1} in
 	init)
 		k_init $@
 		;;
-	target)
-		k_target $@
-		;;
 	provision)
 		source $LIBDIR/provision.sh
 		k_provision $@
@@ -58,7 +55,6 @@ case ${1} in
 	update)
 		k_update $@
 		;;
-
 	-v|-V|--version)
 		k_version
 		;;
@@ -66,9 +62,9 @@ case ${1} in
 		k_help
 		;;
 	*)
-	echo "no such sub command $1" 1>&2
-	echo "Try $COMMAND -h"
-		;;
+		echo "no such sub command $1" 1>&2
+		echo "Try $COMMAND -h"
+	;;
 esac
 check_status
 exit ${_RETURN}
