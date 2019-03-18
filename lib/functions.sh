@@ -160,7 +160,8 @@ function k_machine() {
 function k_wpconfig() {
 	local _dir
 	k_configcmd $BASEDIR test -f $BASEDIR/wp-config.php && _dir=$BASEDIR
-	k_configcmd $DOCUMENTROOT test -f $BASEDIR/wp-config.php && _dir=$DOCUMENTROOT
+	[ "x$_dir" = "x" ] && \
+		k_configcmd $DOCUMENTROOT test -f $DOCUMENTROOT/wp-config.php && _dir=$DOCUMENTROOT
 	if [ "x$_dir" = "x" ] ; then
 		k_print_error "wp-config.php $(eval_gettext 'is not found.')"
 		return 1
@@ -172,27 +173,25 @@ function k_wpconfig() {
 function k_startstop() {
 	local _cmd=$1
 	local _arg2=$2
-	local _arg3=$3
 	local _service _target
 	case "$_arg2" in
-		httpd|php|mysql|ftp)
+		httpd|php|db|ftp)
 			_service=$_arg2
 			;;
 		"")
 			;;
 		*)
-		if [ -z $_arg3 ] ; then
-			_target=$_arg2
-		else
 			k_print_error $_cmd: $_arg2 $(eval_gettext "service not found.")
 			return 1
-		fi
 	esac
-	k_target $_target
+	k\_target > /dev/null
 	k_machine > /dev/null
 	case $_cmd in
-	'start'|'stop'|'restart')
+	'start'|'stop'|'restart'|'ps')
 		cd $TARGETDIR && docker-compose $_cmd $_service
+		;;
+	'status')
+		cd $TARGETDIR && docker-compose ps $_service
 		;;
 	*)
 	esac
@@ -244,7 +243,7 @@ function k_check_email() {
 function k_check_onoff() {
 	local PRE_OPT="$1"
 	local OPT="$2"
-	if [ "$OPT" = "on" -o "$OPT" = "off"] ; then
+	if [ "$OPT" = "on" -o "$OPT" = "off" ] ; then
 		echo "$OPT"
 	else
 		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input on/off.")
@@ -310,17 +309,17 @@ function k_print_notice () {
 
 function k_print_red () {
 	local OUT="${1}"
-	k_is_tty && echo -e "\e[31m${OUT}\e[m" || echo "$OUT"
+	k_is_tty && echo -e "\e[31m${OUT}\e[m" || echo "$OUT" 1&>2
 }
 
 function k_print_green () {
 	local OUT="${1}"
-	k_is_tty && echo -e "\e[32m${OUT}\e[m" || echo "$OUT"
+	k_is_tty && echo -e "\e[32m${OUT}\e[m" || echo "$OUT" 1&>2
 }
 
 function k_print_yellow () {
 	local OUT="${1}"
-	k_is_tty && echo -e "\e[33m${OUT}\e[m" || echo "$OUT"
+	k_is_tty && echo -e "\e[33m${OUT}\e[m" || echo "$OUT" 1&>2
 }
 		
 

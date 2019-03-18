@@ -7,11 +7,53 @@
 function k_check_wplang() {
 	local PRE_OPT="$1"
 	local OPT="$2"
-	if [ "$OPT" =  "en_US" -o "$OPT" = "ja" ] ; then
+	case "$OPT" in
+	af|ar|ary|as|az|azb|bel|bg_BG|bn_BD|bo|bs_BA|ca|ceb|ckb|cs_CZ|cy)
 		echo "$OPT"
-	else
-		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input 'en_US' or 'ja'.")
-	fi
+		;;
+	da_DK|de_CH|de_CH_informal|de_DE|de_DE_formal|dzo)
+		echo "$OPT"
+		;;
+	el|en_AU|en_CA|en_GB|en_NZ|en_US|en_ZA|eo)
+		echo "$OPT"
+		;;
+	es_AR|es_CL|es_CO|es_CR|es_ES|es_GT|es_MX|es_PE|es_VE|et)
+		echo "$OPT"
+		;;
+	eu|fa_IR|fi|fr_BE|fr_CA|fr_FR|fur)
+		echo "$OPT"
+		;;
+	gd|gl_ES|gu|haz|he_IL|hi_IN|hr|hu_HU|hy)
+		echo "$OPT"
+		;;
+	id_ID|is_IS|it_IT|ja|jv_ID|kab|ka_GE|kk|km|ko_KR|lo|lt_LT|lv)
+		echo "$OPT"
+		;;
+	mk_MK|ml_IN|mn|mr|ms_MY|my_MM)
+		echo "$OPT"
+		;;
+	nb_NO|ne_NP|nl_BE|nl_NL|nl_NL_formal|nn_NO)
+		echo "$OPT"
+		;;
+	oci|pa_IN|pl_PL|ps|pt_BR|pt_PT|pt_PT_ao90)
+		echo "$OPT"
+		;;
+	rhg|ro_RO|ru_RU|sah)
+		echo "$OPT"
+		;;
+	si_LK|skr|sk_SK|sl_SI|sq|sr_RS|sv_SE|szl)
+		echo "$OPT"
+		;;
+	tah|ta_IN|te|th|tl|tr_TR|tt_RU)
+		echo "$OPT"
+		;;
+	ug_CN|uk|ur|uz_UZ|vi|zh_CN|zh_HK|zh_TW)
+		echo "$OPT"
+		;;
+	*)
+		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input legal language.")
+		;;
+	esac
 }
 
 function k_check_fqdn() {
@@ -164,7 +206,7 @@ function k_provision () {
 		# skip 1st argment "provision"
 		if [ $OPT_WPLANG ] ; then
 			WP_LANG=$(k_check_wplang "$PRE_OPT" "$OPT")
-			[ -z $WP_LANG ] && return 1
+			[ $WP_LANG != $OPT ] && return 1
 			OPT_WPLANG=
 		elif [ $OPT_FQDN ] ; then
 			FQDN=$(k_check_fqdn "$PRE_OPT" "$OPT")
@@ -439,7 +481,7 @@ function k_provision () {
 
 	if [ "wp" = $APP ]; then
 		WP_TITLE=${WP_TITLE:-WordPress}
-		WPLANG=${WPLANG:-ja}
+		WPLANG=${WPLANG:-ja_JP}
 		## kusanagi user password
 		KUSANAGI_PASS=${KUSANAGI_PASS:-$(k_mkpasswd)}
 		# admin user
@@ -481,7 +523,9 @@ EOF
 	cat <<EOF > $PROFILE/.kusanagi.httpd
 FQDN=$FQDN
 DONOT_USE_FCACHE=1
-DONOT_USE_NAXSI=1
+USE_SSL_CT=off
+USE_SSL_OSCP=off
+NO_USE_NAXSI=1
 NO_USE_SSLST=1
 NO_SSL_REDIRECT=1
 EOF
@@ -539,12 +583,15 @@ EOF
 		k_content pull
 	fi
 
-	echo -n -e "\e[32m" $(eval_gettext "Waiting HTTPD init process")
-	local ENTRY=1
+	local ENTRY=$(docker-compose exec httpd ps | grep 'docker-entrypoint.sh') 
+	local FIRST=1
 	while [ "x$ENTRY" != "x" ] ; do
+		[ $FIRST ] && FIRST= && \
+			echo -n -e "\e[32m" $(eval_gettext "Waiting HTTPD init process") 
 		echo -n "."
 		ENTRY=$(docker-compose exec httpd ps | grep 'docker-entrypoint.sh') 
-		sleep 10
+		[ "x$ENTRY" != "x" ] && break
+		sleep 5
 	done
 	echo -e "\e[m"
 
@@ -552,7 +599,7 @@ EOF
 	DHPARAM=$(docker-compose exec httpd cat /etc/nginx/dhparam.key)
 	[ $? -ne 0 ] && DHPARAM=$(docker-compose exec httpd cat /etc/httpd/dhparam.key)
 	SSL_DHPARAM=$(echo $DHPARAM | sed -e 's/\n/ /g' -e 's/\r//g')
-	echo "SSL_DHPARAM=$SSL_DHPARAM" >> .kusanagi.httpd
+	echo "SSL_DHPARAM=\"$SSL_DHPARAM\"" >> .kusanagi.httpd
 
 	# use let's encrypt
 	if [ "x$MAILADDR" != "x" ] ; then

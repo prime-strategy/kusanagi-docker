@@ -37,6 +37,14 @@ echo 'volumes:' >> docker-compose.yml
 echo '  kusanagi:' >>  docker-compose.yml
 [[ $DBHOST =~ ^localhost: ]] && echo '  database:' >> docker-compose.yml
 
+function wp_lang() {
+	if [ ${1} != "en_US" ] ; then
+		k_configcmd $DOCUMENTROOT language core install ${WP_LANG} && \
+		k_configcmd $DOCUMENTROOT language plugin install --all ${WP_LANG} && \
+		k_configcmd $DOCUMENTROOT language theme install --all ${WP_LANG} && \
+		k_configcmd $DOCUMENTROOT site switch-language ${WP_LANG} 
+	fi
+}
 
 docker-compose up -d \
 && docker-compose run -u0 --rm config chown 1000:1001 /home/kusanagi  \
@@ -54,32 +62,35 @@ else
 		while [ $ENTRY -eq 1 ] ; do
 			echo -n "."
 			sleep 5
-			journalctl CONTAINER_NAME=${PROFILE}_db | tail -30 | grep "MySQL init process done. Ready for start up."
+			journalctl CONTAINER_NAME=${PROFILE}_db | tail -30 | grep "MySQL init process done. Ready for start up." > /dev/null
 			ENTRY=$?
 		done
 		echo -e "\e[m"
 	fi
 
+	EXTRAPHP=$LIBDIR/wp/wp-config-sample/$WP_LANG/wp-config-extra.php
+	[ -f $EXTRAPHP ] || EXTRAPHP=$LIBDIR/wp/wp-config-sample/en_US/wp-config-extra.php
 	k_print_green "$(eval_gettext 'Provision WordPress')"
-	k_configcmd $DOCUMENTROOT core download ${WP_LANG:+ --locale=$WP_LANG} \
+	k_configcmd $DOCUMENTROOT core download \
 	&& sleep 1 \
 	&& k_configcmd $DOCUMENTROOT core config \
 		--dbhost=${DBHOST} \
 		--dbname="${DBNAME}" --dbuser="${DBUSER}" --dbpass="${DBPASS}" \
 		${DBPREFIX:+--dbprefix $DBPREFIX} \
-		--dbcharset=${MYSQL_CHARSET:-utf8mb4} --extra-php < $LIBDIR/wp/wp-config-sample/$WP_LANG/wp-config-extra.php \
+		--dbcharset=${MYSQL_CHARSET:-utf8mb4} --extra-php < $EXTRAPHP \
 	&& sleep 1 \
 	&& k_configcmd $DOCUMENTROOT core install --url=http://${FQDN} \
 		--title=${WP_TITLE} --admin_user=${ADMIN_USER} \
 		--admin_password=${ADMIN_PASSWORD} --admin_email="${ADMIN_EMAIL}" \
 	&& k_configcmd $DOCUMENTROOT chmod 440 wp-config.php \
 	&& k_configcmd $DOCUMENTROOT mv wp-config.php .. \
+	&& wp_lang $WP_LANG \
 	&& tar cf - -C $LIBDIR/wp/ mu-plugins | k_configcmd $DOCUMENTROOT/wp-content tar xf - \
 	&& tar cf - -C $LIBDIR/wp/ tools settings | k_configcmd $BASEDIR tar xf - \
 	&& k_configcmd $DOCUMENTROOT mkdir -p ./wp-content/languages \
 	&& k_configcmd $DOCUMENTROOT chmod 0750 . ./wp-content \
-	&& k_configcmd $DOCUMENTROOT chmod 0770 ./wp-content/uploads \
-	&& k_configcmd $DOCUMENTROOT chmod -R 0770 . ./wp-content/languages ./wp-content/plugins \
+	&& k_configcmd $DOCUMENTROOT chmod -R 0770 ./wp-content/uploads \
+	&& k_configcmd $DOCUMENTROOT chmod -R 0750 ./wp-content/languages ./wp-content/plugins \
 	&& k_configcmd $BASEDIR sed -i "s/fqdn/$FQDN/g" tools/bcache.clear.php \
 || return 1
 fi
@@ -89,7 +100,7 @@ fi
 #	docker cp $PROFILE_httpd $KUSANAGILIBDIR/wp/wc4jp-gmo-pg.1.2.0.zip $PROFILE_httpd:$DOCUMENTROOT
 #	k_configcmd "" unzip -q -d $DOCUMENTROOT/wp-content/plugins $DOCUMENTROOT/wc4jp-gmo-pg.1.2.0.zip
 #	k_configcmd "" rm $DOCUMENTROOT/wc4jp-gmo-pg.1.2.0.zip
-#	if [ "WPLANG" = "ja" ] ; then
+#	if [[ WP_LANG =~ ja ]] ; then
 #		k_configcmd "" plugin install woocommerce-for-japan
 #		k_configcmd "" language plugin install woocommerce-for-japan ja
 #		k_configcmd "" language theme install storefront ja

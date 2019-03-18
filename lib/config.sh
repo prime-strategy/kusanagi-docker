@@ -32,6 +32,7 @@ function k_bcache () {
 function k_fcache() {
 	shift
 	local cmd=$1
+	shift
 	k_target  > /dev/null || return 1
 	k_machine > /dev/null || return 1
 	source $TARGETDIR/.kusanagi
@@ -47,7 +48,13 @@ function k_fcache() {
 		k_print_info $(eval_gettext "fcache is off")
 		;;
 	clear)
-		k_print_info $(eval_gettext "fcache is clear")
+		docker-compose run --rm -w $BASEDIR/tools config ./fcache.sh clear $* 2> /dev/null 
+		if [ $? -ne 0 ] ; then
+			k_print_error $(eval_gettext "fcache can not clear")
+			return 1
+		else
+			k_print_info $(eval_gettext "fcache is clear")
+		fi
 		;;
 	*)
 		local _t=$(grep DONOT_USE_FCACHE= $TARGETDIR/.kusanagi.httpd)
@@ -59,6 +66,35 @@ function k_fcache() {
 		;;
 	esac
 }
+
+function k_naxsi() {
+	shift
+	local cmd=$1
+	k_target  > /dev/null || return 1
+	k_machine > /dev/null || return 1
+	source $TARGETDIR/.kusanagi
+	case $cmd in
+	on)
+		k_rewrite DONOT_USE_NAXSI 0 $TARGETDIR/.kusanagi.httpd
+		docker-compose up -d
+		k_print_info $(eval_gettext "naxsi is on")
+		;;
+	off)
+		k_rewrite DONOT_USE_NAXSI 1 $TARGETDIR/.kusanagi.httpd
+		docker-compose up -d
+		k_print_info $(eval_gettext "naxsi is off")
+		;;
+	*)
+		local _t=$(grep DONOT_USE_NAXSI= $TARGETDIR/.kusanagi.httpd)
+		if [ "${_t##*=}" -eq 0 ]; then
+			k_print_info $(eval_gettext "naxsi is on")
+		else
+			k_print_info $(eval_gettext "naxsi is off")
+		fi
+		;;
+	esac
+}
+
 
 function k_wp() {
 	shift
@@ -174,6 +210,9 @@ function k_config () {
 		;;
 	fcache) #[on|off]
 		k_fcache $@
+		;;
+	naxsi) #[on|off]
+		k_naxsi $@
 		;;
 	pull|push|tag|log|commit|backup|restore)
 		k_content $@
