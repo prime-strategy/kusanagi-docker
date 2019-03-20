@@ -20,7 +20,7 @@ env PROFILE=$PROFILE \
 	$$KUSANAGI_PHP7_IMAGE $$KUSANAGI_FTPD_IMAGE
 	$$CONFIG_IMAGE $$CERTBOT_IMAGE
 	$$HTTP_PORT $$HTTP_TLS_PORT' \
-	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/wpcli.template $LIBDIR/templates/php.template) > docker-compose.yml
+	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/config.template $LIBDIR/templates/php.template) > docker-compose.yml
 if ! [ $NO_USE_DB ] ; then
 	case "$KUSANAGI_DB_SYSTEM" in
 	mariadb)
@@ -46,5 +46,5 @@ docker-compose up -d \
 && docker-compose run -u0 --rm config chown 1000:1001 /home/kusanagi  \
 && k_configcmd "/" chmod 751 /home/kusanagi \
 && k_configcmd "/" mkdir -p $DOCUMENTROOT \
-&& printf '<?php\n\nprint "hello world!\\n";\n' | k_configcmd $DOUMNENTROOT config tee -a index.php > /dev/null
+&& printf '<?php\n\nprint "hello world!\\n";\n' | k_configcmd $DOCUMENTROOT tee -a index.php > /dev/null
 

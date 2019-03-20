@@ -13,9 +13,6 @@ BINDIR=$BASEDIR/bin
 source $LIBDIR/functions.sh
 
 case ${1} in
-	init)
-		k_init $@
-		;;
 	provision)
 		source $LIBDIR/provision.sh
 		k_provision $@

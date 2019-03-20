@@ -62,37 +62,39 @@ else
 		while [ $ENTRY -eq 1 ] ; do
 			echo -n "."
 			sleep 5
-			journalctl CONTAINER_NAME=${PROFILE}_db | tail -30 | grep "MySQL init process done. Ready for start up." > /dev/null
+			k_configcmd / mysqladmin status -u$DBUSER -p"$DBPASS" 2>&1 > /dev/null
 			ENTRY=$?
 		done
 		echo -e "\e[m"
 	fi
 
-	EXTRAPHP=$LIBDIR/wp/wp-config-sample/$WP_LANG/wp-config-extra.php
-	[ -f $EXTRAPHP ] || EXTRAPHP=$LIBDIR/wp/wp-config-sample/en_US/wp-config-extra.php
 	k_print_green "$(eval_gettext 'Provision WordPress')"
-	k_configcmd $DOCUMENTROOT core download \
-	&& sleep 1 \
-	&& k_configcmd $DOCUMENTROOT core config \
-		--dbhost=${DBHOST} \
-		--dbname="${DBNAME}" --dbuser="${DBUSER}" --dbpass="${DBPASS}" \
-		${DBPREFIX:+--dbprefix $DBPREFIX} \
-		--dbcharset=${MYSQL_CHARSET:-utf8mb4} --extra-php < $EXTRAPHP \
-	&& sleep 1 \
-	&& k_configcmd $DOCUMENTROOT core install --url=http://${FQDN} \
-		--title=${WP_TITLE} --admin_user=${ADMIN_USER} \
-		--admin_password=${ADMIN_PASSWORD} --admin_email="${ADMIN_EMAIL}" \
+	tar cf - -C $LIBDIR/wp/ tools settings wp-config-sample wp.sh | k_configcmd $BASEDIR tar xf - \
+	&& docker-compose run --rm \
+		-e BASEDIR=$BASEDIR \
+       		-e DBHOST=$DBHOST \
+		-e DBNAME=$DBNAME \
+       		-e DBUSER=$DBUSER \
+		-e DBPASS="$DBPASS" \
+		-e DBPREFIX=${DBPREFIX:+--dbprefix $DBPREFIX} \
+		-e MYSQL_CHARSET=${MYSQL_CHARSET:-utf8mb4} \
+		-e FQDN=$FQDN \
+		-e WP_TITLE=${WP_TITLE} \
+		-e WP_LANG=${WP_LANG} \
+		-e ADMIN_USER=${ADMIN_USER} \
+		-e ADMIN_PASSWORD=${ADMIN_PASSWORD} \
+		-e ADMIN_EMAIL="${ADMIN_EMAIL}" \
+       		-w $DOCUMENTROOT config bash ../wp.sh \
+	&& k_configcmd $BASEDIR rm wp.sh \
 	&& k_configcmd $DOCUMENTROOT chmod 440 wp-config.php \
 	&& k_configcmd $DOCUMENTROOT mv wp-config.php .. \
-	&& wp_lang $WP_LANG \
-	&& tar cf - -C $LIBDIR/wp/ mu-plugins | k_configcmd $DOCUMENTROOT/wp-content tar xf - \
-	&& tar cf - -C $LIBDIR/wp/ tools settings | k_configcmd $BASEDIR tar xf - \
 	&& k_configcmd $DOCUMENTROOT mkdir -p ./wp-content/languages \
 	&& k_configcmd $DOCUMENTROOT chmod 0750 . ./wp-content \
 	&& k_configcmd $DOCUMENTROOT chmod -R 0770 ./wp-content/uploads \
 	&& k_configcmd $DOCUMENTROOT chmod -R 0750 ./wp-content/languages ./wp-content/plugins \
-	&& k_configcmd $BASEDIR sed -i "s/fqdn/$FQDN/g" tools/bcache.clear.php \
-|| return 1
+	&& k_configcmd $DOCUMENTROOT sed -i "s/fqdn/$FQDN/g" ../tools/bcache.clear.php \
+	&& tar cf - -C $LIBDIR/wp/ mu-plugins | k_configcmd $DOCUMENTROOT/wp-content tar xf - \
+	|| return 1
 fi
 
 #if [ $OPT_WOO ] ; then

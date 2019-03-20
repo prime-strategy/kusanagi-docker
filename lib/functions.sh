@@ -48,9 +48,6 @@ Manual : http://en.kusanagi.tokyo/document/command/
 show this snippet.
 ---------------------
 - configuration -
-init [docker-machine|localhost]
-  - print docker machine
-  - set docker machine
 provision [options] --fqdn domainname target
 	--fqdn domainname(like kusanagi.tokyo)
         [--WordPress [--wplang en_US|ja]
@@ -86,7 +83,7 @@ remove [-y] [target]
 ---------------------
 - status -
 [-V|--version]
-start|stop|restart|status [httpd|php7|db] 
+start|stop|restart|status
 ----------------------
 EOD
 }
@@ -121,6 +118,7 @@ function k_target() {
 
 function k_init {
 	local _init=$2
+	return
 	k_target
 	export MACHINE=$(k_machine "$_init" 1)
 }
@@ -128,6 +126,7 @@ function k_init {
 function k_machine() {
 	local _machine=$1
 	local _is_print=$2
+	return
 	if [ "x$_machine" = "x" ] ; then
 		if [ -f "$TARGETDIR/$LOCAL_KUSANAGI_FILE" ] ; then
 			eval $(grep ^MACHINE= "$TARGETDIR/$LOCAL_KUSANAGI_FILE")

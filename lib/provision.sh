@@ -589,8 +589,8 @@ EOF
 		[ $FIRST ] && FIRST= && \
 			echo -n -e "\e[32m" $(eval_gettext "Waiting HTTPD init process") 
 		echo -n "."
-		ENTRY=$(docker-compose exec httpd ps | grep 'docker-entrypoint.sh') 
-		[ "x$ENTRY" != "x" ] && break
+		ENTRY=$(docker-compose exec httpd ps | grep 'openssl') 
+		[ "x$ENTRY" = "x" ] && break
 		sleep 5
 	done
 	echo -e "\e[m"

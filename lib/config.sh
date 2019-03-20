@@ -130,7 +130,8 @@ function k_content() {
 		;;
 	push|restore)
 		#git commit -a -m "push at "$(date +%Y%m%dT%H%M%S%z)
-		tar cf - -C $CONTENTDIR --exclude-from=$TARGETDIR/.gitignore . | docker-compose run --rm -w $BASEDIR -u 0 config tar xf - --same-owner
+		tar cf - -C $CONTENTDIR --exclude-from=$TARGETDIR/.gitignore . | docker-compose run --rm -w $BASEDIR -u 0 config tar xf - 
+		k_configcmd $BASEDIR chown -R kusanagi:www .
 		return 0
 		;;
 	commit)
@@ -184,21 +185,23 @@ function k_dbrestore() {
 	source $TARGETDIR/.kusanagi.db
 	CONTENTDIR=$TARGETDIR/contents 
 
+	tar cf - -C $CONTENTDIR dbdump | k_configcmd $BASEDIR tar xf - 
 	if [ $KUSANAGI_PROVISION = wp ] ; then
-		k_configcmd $DOCUMENTROOT db import - < $CONTENTDIR/dbdump 
+		k_configcmd $DOCUMENTROOT db import $BASEDIR/dbdump 
 	else
 		[[ $DBHOST =~ ^localhost ]] && DBHOST= || DBHOST="-h $DBHOST"
 		case $KUSANAGI_DB_SYSTEM in
 		mysql)
-			k_configcmd / mysql -u$DBUSER $DBHOST -p"$DBPASS" $DBNAME < $CONTENTDIR/dbdump
+			k_configcmd $BASEDIR mysqlimport -u$DBUSER $DBHOST -p"$DBPASS" $DBNAME dbdump
 			;;
 		pgsql)
-			k_configcmd / pg_restore $DBHOST -d $DBNAME < $CONTENTDIR/dbdump
+			k_configcmd $BASEDIR pg_restore $DBHOST -d $DBNAME dbdump
 			;;
 		*)
 			;;
 		esac
 	fi
+	k_configcmd $BASEDIR rm dbdump 
 }
 
 function k_config () {
