@@ -7,7 +7,7 @@
       - .kusanagi.mail
     network_mode: "service:httpd"
     volumes:
-      - database:/var/run/mysqld
+      - database:${DBLIB}
       - kusanagi:/home/kusanagi
     logging:
       driver: journald

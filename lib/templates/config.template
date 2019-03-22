@@ -7,7 +7,7 @@
       - .kusanagi
       - .kusanagi.db
     volumes:
-      - database:/var/run/mysqld
+      - database:${DBLIB}
       - kusanagi:/home/kusanagi
     logging:
       driver: journald

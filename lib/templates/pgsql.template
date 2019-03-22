@@ -1,5 +1,5 @@
-## MYSQL 
-  mysql:
+## Postgresql 
+  db:
     container_name: ${PROFILE}_db
     image: $POSTGRESQL_IMAGE
     user: "70:70"

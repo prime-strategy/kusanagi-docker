@@ -451,6 +451,11 @@ function k_provision () {
 	done
 	APP=${APP:-wp}
 	KUSANAGI_DB_SYSTEM=${KUSANAGI_DB_SYSTEM:-mariadb}
+	if [ $KUSANAGI_DB_SYSTEM = "mariadb" ] ; then
+		DBLIB=/var/run/mysqld
+	else
+		DBLIB=/var/run/pgsql
+	fi
 	
 	## option check
 	if [ $OPT_NGINX -a $OPT_HTTPD ] ; then
@@ -543,6 +548,7 @@ ADMIN_PASSWORD=$ADMIN_PASS
 ADMIN_EMAIL=$ADMIN_EMAIL
 EOF
 	cat <<EOF > $PROFILE/.kusanagi.db
+DBLIB=$DBLIB
 DBHOST=$DBHOST
 DBNAME=$DBNAME
 DBUSER=$DBUSER
@@ -556,7 +562,7 @@ MYSQL_DATABASE=$DBNAME
 MYSQL_USER=$DBUSER
 MYSQL_PASSWORD=$DBPASS
 EOF
-		elif [ "KUSANAGI_DB_SYSTEM" = "pgsql" ] ; then
+		elif [ "$KUSANAGI_DB_SYSTEM" = "pgsql" ] ; then
 			cat <<EOF > $PROFILE/.kusanagi.pgsql
 POSTGRES_DB=$DBNAME
 POSTGRES_USER=$DBUSER
