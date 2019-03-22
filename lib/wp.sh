@@ -51,10 +51,15 @@ docker-compose up -d \
 && docker-compose run -u0 --rm config chown 1000:1001 /home/kusanagi  \
 && k_configcmd "/" chmod 751 /home/kusanagi \
 && k_configcmd "/" mkdir -p $DOCUMENTROOT || return 1
+
 if [ "x$TARPATH" != "x" ] && [ -f $TARPATH ] ; then
-	:
+	mkdir contents && \
+	tar xf $TARPATH -C contents && \
+	tar cf - -C contents . | k_configcmd $DOCUMENTROOT tar xf - 
 elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then 
-	:
+	mkdir contents && \
+	git clone $GITPATH ./contents && \
+	tar cf - -C contents . | k_configcmd $DOCUMENTROOT tar xf -
 else
 
 	if ! [ $NO_USE_DB ] ; then

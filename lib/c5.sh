@@ -5,6 +5,7 @@
 #
 
 source .kusanagi
+source .kusanagi.db
 source $LIBDIR/.version
 
 IMAGE=$([ $OPT_NGINX ] && echo $KUSANAGI_NGINX_IMAGE || ([ $OPT_HTTPD ] && echo $KUSANGI_HTTPD_IMAGE))
@@ -12,17 +13,17 @@ IMAGE=$([ $OPT_NGINX ] && echo $KUSANAGI_NGINX_IMAGE || ([ $OPT_HTTPD ] && echo 
 env PROFILE=$PROFILE \
     HTTPD_IMAGE=$IMAGE \
     KUSANAGI_PHP7_IMAGE=$KUSANAGI_PHP7_IMAGE \
-    CONFIG_IMAGE=$KUSANAGI_CONFIG_IMAGE \
+    CONFIG_IMAGE=$WPCLI_IMAGE \
     CERTBOT_IMAGE=$CERTBOT_IMAGE \
     HTTP_PORT=$HTTP_PORT \
     HTTP_TLS_PORT=$HTTP_TLS_PORT \
-    DBLIB=$DBLIB \
 	envsubst '$$PROFILE $$HTTPD_IMAGE
 	$$KUSANAGI_PHP7_IMAGE $$KUSANAGI_FTPD_IMAGE
 	$$CONFIG_IMAGE $$CERTBOT_IMAGE
-	$$HTTP_PORT $$HTTP_TLS_PORT $$DBLIB' \
-	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/config.template $LIBDIR/templates/php.template) > docker-compose.yml
+	$$HTTP_PORT $$HTTP_TLS_PORT' \
+	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/wpcli.template $LIBDIR/templates/php.template) > docker-compose.yml
 if ! [ $NO_USE_DB ] ; then
+	if ! [ $NO_USE_DB ] ; then
 	case "$KUSANAGI_DB_SYSTEM" in
 	mariadb)
 		env PROFILE=$PROFILE KUSANAGI_MARIADB_IMAGE=$KUSANAGI_MARIADB_IMAGE \
@@ -37,17 +38,16 @@ if ! [ $NO_USE_DB ] ; then
 	esac
 
 fi
-
 echo >> docker-compose.yml
 echo 'volumes:' >> docker-compose.yml
 echo '  kusanagi:' >>  docker-compose.yml
-[[ $DBHOST =~ ^localhost: ]] || [[ $DBHOST = localhost ]] && echo '  database:' >> docker-compose.yml
+[[ $DBHOST =~ ^localhost: ]] && echo '  database:' >> docker-compose.yml
 
-k_print_green "$(eval_gettext 'Provision LAMP')"
+k_print_green "$(eval_gettext 'Provision Concrete5')"
 docker-compose up -d \
 && docker-compose run -u0 --rm config chown 1000:1001 /home/kusanagi  \
-&& k_configcmd "/" chmod 751 /home/kusanagi \
-&& k_configcmd "/" mkdir -p $DOCUMENTROOT || return 1
+&& k_configcmd "/" chmod 751 /home/kusanagi || return 1
+
 if [ "x$TARPATH" != "x" ] && [ -f $TARPATH ] ; then
 	mkdir contents
 	tar xf $TARPATH -C contents 
@@ -57,6 +57,13 @@ elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then
 	git clone $GITPATH ./contents
 	tar cf - -C contents . | k_configcmd $DOCUMENTROOT tar xf - 
 else
-	printf '<?php\n\nprint "hello world!\\n";\n' | k_configcmd $DOCUMENTROOT tee -a index.php > /dev/null
+	docker-compose exec php -w /home/kusanagi \
+		/usr/local/bin/composer create-project -n concrete5/composer $PROFILE \
+	&& docker-compose run -u0 --rm -w /home/kusanagi config chown -R 1000:1001 $PROFILE  \
+	&& docker-compose run -u0 --rm -w /home/kusanagi config chmod o-rwx $PROFILE  \
+	&& k_configcmd /home/kusanagi/$PROFILE/public mkdir -p application/languages \
+	&& docker-compose run -u0 --rm -w /home/kusanagi/$PROFILE/public config \
+		chown -R 1001:1001 application/languages application/config application/files packages \
+	&& docker-compose run -u0 --rm -w /home/kusanagi/$PROFILE/public config \
+		chmod -R g+w application/languages application/config application/files packages \
 fi
-

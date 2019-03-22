@@ -296,11 +296,20 @@ function k_provision () {
 				fi
 				APP='lamp'
 				;;
+			'--drupal7')
+				if [ "x$APP" != "x" ] ; then
+					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
+				fi
+				APP='drupal'
+				DRUPAL_VERSION=7
+				;;
+
 			'--drupal'|'--drupal8')
 				if [ "x$APP" != "x" ] ; then
 					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
 				fi
-				APP='drupal8'
+				APP='drupal'
+				DRUPAL_VERSION=8
 				;;
 			'--rails'|'--RubyonRails')
 				if [ "x$APP" != "x" ] ; then

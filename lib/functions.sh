@@ -53,7 +53,7 @@ provision [options] --fqdn domainname target
         [--WordPress [--wplang en_US|ja]
 	  [--admin-user admin] [--admin-passwd pass] [--admin-email email]
 	  [--wp-title title] [--kusanagi-pass pass] [--notfp|--no-ftp] |
-	 --lamp|--concrete5|--drupal]
+	 --lamp|--concrete5|--drupal|--drupal7|--drupal8]
         [--email|-ssl email@example.com]
         [--dbhost host] [--dbname dbname]
 	[--dbuser username] [--dbpass password]
