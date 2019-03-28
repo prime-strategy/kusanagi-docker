@@ -525,6 +525,7 @@ function k_provision () {
 	
 	mkdir $PROFILE
 	DOCUMENTROOT=/home/kusanagi/$PROFILE/DocumentRoot
+	[ "c5" = $APP ] && DOCUMENTROOT=/home/kusanagi/$PROFILE/public
 	cat <<EOF > $PROFILE/.kusanagi
 PROFILE=$PROFILE
 MACHINE=$MACHINE

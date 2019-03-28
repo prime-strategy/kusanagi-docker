@@ -15,6 +15,14 @@ function k_configcmd() {
 	docker-compose run --rm -w $_dir config $@
 }
 
+function k_configcmd_root() {
+	local _dir=$1
+	shift
+	docker-compose run --rm -u 0 -w $_dir config $@
+}
+
+
+
 # make random username
 function k_mkusername() {
 	openssl rand -base64 1024 | fold -w 10 | egrep -e '^[a-zA-Z][a-zA-Z0-9]+$'| head -1

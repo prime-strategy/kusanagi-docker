@@ -18,7 +18,7 @@ env PROFILE=$PROFILE \
     HTTP_TLS_PORT=$HTTP_TLS_PORT \
     DBLIB=$DBLIB \
 	envsubst '$$PROFILE $$HTTPD_IMAGE
-	$$KUSANAGI_PHP7_IMAGE $$KUSANAGI_FTPD_IMAGE
+	$$KUSANAGI_PHP7_IMAGE
 	$$CONFIG_IMAGE $$CERTBOT_IMAGE
 	$$HTTP_PORT $$HTTP_TLS_PORT $$DBLIB' \
 	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/config.template $LIBDIR/templates/php.template) > docker-compose.yml
