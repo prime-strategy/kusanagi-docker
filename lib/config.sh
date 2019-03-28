@@ -153,6 +153,7 @@ function k_content() {
 
 function k_dbdump() {
 	shift
+	local _file=${1:-dbdump}
 	k_target  > /dev/null || return 1
 	k_machine > /dev/null || return 1
 	source $TARGETDIR/.kusanagi
@@ -160,15 +161,15 @@ function k_dbdump() {
 	CONTENTDIR=$TARGETDIR/contents 
 
 	if [ $KUSANAGI_PROVISION = wp ] ; then
-		k_configcmd $DOCUMENTROOT db export - > $CONTENTDIR/dbdump 
+		k_configcmd $DOCUMENTROOT db export - > $_file 
 	else
 		[[ $DBHOST =~ ^localhost ]] && DBHOST= || DBHOST="-h $DBHOST"
 		case $KUSANAGI_DB_SYSTEM in
 		mysql)
-			k_configcmd / mysqldump -u$DBUSER $DBHOST -p"$DBPASS" $DBNAME > $CONTENTDIR/dbdump
+			k_configcmd / mysqldump -u$DBUSER $DBHOST -p"$DBPASS" $DBNAME > $_file
 			;;
 		pgsql)
-			k_configcmd / pg_dump $DBHOST $DBNAME > $CONTENTDIR/dbdump
+			k_configcmd / pg_dump $DBHOST $DBNAME > $_file
 			;;
 		*)
 			;;
@@ -179,29 +180,30 @@ function k_dbdump() {
 
 function k_dbrestore() {
 	shift
+	local _file=${1:-dbdump}
 	k_target  > /dev/null || return 1
 	k_machine > /dev/null || return 1
 	source $TARGETDIR/.kusanagi
 	source $TARGETDIR/.kusanagi.db
 	CONTENTDIR=$TARGETDIR/contents 
 
-	tar cf - -C $CONTENTDIR dbdump | k_configcmd $BASEDIR tar xf - 
+	tar cf - $_file | k_configcmd $BASEDIR tar xf - 
 	if [ $KUSANAGI_PROVISION = wp ] ; then
-		k_configcmd $DOCUMENTROOT db import $BASEDIR/dbdump 
+		k_configcmd $DOCUMENTROOT db import $BASEDIR/$_file 
 	else
 		[[ $DBHOST =~ ^localhost ]] && DBHOST= || DBHOST="-h $DBHOST"
 		case $KUSANAGI_DB_SYSTEM in
 		mysql)
-			k_configcmd $BASEDIR mysqlimport -u$DBUSER $DBHOST -p"$DBPASS" $DBNAME dbdump
+			k_configcmd $BASEDIR mysqlimport -u$DBUSER $DBHOST -p"$DBPASS" $DBNAME $_file
 			;;
 		pgsql)
-			k_configcmd $BASEDIR pg_restore $DBHOST -d $DBNAME dbdump
+			k_configcmd $BASEDIR pg_restore $DBHOST -d $DBNAME $_file
 			;;
 		*)
 			;;
 		esac
 	fi
-	k_configcmd $BASEDIR rm dbdump 
+	k_configcmd $BASEDIR rm $_file 
 }
 
 function k_config () {

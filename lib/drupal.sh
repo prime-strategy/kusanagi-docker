@@ -16,10 +16,11 @@ env PROFILE=$PROFILE \
     CERTBOT_IMAGE=$CERTBOT_IMAGE \
     HTTP_PORT=$HTTP_PORT \
     HTTP_TLS_PORT=$HTTP_TLS_PORT \
+    DBLIB=$DBLIB \
 	envsubst '$$PROFILE $$HTTPD_IMAGE
 	$$KUSANAGI_PHP7_IMAGE $$KUSANAGI_FTPD_IMAGE
 	$$CONFIG_IMAGE $$CERTBOT_IMAGE
-	$$HTTP_PORT $$HTTP_TLS_PORT' \
+	$$HTTP_PORT $$HTTP_TLS_PORT $$DBLIB' \
 	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/config.template $LIBDIR/templates/php.template) > docker-compose.yml
 if ! [ $NO_USE_DB ] ; then
 	case "$KUSANAGI_DB_SYSTEM" in
@@ -42,11 +43,11 @@ echo '  kusanagi:' >>  docker-compose.yml
 [[ $DBHOST =~ ^localhost: ]] && echo '  database:' >> docker-compose.yml
 
 
-tar cf - -C $LIBDIR/drupal drupal.sh | k_configcmd $BASEDIR tar xf - \
 docker-compose up -d \
 && docker-compose run -u0 --rm config chown 1000:1001 /home/kusanagi \
 && k_configcmd "/" chmod 751 /home/kusanagi \
-&& k_configcmd "/" mkdir -p $DOCUMENTROOT 
+&& k_configcmd "/" mkdir -p $DOCUMENTROOT \
+&& tar cf - -C $LIBDIR/drupal drupal.sh | k_configcmd $BASEDIR tar xf - 
 
 k_print_green "$(eval_gettext 'Provision Drupal')"
 
@@ -59,7 +60,7 @@ elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then
 	git clone $GITPATH ./contents
 	tar cf - -C contents . | k_configcmd $DOCUMENTROOT tar xf - 
 else
-	k_configcmd $BASEDIR ./drupal.sh $DRUPAL_VERSION \
+	k_configcmd $BASEDIR sh ./drupal.sh $DRUPAL_VERSION \
 	&& k_configcmd $BASEDIR rm ./drupal.sh \
 	|| return 1
 fi

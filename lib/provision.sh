@@ -637,6 +637,7 @@ EOF
 
 	git init -q
 	echo '*~' > .gitignore
+	echo '.gitignore' >> .gitignore
 	git add .kusanagi* contents docker-compose.yml > /dev/null
 	git commit -m 'initial commit' > /dev/null
 }

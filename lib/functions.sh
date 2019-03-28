@@ -71,12 +71,8 @@ config command
 	fcache [on|off]
 	pull
 	push
-	tag tag
-	log
-	commit [--tag tag]
-	checkout [--tag tag]
-	dbdump
-	dbrestore
+	dbdump [file]
+	dbrestore [file]
 	backup
 	restore
 remove [-y] [target]
