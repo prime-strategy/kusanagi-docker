@@ -10,7 +10,4 @@
       - database:/var/run/mysqld
       - kusanagi:/home/kusanagi
     command: wp --version
-    logging:
-      driver: journald
-
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kusanagi-docker 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-22 16:05+0900\n"
+"POT-Creation-Date: 2019-05-23 21:28+0900\n"
 "PO-Revision-Date: 2019-02-11 00:00+0900\n"
 "Last-Translator: Satoru MIYAZAKI<satoru@prime-strategy.co.jp>\n"
 "Language-Team: Satoru MIYAZAKI<satoru@prime-strategy.co.jp>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: lib/c5.sh:46
+#: lib/c5.sh:50
 #, sh-format
 msgid "Provision Concrete5"
 msgstr "Concrete5 を配置します"
@@ -71,43 +71,43 @@ msgstr "naxsi は有効です"
 msgid "naxsi is off"
 msgstr "naxsi は無効です"
 
-#: lib/config.sh:230 lib/ssl.sh:21
+#: lib/config.sh:232 lib/ssl.sh:21
 #, sh-format
 msgid "is unknown subcommand."
 msgstr "無効なサブコマンドです"
 
-#: lib/drupal.sh:51
+#: lib/drupal.sh:52
 #, sh-format
 msgid "Provision Drupal"
 msgstr "Drupal を配置します"
 
-#: lib/functions.sh:101
+#: lib/functions.sh:105
 #, sh-format
 msgid "not found."
 msgstr "見つかりません"
 
-#: lib/functions.sh:110
+#: lib/functions.sh:114
 #, sh-format
 msgid "TARGET has not been set."
 msgstr "TARGET が指定されていません"
 
-#: lib/functions.sh:138 lib/functions.sh:165
+#: lib/functions.sh:142 lib/functions.sh:169
 #, sh-format
 msgid "is not found."
 msgstr "見つかりません"
 
-#: lib/functions.sh:183
+#: lib/functions.sh:187
 #, sh-format
 msgid "service not found."
 msgstr "サービスが見つかりません。"
 
-#: lib/functions.sh:213 lib/functions.sh:216 lib/functions.sh:219
-#: lib/provision.sh:587
+#: lib/functions.sh:217 lib/functions.sh:220 lib/functions.sh:223
+#: lib/provision.sh:608
 #, sh-format
 msgid "is not implemented."
 msgstr "実装されていません。"
 
-#: lib/functions.sh:228 lib/functions.sh:238 lib/functions.sh:248
+#: lib/functions.sh:232 lib/functions.sh:242 lib/functions.sh:252
 #: lib/provision.sh:54 lib/provision.sh:66 lib/provision.sh:76
 #: lib/provision.sh:85 lib/provision.sh:100 lib/provision.sh:110
 #: lib/provision.sh:120 lib/provision.sh:131 lib/provision.sh:141
@@ -119,27 +119,27 @@ msgstr "実装されていません。"
 msgid "option:"
 msgstr "オプション:"
 
-#: lib/functions.sh:228
+#: lib/functions.sh:232
 #, sh-format
 msgid "file not found."
 msgstr "ファイルが見つかりません。"
 
-#: lib/functions.sh:238 lib/provision.sh:76
+#: lib/functions.sh:242 lib/provision.sh:76
 #, sh-format
 msgid "please input valid email address."
 msgstr "有効なEメールアドレスを指定してください。"
 
-#: lib/functions.sh:248
+#: lib/functions.sh:252
 #, sh-format
 msgid "please input on/off."
 msgstr "onかoffを指定してください。"
 
-#: lib/functions.sh:268
+#: lib/functions.sh:272
 #, sh-format
 msgid "Done."
 msgstr "完了しました。"
 
-#: lib/functions.sh:271
+#: lib/functions.sh:275
 #, sh-format
 msgid "Failed."
 msgstr "失敗しました。"
@@ -225,12 +225,12 @@ msgstr "ターゲット名は3～24文字の[a-zA-Z0-9._-]の文字列を指定�
 msgid "require option --fqdn for your website. ex) kusanagi.tokyo."
 msgstr "Webサイトで使用するホスト名(FQDN)を入力してください。 例) kusanagi.tokyo"
 
-#: lib/provision.sh:605
+#: lib/provision.sh:626
 #, sh-format
 msgid "Waiting HTTPD init process"
 msgstr "HTTPDの初期化を待っています"
 
-#: lib/provision.sh:629
+#: lib/provision.sh:650
 #, sh-format
 msgid "Cannot get Let's Encrypt SSL Certificate files."
 msgstr "Let's EncryptのSSL証明書を取得できませんでした。"

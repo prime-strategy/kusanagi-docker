@@ -21,8 +21,6 @@ services:
     ports:
       - "$HTTP_PORT:8080"
       - "$HTTP_TLS_PORT:8443"
-    logging:
-      driver: journald
 
   certbot:
     container_name: ${PROFILE}_certbot
@@ -35,6 +33,4 @@ services:
       - kusanagi:/etc/letsencrypt
     command:
       - --version
-    logging:
-      driver: journald
 

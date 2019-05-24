@@ -9,6 +9,4 @@
     volumes:
       - database:/var/run/pgsql
       - database:/var/lib/pgsql
-    logging:
-      driver: journald
  

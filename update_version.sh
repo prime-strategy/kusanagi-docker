@@ -10,6 +10,10 @@ function kusanagi_version {
 	echo ${_ver:-latest}
 }
 
+function mariadb_version {
+	local _ver=$(docker_repo_tag mariadb | grep '^[0-9]' | sort -Vr | head -1)
+	echo ${_ver:-latest}
+}
 function postgresql_version {
 	local _ver=$(docker_repo_tag postgres | grep '^[0-9]' | sort -Vr | head -1)
 	echo ${_ver:-latest}
@@ -29,7 +33,7 @@ KUSANAGILIBDIR=$HOME/.kusanagi/lib
 KUSANAGI_NGINX_IMAGE=primestrategy/kusanagi-nginx:$(kusanagi_version kusanagi-nginx)
 KUSANAGI_HTTPD_IMAGE=primestrategy/kusanagi-httpd:$(kusanagi_version kusanagi-httpd)
 KUSANAGI_PHP7_IMAGE=primestrategy/kusanagi-php7:$(kusanagi_version kusanagi-php7)
-KUSANAGI_MARIADB_IMAGE=primestrategy/kusanagi-mariadb:$(kusanagi_version kusanagi-mariadb)
+KUSANAGI_MARIADB_IMAGE=mariadb:$(mariadb_version)
 KUSANAGI_CONFIG_IMAGE=primestrategy/kusanagi-config:$(kusanagi_version kusanagi-config)
 KUSANAGI_FTPD_IMAGE=primestrategy/kusanagi-ftpd:$(kusanagi_version kusanagi-ftpd)
 POSTGRESQL_IMAGE=postgres:$(postgresql_version)

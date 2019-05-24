@@ -9,6 +9,4 @@
     volumes:
       - database:${DBLIB}
       - kusanagi:/home/kusanagi
-    logging:
-      driver: journald
 
