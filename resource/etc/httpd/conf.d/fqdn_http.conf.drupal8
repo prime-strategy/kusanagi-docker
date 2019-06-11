@@ -1,0 +1,9 @@
+#=======================================
+# fqdn
+#---------------------------------------
+
+<VirtualHost *:80>
+# Common specific setting start
+# Common specific setting end
+</VirtualHost>
+

@@ -1,0 +1,29 @@
+#=======================================
+# fqdn
+#---------------------------------------
+
+server {
+# Common specific setting start
+# Common specific setting end
+	passenger_enabled on;
+	passenger_env_var SECRET_KEY_BASE secret_key_base;
+
+	location / {
+
+		passenger_ruby /usr/local/bin/ruby;
+		passenger_min_instances 6;
+
+		rails_env development;
+		#rails_env production;
+		#passenger_intercept_errors on;
+		error_page  404              /404.html;
+		error_page 500 502 503 504   /500.html;
+
+		add_header X-Signature KUSANAGI;
+		include conf.d/security.conf;
+		#add_header Strict-Transport-Security 'max-age=31536000; includeSubDomains;preload;' always;
+		#include naxsi.d/{waf_type}/*.conf;
+	}
+}
+
+passenger_pre_start https://fqdn/;

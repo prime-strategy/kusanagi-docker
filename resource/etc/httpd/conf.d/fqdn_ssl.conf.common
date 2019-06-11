@@ -1,0 +1,29 @@
+	Protocols h2 http/1.1
+	ServerAdmin webmaster@example.com
+	DocumentRoot /home/kusanagi/profile/DocumentRoot
+	ServerName fqdn
+	ErrorLog /home/kusanagi/profile/log/httpd/ssl_error.log
+	CustomLog /home/kusanagi/profile/log/httpd/ssl_access.log kusanagi env=!no_log
+	LogLevel warn
+	SSLEngine on
+	SSLProtocol -All +TLSv1.2 +TLSv1.3
+	SSLCipherSuite AES128+ECDHE:AES256+ECDHE:AES128+EDH:AES256+EDH:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4!CAMELLIA!AES128-SHA!AES128-SHA256!AES128-GCM-SHA256:!AES256-GCM-SHA384:!AES256-SHA256:!AES256-SHA!AES256-CCM8!AES256-CCM!AES128-CCM!ARIA128-GCM-SHA256!AES128-CCM8!ARIA256-GCM-SHA384
+	SSLCertificateFile /etc/pki/tls/certs/localhost.crt
+	SSLCertificateKeyFile /etc/pki/tls/private/localhost.key 
+	SSLHonorCipherOrder on
+	SSLCompression off
+	SSLOpenSSLConfCmd DHParameters "/etc/kusanagi.d/ssl/dhparam.key"
+
+	BrowserMatch "MSIE [2-5]" \
+	nokeepalive ssl-unclean-shutdown \
+	downgrade-1.0 force-response-1.0
+	#Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+	<IfModule mod_security2.c>
+		#IncludeOptional modsecurity.d/kusanagi_activated_rules/{waf_type}/*.conf
+		#SecAuditLog /home/kusanagi/profile/log/httpd/waf.log
+	</IfModule>
+	<Directory "/home/kusanagi/profile/DocumentRoot">
+		Require all granted
+		AllowOverride All
+		Options FollowSymlinks
+	</Directory>
