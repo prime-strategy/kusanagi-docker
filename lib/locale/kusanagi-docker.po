@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kusanagi-docker 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-23 21:28+0900\n"
+"POT-Creation-Date: 2019-06-11 22:24+0900\n"
 "PO-Revision-Date: 2019-02-11 00:00+0900\n"
 "Last-Translator: Satoru MIYAZAKI<satoru@prime-strategy.co.jp>\n"
 "Language-Team: Satoru MIYAZAKI<satoru@prime-strategy.co.jp>\n"
@@ -102,7 +102,7 @@ msgid "service not found."
 msgstr "サービスが見つかりません。"
 
 #: lib/functions.sh:217 lib/functions.sh:220 lib/functions.sh:223
-#: lib/provision.sh:608
+#: lib/provision.sh:624
 #, sh-format
 msgid "is not implemented."
 msgstr "実装されていません。"
@@ -112,9 +112,9 @@ msgstr "実装されていません。"
 #: lib/provision.sh:85 lib/provision.sh:100 lib/provision.sh:110
 #: lib/provision.sh:120 lib/provision.sh:131 lib/provision.sh:141
 #: lib/provision.sh:154 lib/provision.sh:161 lib/provision.sh:165
-#: lib/provision.sh:176 lib/provision.sh:186 lib/provision.sh:279
-#: lib/provision.sh:283 lib/provision.sh:289 lib/provision.sh:295
-#: lib/provision.sh:301 lib/provision.sh:309 lib/provision.sh:316
+#: lib/provision.sh:176 lib/provision.sh:186 lib/provision.sh:291
+#: lib/provision.sh:295 lib/provision.sh:301 lib/provision.sh:307
+#: lib/provision.sh:313 lib/provision.sh:321 lib/provision.sh:328
 #, sh-format
 msgid "option:"
 msgstr "オプション:"
@@ -194,43 +194,43 @@ msgstr "指定することが出来ません。"
 msgid "Enter Title for for WordPress. USE 1 characters minimum."
 msgstr "WordPressのタイトルを指定してください。1文字以上の文字列が使用できます。"
 
-#: lib/provision.sh:279
+#: lib/provision.sh:291
 #, sh-format
 msgid "not implimented."
 msgstr "実装されていません。"
 
-#: lib/provision.sh:283 lib/provision.sh:289 lib/provision.sh:295
-#: lib/provision.sh:301 lib/provision.sh:309 lib/provision.sh:316
+#: lib/provision.sh:295 lib/provision.sh:301 lib/provision.sh:307
+#: lib/provision.sh:313 lib/provision.sh:321 lib/provision.sh:328
 #, sh-format
 msgid "can not specified with another application."
 msgstr "他のアプリケーションと共に指定することは出来ません。"
 
-#: lib/provision.sh:451 lib/ssl.sh:106
+#: lib/provision.sh:463 lib/ssl.sh:106
 #, sh-format
 msgid "Cannot use option"
 msgstr "このオプションは使用できません。"
 
-#: lib/provision.sh:474
+#: lib/provision.sh:486
 #, sh-format
 msgid "option --nginx and --httpd is can not specify both at the same time."
 msgstr "オプション--nginxと--httpdを同時に指定することは出来ません。"
 
-#: lib/provision.sh:481
+#: lib/provision.sh:493
 #, sh-format
 msgid "Target name requires [a-zA-Z0-9._-] 3-24 characters."
 msgstr "ターゲット名は3～24文字の[a-zA-Z0-9._-]の文字列を指定してください。"
 
-#: lib/provision.sh:492
+#: lib/provision.sh:504
 #, sh-format
 msgid "require option --fqdn for your website. ex) kusanagi.tokyo."
 msgstr "Webサイトで使用するホスト名(FQDN)を入力してください。 例) kusanagi.tokyo"
 
-#: lib/provision.sh:626
+#: lib/provision.sh:642
 #, sh-format
 msgid "Waiting HTTPD init process"
 msgstr "HTTPDの初期化を待っています"
 
-#: lib/provision.sh:650
+#: lib/provision.sh:666
 #, sh-format
 msgid "Cannot get Let's Encrypt SSL Certificate files."
 msgstr "Let's EncryptのSSL証明書を取得できませんでした。"

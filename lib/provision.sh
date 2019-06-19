@@ -187,6 +187,18 @@ function k_check_title() {
 	fi
 }
 
+function k_add_profile() {
+	local OPT="$1"
+	local DEFAULT="$2"
+	local FILE="$3"
+	if [ "x${$OPT}" = "x" ] ; then
+		echo "#$OPT=$DEFAULT" >> $FILE
+	else
+		echo "$OPT=${$OPT}" >> $FILE
+	fi
+}
+
+
 function k_provision () {
 	local OPT_WOO=	# use WooCommerce option(1 = use/other no use)
 	local OPT_WPLANG OPT_FQDN OPT_EMAIL OPT_DBHOST OPT_DBROOTPASS
@@ -526,6 +538,7 @@ function k_provision () {
 	mkdir $PROFILE
 	DOCUMENTROOT=/home/kusanagi/$PROFILE/DocumentRoot
 	[ "c5" = $APP ] && DOCUMENTROOT=/home/kusanagi/$PROFILE/public
+	# add .kusanagi
 	cat <<EOF > $PROFILE/.kusanagi
 PROFILE=$PROFILE
 MACHINE=$MACHINE
@@ -535,6 +548,8 @@ DOCUMENTROOT=$DOCUMENTROOT
 KUSANAGI_PROVISION=$APP
 KUSANAGI_DB_SYSTEM=$KUSANAGI_DB_SYSTEM
 EOF
+
+	# add .kusanagi.httpd
 	cat <<EOF > $PROFILE/.kusanagi.httpd
 FQDN=$FQDN
 DONOT_USE_FCACHE=1
@@ -543,25 +558,26 @@ USE_SSL_OSCP=off
 NO_USE_NAXSI=1
 NO_USE_SSLST=1
 NO_SSL_REDIRECT=1
-#EXPIRE_DAYS=90
-#OSCP_RESOLV=8.8.8.8
 EOF
-cat <<EOF > $PROFILE/.kusanagi.php
-#PHP_PORT=127.0.0.1:9000
-#PHP_ALLOWED=127.0.0.1
-#PHP_MAX_CHILDLEN=50
-#PHP_START_SERVERS=10
-#PHP_MIN_SPARE_SERVERS=5
-#PHP_MAX_SPARE_SERVERS=15
-#PHP_MAX_REQUESTS=500
-EOF
-cat <<EOF > $PROFILE/.kusanagi.mail
-MAILSERVER=localhost
-#MAILDOMAIN=
-#MAILUSER=
-#MAILPASS=
-#MAILAUTH=
-EOF
+	k_add_profile EXPIRE_DAYS 90 $PROFILE/kusanagi.httpd
+	k_add_profile OSCP_RESOLV 8.8.8.8 $PROFILE/kusanagi.httpd
+
+	# add .kusanagi.php
+	touch $PROFILE/.kusanagi.php
+	k_add_profile PHP_PORT '127.0.0.1:9000' $PROFILE/.kusanagi.php
+	k_add_profile PHP_MAX_CHILDLEN 500 $PROFILE/.kusanagi.php
+	k_add_profile PHP_START_SERVERS 10 $PROFILE/.kusanagi.php
+	k_add_profile PHP_MIN_SPARE_SERVERS 5 $PROFILE/.kusanagi.php
+	k_add_profile PHP_MAX_SPARE_SERVERS 15 $PROFILE/.kusanagi.php
+	k_add_profile PHP_MAX_REQUESTS 500 $PROFILE/.kusanagi.php
+
+	# add .kusanagi.mail
+	MAILSERVER=${MAILSERVER:-localhost} > $PROFILE/.kusanagi.mail
+	k_add_profile MAILDOMAIN '' $PROFILE/.kusanagi.mail
+	k_add_profile MAILUSER '' $PROFILE/.kusanagi.mail
+	k_add_profile MAILPASS '' $PROFILE/.kusanagi.mail
+	k_add_profile MAILAUTH '' $PROFILE/.kusanagi.mail
+
 	[ "x$APP" = "xwp" ] && cat <<EOF > $PROFILE/.kusanagi.wp
 KUSANAGIPASS=$KUSANAGI_PASS
 WP_TITLE=$WP_TITLE
@@ -584,21 +600,21 @@ MYSQL_ROOT_PASSWORD=$DBROOTPASS
 MYSQL_DATABASE=$DBNAME
 MYSQL_USER=$DBUSER
 MYSQL_PASSWORD=$DBPASS
-#MYSQL_ALLOW_EMPTY_PASSWORD=
-#MYSQL_RANDOM_ROOT_PASSWORD=
-#SOCKET=
-#MYSQL_INITDB_SKIP_TZINFO=
-#MYSQL_ROOT_HOST=
 EOF
+			k_add_profile MYSQL_ALLOW_EMPTY_PASSWORD '' $PROFILE/.kusanagi.mysql
+			k_add_profile MYSQL_RANDOM_ROOT_PASSWORD '' $PROFILE/.kusanagi.mysql
+			k_add_profile SOCKET '' $PROFILE/.kusanagi.mysql
+			k_add_profile MYSQL_INITDB_SKIP_TZINFO '' $PROFILE/.kusanagi.mysql
+			k_add_profile MYSQL_ROOT_HOST '' $PROFILE/.kusanagi.mysql
 		elif [ "$KUSANAGI_DB_SYSTEM" = "pgsql" ] ; then
 			cat <<EOF > $PROFILE/.kusanagi.pgsql
 POSTGRES_DB=$DBNAME
 POSTGRES_USER=$DBUSER
 POSTGRES_PASSWORD=$DBPASS
 POSTGRES_INITDB_ARGS=--encoding=UTF-8
-#PGDATA=
-#POSTGRES_INITDB_WALDIR=
 EOF
+			k_add_profile PGDATA '' $PROFILE/.kusanagi.psql
+			k_add_profile POSTGRES_INITDB_WALDIR '' $PROFILE/.kusanagi.psql
 		fi
 	fi
 
