@@ -54,42 +54,215 @@ Manual : http://en.kusanagi.tokyo/document/command/
 - help -
 # kusanagi-docker [-h | --help | help]
 show this snippet.
+# kusanagi-docker [-V|--version]
+show this version
 ---------------------
-- configuration -
-provision [options] --fqdn domainname target
-	--fqdn domainname(like kusanagi.tokyo)
-        [--WordPress [--wplang en_US|ja]
-	  [--admin-user admin] [--admin-passwd pass] [--admin-email email]
-	  [--wp-title title] [--kusanagi-pass pass] [--notfp|--no-ftp] |
-	 --lamp|--concrete5|--drupal|--drupal7|--drupal8]
-        [--email|-ssl email@example.com]
-        [--dbhost host] [--dbname dbname]
-	[--dbuser username] [--dbpass password]
-	[--git giturl|--tar tarball]
-ssl [options] 
-        [--email|--ssl email@example.com]
-	[--cert file --key file]
-        [--redirect|--noredirect]
-        [--hsts  {on|off}]
-        [--oscp  [on|off]]
-        [--ct  [on|off] [--no-register|--noregister]]
-        [--renew]
-config command 
-	bcache [on|off]
-	fcache [on|off]
-	pull
-	push
-	dbdump [file]
-	dbrestore [file]
-	backup
-	restore
-remove [-y] [target]
+- create/remove target -
+EOD
+k_helphelp provision help
+k_helphelp remove help
+- configuration (runs on target dir) -
+k_helphelp ssl help
+k_helphelp config help
+wp [wpcli commands]
+import/export
 ---------------------
-- status -
-[-V|--version]
+- status (runs on target dir) -
 start|stop|restart|status
 ----------------------
 EOD
+}
+
+function k_helphelp {
+	case $2 in
+	'help'|'--help')
+		case $1 in
+			provision)
+				echo $(eval_gettext "provision [options] --fqdn domainname target")
+				echo "	"$(eval_gettext "--fqdn domainname(like kusanagi.tokyo)")
+				echo "	"$(eval_gettext "[--WordPress [--wplang lang(like en_US, ja)]")
+				echo "		"$(eval_gettext "[--admin-user admin] [--admin-passwd pass] [--admin-email email]")
+				echo "		"$(eval_gettext "[--wp-title title] [--kusanagi-pass pass] [--notfp|--no-ftp] |")
+				echo "	"$(eval_gettext " --lamp|--concrete5|--drupal|--drupal7|--drupal8]")
+				echo "	"$(eval_gettext "[--dbhost host]")
+				echo "	"$(eval_gettext "[--dbname dbname]")
+				echo "	"$(eval_gettext "[--dbuser username]")
+				echo "	"$(eval_gettext "[--dbpass password]")
+
+#				echo "	"$(eval_gettext "Option: --wordpress|--WordPress")
+#				echo "		"$(eval_gettext "Provision new profile to use WordPress.")
+#				echo "	"$(eval_gettext "Option: --woo|--WooCommerce")
+#				echo "		"$(eval_gettext "Provision WordPress with WooCommerce plugin.")
+#				echo "	"$(eval_gettext "Option: --lamp")
+#				echo "		"$(eval_gettext "Provision new profile to use LAMP.")
+#				echo "	"$(eval_gettext "Option: --c5|--concrete5")
+#				echo "		"$(eval_gettext "Provision new profile to use Concrete5.")
+#				echo "	"$(eval_gettext "Option: --drupal7")
+#				echo "		"$(eval_gettext "Provision new profile to use Drupal7.")
+#				echo "	"$(eval_gettext "Option: --drupal|--drupal8")
+#				echo "		"$(eval_gettext "Provision new profile to use Drupal8.")
+#				echo "	"$(eval_gettext "Option: --wplang [en_US|ja]")
+#				echo "		"$(eval_gettext "Set WordPress Language english(en_US) or Japanese(ja).")
+#				echo "		"$(eval_gettext "If do not specify it, use choose this parameter interactively.")
+#				echo "	"$(eval_gettext "Option: --fqdn domainname")
+#				echo "		"$(eval_gettext "Set host name to new domainname.")
+#				echo "	"$(eval_gettext "Option: --email mail_address")
+#				echo "		"$(eval_gettext "Set Email address to Let's Encrypt certiticates.")
+#				echo "		"$(eval_gettext "If do not specify --email and --no-email, use choose this parameter interactively.")
+#				echo "	"$(eval_gettext "Option: --no-email|--noemail")
+#				echo "		"$(eval_gettext "Unset Email address, and Do not execute Let's Encrypt certiticates.")
+#				echo "		"$(eval_gettext "If do not specify --email and --no-email, use choose this parameter interactively.")
+#				echo "	"$(eval_gettext "Option: --dbname name")
+#				echo "		"$(eval_gettext "Set MySQL Database name.")
+#				echo "		"$(eval_gettext "If do not specify it, use choose this parameter interactively.")
+#				echo "	"$(eval_gettext "Option: --dbuser user")
+#				echo "		"$(eval_gettext "Set MySQL Database user name.")
+#				echo "		"$(eval_gettext "If do not specify it, use choose this parameter interactively.")
+#				echo "	"$(eval_gettext "Option: --dbpass password")
+#				echo "		"$(eval_gettext "Set MySQL Database user's password.")
+#				echo "		"$(eval_gettext "If do not specify it, use choose this parameter interactively.")
+				exit 0
+				;;
+			config)
+				echo $(eval_gettext "config command ")
+				echo "	"$(eval_gettext "bcache [on|off]")
+				echo "	"$(eval_gettext "fcache [on|off]")
+				echo "	"$(eval_gettext "pull")
+				echo "	"$(eval_gettext "push")
+				echo "	"$(eval_gettext "dbdump [file]")
+				echo "	"$(eval_gettext "dbrestore [file]")
+				echo "	"$(eval_gettext "backup")
+				echo "	"$(eval_gettext "restore")
+				echo "	"$(eval_gettext "[--help|help]")
+#				echo $(eval_gettext "Setting: Change site URL to target profile.")
+#				echo "	"$(eval_gettext "Argument: --fqdn domainname [profile]")
+#				echo "	"$(eval_gettext "Option: --fqdn domainname")
+#				echo "		"$(eval_gettext "Change existing host name to domainname.")
+#				echo "	"$(eval_gettext "Option: [profile]")
+#				echo "		"$(eval_gettext "Target Profile name. If do not specify it, use the current profile.")
+
+				exit 0
+				;;
+			ssl)
+				echo $(eval_gettext "ssl [options]")
+				echo "	"$(eval_gettext "[--cert file --key file]")
+				echo "	"$(eval_gettext "[--redirect|--noredirect]")
+				echo "	"$(eval_gettext "[--hsts  [on|off]]")
+				echo "	"$(eval_gettext "[--oscp  [on|off]]")
+				echo "	"$(eval_gettext "[--ct  [on|off] [--no-register|--noregister]]")
+				echo "	"$(eval_gettext "[--help|help]")
+
+#				echo $(eval_gettext "SSL: modify SSL Certificate configurations.")
+#				echo "	"$(eval_gettext "Option: --email email@example.com")
+#				echo "		"$(eval_gettext "Create new Let's Encrypt certificate to target profile.")
+#				echo "		"$(eval_gettext "Specified your E-Mail address(to use expire notice email,etc...)")
+#				echo "	"$(eval_gettext "Option: --cert certfile --key keyfile")
+#				echo "		"$(eval_gettext "Use specified certificate and key files.")
+#				echo "		"$(eval_gettext "These option cannot use with --email option.")
+#				echo "	"$(eval_gettext "Option: --https [redirect|noredirect]")
+#				echo "		"$(eval_gettext "Redirect or No Redirect HTTP to HTTPS site to target profile.")
+#				echo "	"$(eval_gettext "Option: --hsts [off|weak|mid|high]")
+#				echo "		"$(eval_gettext "use HSTS(HTTP Strict Transport Security) setting.")
+#				echo "		"$(eval_gettext "off:  Disable HSTS")
+#				echo "		"$(eval_gettext "weak: Enabling HSTS(not IncludeSubDomain)")
+#				echo "		"$(eval_gettext "mid:  Enabling HSTS w/IncludeSubDomain (not Preloading)")
+#				echo "		"$(eval_gettext "high: Enabling HSTS w/IncludeSubDomain,Preloading")
+#				echo "	"$(eval_gettext "Option: --auto [on|off]")
+#				echo "		"$(eval_gettext "Enable or disable auto renewal Let's Encrypt certification.")
+#				echo "	"$(eval_gettext "Option: --ct [on|off]")
+#				echo "		"$(eval_gettext "Enable or disable CT(Certificate Transparency) options.")
+#				echo "	"$(eval_gettext "Option: --no-register|--noregister")
+#				echo "		"$(eval_gettext "Do not register SCT files to CT(Certificate Transparency) log servers.")
+#				echo "		"$(eval_gettext "This Options only use with --ct Options.")
+#				echo "	"$(eval_gettext "Option: [profile]")
+#				echo "		"$(eval_gettext "Target Profile name. If do not specify it, use the current profile.")
+				exit 0
+				;;
+#			httpd)
+#				echo $(eval_gettext "HTTPd: Change using web server to Apache HTTPd.")
+#				echo "	"$(eval_gettext "No need arguments.")
+#				exit 0
+#				;;
+#			nginx)
+#				echo $(eval_gettext "NGINX: Change using web server to Nginx.")
+#				echo "	"$(eval_gettext "No need arguments.")
+#				exit 0
+#				;;
+#			php-fpm)
+#				echo $(eval_gettext "PHP-FPM: Change using PHP FastCGI server to PHP-FPM(version 5).")
+#				echo "	" $(eval_gettext "No need arguments.")
+#				exit 0
+#				;;
+#			php7)
+#				echo $(eval_gettext "PHP7: Change using PHP FastCGI server to PHP7.")
+#				echo "	"$(eval_gettext "No need arguments.")
+#				exit 0
+#				;;
+#		status)
+#				echo $(eval_gettext "Status: Show KUSANAGI middleware status and current profile.")
+#				echo "	"$(eval_gettext "No need arguments.")
+#				exit 0
+#				;;
+#			update)
+#				echo $(eval_gettext "Update: Update KUSANAGI plugin or certificate.")
+#				echo "	"$(eval_gettext "Argument: plugin [-y]")
+#				echo "		"$(eval_gettext "Update plugins If plugin version is updated.")
+#				echo "	"$(eval_gettext "Option: [-y]")
+#				echo "		"$(eval_gettext "Assume yes; assume that the answer to any question which would be asked is yes.")
+#				echo "	"$(eval_gettext "Argument: cert [profile]")
+#				echo "		"$(eval_gettext "Update Let's Encrypt SSL Certification.")
+#				echo "	"$(eval_gettext "Option: [profile]")
+#				echo "		"$(eval_gettext "Target Profile name. If do not specify it, use the current profile.")
+#				exit 0
+#				;;
+#			fcache)
+#				echo $(eval_gettext "FCache: Control FCache feature.")
+#				echo "	"$(eval_gettext "Argument: on")
+#				echo "		"$(eval_gettext "Use FCache")
+#				echo "	"$(eval_gettext "Argument: off")
+##				echo "		"$(eval_gettext "Do not use FCache")
+#				echo "	"$(eval_gettext "Argument: clear")
+#				echo "		"$(eval_gettext "Clear FCache")
+#				exit 0
+#				;;
+#			bcache)
+#				echo $(eval_gettext "BCache: Control BCache feature.")
+#				echo "	"$(eval_gettext "Argument: on")
+#				echo "		"$(eval_gettext "Use BCache")
+#				echo "	"$(eval_gettext "Argument: off")
+#				echo "		"$(eval_gettext "Do not use BCache")
+#				echo "	"$(eval_gettext "Argument: clear")
+#				echo "		"$(eval_gettext "Clear BCache")
+#				exit 0
+#				;;
+#			restart)
+#				echo $(eval_gettext "Restart: restart all enabled middleweres.")
+#				echo "	"$(eval_gettext "No need arguments.")
+#				exit 0
+#				;;
+			remove)
+				echo $(eval_gettext "remove [-y] [target]")
+#				echo $(eval_gettext "Remove: remove setteing, contents, and DB.")
+#				echo "	"$(eval_gettext "Argument: [-y] [profile]")
+#				echo "	"$(eval_gettext "Option: -y")
+#				echo "		"$(eval_gettext "Assume yes; assume that the answer to any question which would be asked is yes.")
+#				echo "	"$(eval_gettext "Option: profile ")
+#				echo "		"$(eval_gettext "Target profile. When don't you set profile, you remove current profile.")
+				exit 0
+				;;
+#			-h|--help|help)
+#				echo $(eval_gettext "Help: Help is this option.")
+#				exit 0
+#				;;
+			*)
+				echo $(eval_gettext "Invalid Parameters. Try 'kusanagi -h'")
+				exit 1
+				;;
+		esac
+		;;
+	*)
+		;;
+	esac
 }
 
 function k_target() {

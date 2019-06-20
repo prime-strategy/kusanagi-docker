@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kusanagi-docker 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-11 22:24+0900\n"
+"POT-Creation-Date: 2019-06-20 17:45+0900\n"
 "PO-Revision-Date: 2019-02-11 00:00+0900\n"
 "Last-Translator: Satoru MIYAZAKI<satoru@prime-strategy.co.jp>\n"
 "Language-Team: Satoru MIYAZAKI<satoru@prime-strategy.co.jp>\n"
@@ -71,7 +71,7 @@ msgstr "naxsi は有効です"
 msgid "naxsi is off"
 msgstr "naxsi は無効です"
 
-#: lib/config.sh:232 lib/ssl.sh:21
+#: lib/config.sh:235 lib/ssl.sh:21
 #, sh-format
 msgid "is unknown subcommand."
 msgstr "無効なサブコマンドです"
@@ -81,33 +81,173 @@ msgstr "無効なサブコマンドです"
 msgid "Provision Drupal"
 msgstr "Drupal を配置します"
 
-#: lib/functions.sh:105
+#: lib/functions.sh:81
+#, sh-format
+msgid "provision [options] --fqdn domainname target"
+msgstr ""
+
+#: lib/functions.sh:82
+#, sh-format
+msgid "--fqdn domainname(like kusanagi.tokyo)"
+msgstr ""
+
+#: lib/functions.sh:83
+#, sh-format
+msgid "[--WordPress [--wplang lang(like en_US, ja)]"
+msgstr ""
+
+#: lib/functions.sh:84
+#, sh-format
+msgid "[--admin-user admin] [--admin-passwd pass] [--admin-email email]"
+msgstr ""
+
+#: lib/functions.sh:85
+#, sh-format
+msgid "[--wp-title title] [--kusanagi-pass pass] [--notfp|--no-ftp] |"
+msgstr ""
+
+#: lib/functions.sh:86
+#, sh-format
+msgid " --lamp|--concrete5|--drupal|--drupal7|--drupal8]"
+msgstr ""
+
+#: lib/functions.sh:87
+#, sh-format
+msgid "[--dbhost host]"
+msgstr ""
+
+#: lib/functions.sh:88
+#, sh-format
+msgid "[--dbname dbname]"
+msgstr ""
+
+#: lib/functions.sh:89
+#, sh-format
+msgid "[--dbuser username]"
+msgstr ""
+
+#: lib/functions.sh:90
+#, sh-format
+msgid "[--dbpass password]"
+msgstr ""
+
+#: lib/functions.sh:127
+#, sh-format
+msgid "config command "
+msgstr ""
+
+#: lib/functions.sh:128
+#, sh-format
+msgid "bcache [on|off]"
+msgstr ""
+
+#: lib/functions.sh:129
+#, sh-format
+msgid "fcache [on|off]"
+msgstr ""
+
+#: lib/functions.sh:130
+#, sh-format
+msgid "pull"
+msgstr ""
+
+#: lib/functions.sh:131
+#, sh-format
+msgid "push"
+msgstr ""
+
+#: lib/functions.sh:132
+#, sh-format
+msgid "dbdump [file]"
+msgstr ""
+
+#: lib/functions.sh:133
+#, sh-format
+msgid "dbrestore [file]"
+msgstr ""
+
+#: lib/functions.sh:134
+#, sh-format
+msgid "backup"
+msgstr ""
+
+#: lib/functions.sh:135
+#, sh-format
+msgid "restore"
+msgstr ""
+
+#: lib/functions.sh:136 lib/functions.sh:153
+#, sh-format
+msgid "[--help|help]"
+msgstr ""
+
+#: lib/functions.sh:147
+#, sh-format
+msgid "ssl [options]"
+msgstr ""
+
+#: lib/functions.sh:148
+#, sh-format
+msgid "[--cert file --key file]"
+msgstr ""
+
+#: lib/functions.sh:149
+#, sh-format
+msgid "[--redirect|--noredirect]"
+msgstr ""
+
+#: lib/functions.sh:150
+#, sh-format
+msgid "[--hsts  [on|off]]"
+msgstr ""
+
+#: lib/functions.sh:151
+#, sh-format
+msgid "[--oscp  [on|off]]"
+msgstr ""
+
+#: lib/functions.sh:152
+#, sh-format
+msgid "[--ct  [on|off] [--no-register|--noregister]]"
+msgstr ""
+
+#: lib/functions.sh:244
+#, sh-format
+msgid "remove [-y] [target]"
+msgstr ""
+
+#: lib/functions.sh:258
+#, sh-format
+msgid "Invalid Parameters. Try 'kusanagi -h'"
+msgstr ""
+
+#: lib/functions.sh:278
 #, sh-format
 msgid "not found."
 msgstr "見つかりません"
 
-#: lib/functions.sh:114
+#: lib/functions.sh:287
 #, sh-format
 msgid "TARGET has not been set."
 msgstr "TARGET が指定されていません"
 
-#: lib/functions.sh:142 lib/functions.sh:169
+#: lib/functions.sh:315 lib/functions.sh:342
 #, sh-format
 msgid "is not found."
 msgstr "見つかりません"
 
-#: lib/functions.sh:187
+#: lib/functions.sh:360
 #, sh-format
 msgid "service not found."
 msgstr "サービスが見つかりません。"
 
-#: lib/functions.sh:217 lib/functions.sh:220 lib/functions.sh:223
-#: lib/provision.sh:624
+#: lib/functions.sh:390 lib/functions.sh:393 lib/functions.sh:396
+#: lib/provision.sh:627
 #, sh-format
 msgid "is not implemented."
 msgstr "実装されていません。"
 
-#: lib/functions.sh:232 lib/functions.sh:242 lib/functions.sh:252
+#: lib/functions.sh:405 lib/functions.sh:415 lib/functions.sh:425
 #: lib/provision.sh:54 lib/provision.sh:66 lib/provision.sh:76
 #: lib/provision.sh:85 lib/provision.sh:100 lib/provision.sh:110
 #: lib/provision.sh:120 lib/provision.sh:131 lib/provision.sh:141
@@ -119,27 +259,27 @@ msgstr "実装されていません。"
 msgid "option:"
 msgstr "オプション:"
 
-#: lib/functions.sh:232
+#: lib/functions.sh:405
 #, sh-format
 msgid "file not found."
 msgstr "ファイルが見つかりません。"
 
-#: lib/functions.sh:242 lib/provision.sh:76
+#: lib/functions.sh:415 lib/provision.sh:76
 #, sh-format
 msgid "please input valid email address."
 msgstr "有効なEメールアドレスを指定してください。"
 
-#: lib/functions.sh:252
+#: lib/functions.sh:425
 #, sh-format
 msgid "please input on/off."
 msgstr "onかoffを指定してください。"
 
-#: lib/functions.sh:272
+#: lib/functions.sh:445
 #, sh-format
 msgid "Done."
 msgstr "完了しました。"
 
-#: lib/functions.sh:275
+#: lib/functions.sh:448
 #, sh-format
 msgid "Failed."
 msgstr "失敗しました。"
@@ -205,42 +345,42 @@ msgstr "実装されていません。"
 msgid "can not specified with another application."
 msgstr "他のアプリケーションと共に指定することは出来ません。"
 
-#: lib/provision.sh:463 lib/ssl.sh:106
+#: lib/provision.sh:466 lib/ssl.sh:109
 #, sh-format
 msgid "Cannot use option"
 msgstr "このオプションは使用できません。"
 
-#: lib/provision.sh:486
+#: lib/provision.sh:489
 #, sh-format
 msgid "option --nginx and --httpd is can not specify both at the same time."
 msgstr "オプション--nginxと--httpdを同時に指定することは出来ません。"
 
-#: lib/provision.sh:493
+#: lib/provision.sh:496
 #, sh-format
 msgid "Target name requires [a-zA-Z0-9._-] 3-24 characters."
 msgstr "ターゲット名は3～24文字の[a-zA-Z0-9._-]の文字列を指定してください。"
 
-#: lib/provision.sh:504
+#: lib/provision.sh:507
 #, sh-format
 msgid "require option --fqdn for your website. ex) kusanagi.tokyo."
 msgstr "Webサイトで使用するホスト名(FQDN)を入力してください。 例) kusanagi.tokyo"
 
-#: lib/provision.sh:642
+#: lib/provision.sh:645
 #, sh-format
 msgid "Waiting HTTPD init process"
 msgstr "HTTPDの初期化を待っています"
 
-#: lib/provision.sh:666
+#: lib/provision.sh:669
 #, sh-format
 msgid "Cannot get Let's Encrypt SSL Certificate files."
 msgstr "Let's EncryptのSSL証明書を取得できませんでした。"
 
-#: lib/ssl.sh:116
+#: lib/ssl.sh:119
 #, sh-format
 msgid "specified in same time."
 msgstr "同時に指定してください"
 
-#: lib/ssl.sh:119
+#: lib/ssl.sh:122
 #, sh-format
 msgid "can not specified in same time."
 msgstr "同時に指定することは出来ません。"

@@ -459,6 +459,9 @@ function k_provision () {
 				KUSANAGI_DB_SYSTEM=$(k_check_dbsystem "${OPT%%=*}" "${OPT#*=}" "$KUSANAGI_DB_SYSTEM")
 				[ -z $KUSANAGI_DB_SYSTEM ] && return 1
 				;;
+			--help|help)
+				k_helphelp provision help
+				;;
 			-*)	# skip other option
 				k_print_error $(eval_gettext "Cannot use option") $OPT
 				return 1

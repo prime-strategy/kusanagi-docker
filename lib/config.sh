@@ -228,6 +228,9 @@ function k_config () {
 	dbrestore)
 		k_dbrestore $@
 		;;
+	--help|help)
+		k_helphelp config help
+		;;
 	*)
 		k_print_error config $OPT $(eval_gettext "is unknown subcommand.")
 		false

@@ -102,6 +102,9 @@ function k_ssl () {
 			'--renew')
 				OPT_RENEW=1
 				;;
+			'--help'|help)
+				k_helphelp ssl help
+				;;
 			*)	# skip other option
 				k_print_error $(eval_gettext "Cannot use option") $OPT
 				return 1
