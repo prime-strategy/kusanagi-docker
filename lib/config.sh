@@ -230,9 +230,10 @@ function k_config () {
 		;;
 	--help|help)
 		k_helphelp config help
+		return 0
 		;;
 	*)
 		k_print_error config $OPT $(eval_gettext "is unknown subcommand.")
-		false
+		return 1
 	esac
 }

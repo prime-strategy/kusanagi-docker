@@ -59,11 +59,12 @@ show this version
 ---------------------
 - create/remove target -
 EOD
-k_helphelp provision help
-k_helphelp remove help
-- configuration (runs on target dir) -
-k_helphelp ssl help
-k_helphelp config help
+	k_helphelp provision help
+	k_helphelp remove help
+	echo '- configuration (runs on target dir) -'
+	k_helphelp ssl help
+	k_helphelp config help
+	cat <<EOD
 wp [wpcli commands]
 import/export
 ---------------------
@@ -78,12 +79,11 @@ function k_helphelp {
 	'help'|'--help')
 		case $1 in
 			provision)
-				echo $(eval_gettext "provision [options] --fqdn domainname target")
-				echo "	"$(eval_gettext "--fqdn domainname(like kusanagi.tokyo)")
+				echo $(eval_gettext "provision [options] --fqdn domainname target(like kusanagi.tokyo)")
 				echo "	"$(eval_gettext "[--WordPress [--wplang lang(like en_US, ja)]")
 				echo "		"$(eval_gettext "[--admin-user admin] [--admin-passwd pass] [--admin-email email]")
 				echo "		"$(eval_gettext "[--wp-title title] [--kusanagi-pass pass] [--notfp|--no-ftp] |")
-				echo "	"$(eval_gettext " --lamp|--concrete5|--drupal|--drupal7|--drupal8]")
+				echo "	"$(eval_gettext ' --lamp|--concrete5|--drupal|--drupal7|--drupal8]')
 				echo "	"$(eval_gettext "[--dbhost host]")
 				echo "	"$(eval_gettext "[--dbname dbname]")
 				echo "	"$(eval_gettext "[--dbuser username]")
@@ -121,7 +121,6 @@ function k_helphelp {
 #				echo "	"$(eval_gettext "Option: --dbpass password")
 #				echo "		"$(eval_gettext "Set MySQL Database user's password.")
 #				echo "		"$(eval_gettext "If do not specify it, use choose this parameter interactively.")
-				exit 0
 				;;
 			config)
 				echo $(eval_gettext "config command ")
@@ -140,8 +139,6 @@ function k_helphelp {
 #				echo "		"$(eval_gettext "Change existing host name to domainname.")
 #				echo "	"$(eval_gettext "Option: [profile]")
 #				echo "		"$(eval_gettext "Target Profile name. If do not specify it, use the current profile.")
-
-				exit 0
 				;;
 			ssl)
 				echo $(eval_gettext "ssl [options]")
@@ -176,7 +173,6 @@ function k_helphelp {
 #				echo "		"$(eval_gettext "This Options only use with --ct Options.")
 #				echo "	"$(eval_gettext "Option: [profile]")
 #				echo "		"$(eval_gettext "Target Profile name. If do not specify it, use the current profile.")
-				exit 0
 				;;
 #			httpd)
 #				echo $(eval_gettext "HTTPd: Change using web server to Apache HTTPd.")
@@ -248,7 +244,6 @@ function k_helphelp {
 #				echo "		"$(eval_gettext "Assume yes; assume that the answer to any question which would be asked is yes.")
 #				echo "	"$(eval_gettext "Option: profile ")
 #				echo "		"$(eval_gettext "Target profile. When don't you set profile, you remove current profile.")
-				exit 0
 				;;
 #			-h|--help|help)
 #				echo $(eval_gettext "Help: Help is this option.")

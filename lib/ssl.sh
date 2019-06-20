@@ -11,11 +11,6 @@ function k_ssl () {
 	local EMAIL= CERT= KEY= HSTS= OSCP= CT= REGISTER= RENEW=
 	local PROFILE=
 
-	k_target $PROFILE
-	k_machine > /dev/null
-	source $TARGETDIR/.kusanagi
-	source $TARGETDIR/.kusanagi.httpd
-
 	## perse arguments
 	if [ "x$2" = "x" ] ; then
 		k_print_error config $1 $(eval_gettext "is unknown subcommand.")
@@ -104,6 +99,7 @@ function k_ssl () {
 				;;
 			'--help'|help)
 				k_helphelp ssl help
+				return 0
 				;;
 			*)	# skip other option
 				k_print_error $(eval_gettext "Cannot use option") $OPT
@@ -113,6 +109,11 @@ function k_ssl () {
 		fi
 		PRE_OPT=$OPT
 	done
+
+	k_target $PROFILE
+	k_machine > /dev/null
+	source $TARGETDIR/.kusanagi
+	source $TARGETDIR/.kusanagi.httpd
 
 	# error check
 	if [ "x$CERT$KEY" != "x" ] && [ "x$CERT" = "x" -o "x$KEY" = "x" ] ; then

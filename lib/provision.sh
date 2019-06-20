@@ -461,6 +461,7 @@ function k_provision () {
 				;;
 			--help|help)
 				k_helphelp provision help
+				return 0
 				;;
 			-*)	# skip other option
 				k_print_error $(eval_gettext "Cannot use option") $OPT
