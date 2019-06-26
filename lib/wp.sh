@@ -36,6 +36,9 @@ fi
 echo >> docker-compose.yml
 echo 'volumes:' >> docker-compose.yml
 echo '  kusanagi:' >>  docker-compose.yml
+
+echo 'mysqli.default_socket = /var/run/mysqld/mysqld.sock' > .wp_mysqli.ini 
+
 [[ $DBHOST =~ ^localhost ]] && echo '  database:' >> docker-compose.yml
 
 function wp_lang() {

@@ -565,8 +565,8 @@ NO_USE_NAXSI=1
 NO_USE_SSLST=1
 NO_SSL_REDIRECT=1
 EOF
-	k_add_profile EXPIRE_DAYS 90 $PROFILE/kusanagi.httpd
-	k_add_profile OSCP_RESOLV 8.8.8.8 $PROFILE/kusanagi.httpd
+	k_add_profile EXPIRE_DAYS 90 $PROFILE/.kusanagi.httpd
+	k_add_profile OSCP_RESOLV 8.8.8.8 $PROFILE/.kusanagi.httpd
 
 	# add .kusanagi.php
 	touch $PROFILE/.kusanagi.php
