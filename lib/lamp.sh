@@ -41,7 +41,7 @@ fi
 echo >> docker-compose.yml
 echo 'volumes:' >> docker-compose.yml
 echo '  kusanagi:' >>  docker-compose.yml
-[[ $DBHOST =~ ^localhost: ]] || [[ $DBHOST = localhost ]] && echo '  database:' >> docker-compose.yml
+[[ $DBHOST =~ ^localhost ]] || [[ $DBHOST = localhost ]] && echo '  database:' >> docker-compose.yml
 
 k_print_green "$(eval_gettext 'Provision LAMP')"
 docker-compose up -d \

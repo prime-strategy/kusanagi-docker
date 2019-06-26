@@ -40,7 +40,7 @@ fi
 echo >> docker-compose.yml
 echo 'volumes:' >> docker-compose.yml
 echo '  kusanagi:' >>  docker-compose.yml
-[[ $DBHOST =~ ^localhost: ]] && echo '  database:' >> docker-compose.yml
+[[ $DBHOST =~ ^localhost ]] && echo '  database:' >> docker-compose.yml
 
 
 docker-compose up -d \

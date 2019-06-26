@@ -527,9 +527,9 @@ function k_provision () {
 	DBHOST=${DBHOST:-localhost}
 	if [ "$DBHOST" = 'localhost' ] ; then
 		DBROOTPASS=${DBROOTPASS:-$(k_mkpasswd)}
-		if [ "$KUSANAGI_DB_SYSTEM" = "mariadb" ]; then
-			DBHOST="localhost:/var/run/mysqld/mysqld.sock";
-		fi
+		#if [ "$KUSANAGI_DB_SYSTEM" = "mariadb" ]; then
+		#	DBHOST="localhost:/var/run/mysqld/mysqld.sock";
+		#fi
 	else
 		export NO_USE_DB=1
 	fi
