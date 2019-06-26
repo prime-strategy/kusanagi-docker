@@ -540,15 +540,17 @@ function k_provision () {
 	MACHINE=$(k_machine)
 	
 	mkdir $PROFILE
-	DOCUMENTROOT=/home/kusanagi/$PROFILE/DocumentRoot
-	[ "c5" = $APP ] && DOCUMENTROOT=/home/kusanagi/$PROFILE/public
+	local _rootdir=$([ "c5" = $APP ] && echo =public || echo DocumentRoot)
+	ROOT_DIR="${ROOT_DIR:-$_rootdir}"
+	DOCUMENTROOT="${DOCUMENTROOT:-/home/kusanagi/$PROFILE/$ROOT_DIR}"
 	# add .kusanagi
 	cat <<EOF > $PROFILE/.kusanagi
 PROFILE=$PROFILE
 MACHINE=$MACHINE
 TARGET=$PROFILE
 TARGETDIR=$(pwd)/$PROFILE
-DOCUMENTROOT=$DOCUMENTROOT
+DOCUMENTROOT="$DOCUMENTROOT"
+ROOT_DIR="$ROOT_DIR"
 KUSANAGI_PROVISION=$APP
 KUSANAGI_DB_SYSTEM=$KUSANAGI_DB_SYSTEM
 EOF
@@ -628,12 +630,12 @@ EOF
 	[ -f "$LIBDIR/$APP.sh" ] || (k_print_error "$APP $(eval_gettext "is not implemented.")" && return 1)
 	source "$LIBDIR/$APP.sh" || return 1
 	source "$LIBDIR/config.sh" || return 1
-	mkdir -p contents/DocumentRoot
+	mkdir -p contents/$_rootdir
 	if [ "x$TARPATH" != "x" ] && [ -f $TARPATH ] ; then
-		tar xf $TARFILE -C contents/DocumentRoot
+		tar xf $TARFILE -C contents/$_rootdir
 		k_content push
 	elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then 
-		git clone $GITPATH contents/DocumentRoot
+		git clone $GITPATH contents/$_rootdir
 		k_content push
 	else
 		k_content pull

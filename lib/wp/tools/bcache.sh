@@ -5,8 +5,8 @@ if [ $KUSANAGI_PROVISION != "wp" ] ; then
 	exit 1
 fi
 
-test -f ../DocumentRoot/wp-config.php && _dir=../Documentroot || \
- test -f ../wp-config.php && _dir=..
+test -f ../$ROOT_DIR/wp-config.php && _dir=../$ROOT_DIR || \
+test -f ../wp-config.php && _dir=..
 [ "x$_dir" = "x" ] && exit 1
 
 case $cmd in

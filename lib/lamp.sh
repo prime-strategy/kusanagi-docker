@@ -5,7 +5,7 @@
 #
 
 source .kusanagi
-source $LIBDIR/.version
+source $LIBDIR/image_versions
 
 IMAGE=$([ $OPT_NGINX ] && echo $KUSANAGI_NGINX_IMAGE || ([ $OPT_HTTPD ] && echo $KUSANGI_HTTPD_IMAGE))
 # create docker-compose.yml

@@ -1,7 +1,8 @@
 <?php
 $_SERVER['HTTP_HOST'] = 'fqdn';
 define( 'SHORTINIT', true );
-require_once( '../DocumentRoot/wp-load.php' );
+$ROOT_DIR = getenv ( 'ROOT_DIR' );
+require_once( "../${ROOT_DIR}/wp-load.php' );
 
 $url_path = '';
 if ( isset($argv[1]) ) {

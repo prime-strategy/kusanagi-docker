@@ -282,8 +282,8 @@ function k_target() {
 		k_print_error "$(eval_gettext 'TARGET has not been set.')"
 		false
 	else
-		export CONTENTDIR=$TARGETDIR/contents 
-		export DOCUMENTROOT=/home/kusanagi/$TARGET/DocumentRoot
+		export CONTENTDIR=${CONTENTDIR:-"${TARGETDIR}/contents"}
+		export DOCUMENTROOT=${DOCUMENTROOT:-"$BASEDIR/$ROOT_DIR"}
 		export BASEDIR=$(dirname $DOCUMENTROOT)
 	fi
 }

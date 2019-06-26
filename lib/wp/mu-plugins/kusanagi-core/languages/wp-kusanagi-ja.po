@@ -109,9 +109,9 @@ msgstr "wp-config.php ファイルの位置は適正です。"
 #: kusanagi-core/modules/security-checker.php:16
 msgid ""
 "wp-config.php exist in the public folder. Please move wp-config.php to "
-"DocumentRoot and improve security."
+"%s and improve security."
 msgstr ""
-"公開ディレクトリにwp-config.phpが存在しています。wp-config.phpをDocumentRoot"
+"公開ディレクトリにwp-config.phpが存在しています。wp-config.phpを%s"
 "ディレクトリの上に移動させて安全性を向上させてください。"
 
 #: kusanagi-core/modules/security-checker.php:17
