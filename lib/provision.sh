@@ -191,10 +191,10 @@ function k_add_profile() {
 	local OPT="$1"
 	local DEFAULT="$2"
 	local FILE="$3"
-	if [ "x${$OPT}" = "x" ] ; then
+	if [ "x${OPT}" = "x" ] ; then
 		echo "#$OPT=$DEFAULT" >> $FILE
 	else
-		echo "$OPT=${$OPT}" >> $FILE
+		echo "$OPT=${OPT}" >> $FILE
 	fi
 }
 
