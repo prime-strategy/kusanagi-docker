@@ -1,6 +1,6 @@
   php:
     container_name: ${PROFILE}_php
-    image: $KUSANAGI_PHP7_IMAGE
+    image: $KUSANAGI_PHP_IMAGE
     env_file:
       - .kusanagi
       - .kusanagi.php

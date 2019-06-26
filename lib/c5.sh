@@ -11,14 +11,14 @@ IMAGE=$([ $OPT_NGINX ] && echo $KUSANAGI_NGINX_IMAGE || ([ $OPT_HTTPD ] && echo 
 # create docker-compose.yml
 env PROFILE=$PROFILE \
     HTTPD_IMAGE=$IMAGE \
-    KUSANAGI_PHP7_IMAGE=$KUSANAGI_PHP7_IMAGE \
+    KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP_IMAGE \
     CONFIG_IMAGE=$KUSANAGI_CONFIG_IMAGE \
     CERTBOT_IMAGE=$CERTBOT_IMAGE \
     HTTP_PORT=$HTTP_PORT \
     HTTP_TLS_PORT=$HTTP_TLS_PORT \
     DBLIB=$DBLIB \
 	envsubst '$$PROFILE $$HTTPD_IMAGE
-	$$KUSANAGI_PHP7_IMAGE
+	$$KUSANAGI_PHP_IMAGE
 	$$CONFIG_IMAGE $$CERTBOT_IMAGE
 	$$HTTP_PORT $$HTTP_TLS_PORT $$DBLIB' \
 	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/config.template $LIBDIR/templates/php.template) > docker-compose.yml
