@@ -231,7 +231,7 @@ function k_provision () {
 		elif [ $OPT_HTTP_PORT ] ; then
 			HTTP_PORT=$(k_check_port "$PRE_OPT" "$OPT")
 			[ -z $HTTP_PORT ] && return 1
-			OPT_hTTP_PORT=
+			OPT_HTTP_PORT=
 		elif [ $OPT_TLS_PORT ] ; then
 			HTTP_TLS_PORT=$(k_check_port "$PRE_OPT" "$OPT")
 			[ -z $HTTP_TLS_PORT ] && return 1

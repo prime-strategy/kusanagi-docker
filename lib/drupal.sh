@@ -44,7 +44,7 @@ echo '  kusanagi:' >>  docker-compose.yml
 
 
 docker-compose up -d \
-&& docker-compose run -u0 --rm config chown 1000:1001 /home/kusanagi \
+&& k_configcmd_root "/" chown 1000:1001 /home/kusanagi \
 && k_configcmd "/" chmod 751 /home/kusanagi \
 && k_configcmd "/" mkdir -p $DOCUMENTROOT \
 && tar cf - -C $LIBDIR/drupal drupal.sh | k_configcmd $BASEDIR tar xf - 
