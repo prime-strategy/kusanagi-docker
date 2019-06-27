@@ -58,7 +58,8 @@ elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then
 	git clone $GITPATH ./contents
 	tar cf - -C contents . | k_configcmd $BASEDIR tar xf - 
 else
-	docker-compose exec -u 1000 php /usr/local/bin/composer create-project -n concrete5/composer /home/kusanagi/$PROFILE \
+	docker-compose exec -u 0 php apk add -t .git git \
+	&& docker-compose exec -u 1000 php /usr/local/bin/composer create-project -n concrete5/composer /home/kusanagi/$PROFILE \
 	&& docker-compose exec -u 1000 php sh -c "grep -rl PhpSimple /home/kusanagi/$PROFILE/public |xargs -n 1 sed -i 's/Sunra/KubAT/g'" \
 	&& docker-compose exec -u 1000 php sed -i 's/sunra/kub-at/g' /home/kusanagi/$PROFILE/public/concrete/composer.json \
 	&& docker-compose exec -u 1000 php /usr/local/bin/composer remove -d /home/kusanagi/$PROFILE sunra/php-simple-html-dom-parser \
