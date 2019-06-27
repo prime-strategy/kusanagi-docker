@@ -149,7 +149,7 @@ function k_check_dbsystem() {
 	case "$OPT" in
 	'mysql'|'mariadb')
 		if [ "x$DB" = "x" ] ; then
-			echo mariadb
+			echo mysql
 		else
 			k_print_notice $(eval_gettext "option:") $OPT: $(eval_gettext "can not be specified with another db system.")
 		fi
@@ -475,8 +475,8 @@ function k_provision () {
 		PRE_OPT=$OPT
 	done
 	APP=${APP:-wp}
-	KUSANAGI_DB_SYSTEM=${KUSANAGI_DB_SYSTEM:-mariadb}
-	if [ $KUSANAGI_DB_SYSTEM = "mariadb" ] ; then
+	KUSANAGI_DB_SYSTEM=${KUSANAGI_DB_SYSTEM:-mysql}
+	if [ $KUSANAGI_DB_SYSTEM = "mysql" ] ; then
 		DBLIB=/var/run/mysqld
 	else
 		DBLIB=/var/run/pgsql
@@ -527,7 +527,7 @@ function k_provision () {
 	DBHOST=${DBHOST:-localhost}
 	if [ "$DBHOST" = 'localhost' ] ; then
 		DBROOTPASS=${DBROOTPASS:-$(k_mkpasswd)}
-		#if [ "$KUSANAGI_DB_SYSTEM" = "mariadb" ]; then
+		#if [ "$KUSANAGI_DB_SYSTEM" = "mysql" ]; then
 		#	DBHOST="localhost:/var/run/mysqld/mysqld.sock";
 		#fi
 	else
@@ -600,7 +600,7 @@ DBUSER=$DBUSER
 DBPASS=$DBPASS
 EOF
 	if ! [ $NO_USE_DB ] ; then
-		if [ "$KUSANAGI_DB_SYSTEM" = "mariadb" ] ; then
+		if [ "$KUSANAGI_DB_SYSTEM" = "mysql" ] ; then
 			cat <<EOF > $PROFILE/.kusanagi.mysql
 MYSQL_ROOT_PASSWORD=$DBROOTPASS
 MYSQL_DATABASE=$DBNAME

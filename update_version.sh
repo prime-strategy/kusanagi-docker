@@ -33,7 +33,7 @@ KUSANAGILIBDIR=$HOME/.kusanagi/lib
 KUSANAGI_NGINX_IMAGE=primestrategy/kusanagi-nginx:$(kusanagi_version kusanagi-nginx)
 KUSANAGI_HTTPD_IMAGE=primestrategy/kusanagi-httpd:$(kusanagi_version kusanagi-httpd)
 KUSANAGI_PHP_IMAGE=primestrategy/kusanagi-php:$(kusanagi_version kusanagi-php)
-KUSANAGI_MARIADB_IMAGE=mariadb:$(mariadb_version)
+KUSANAGI_MYSQL_IMAGE=mariadb:$(mariadb_version)
 KUSANAGI_CONFIG_IMAGE=primestrategy/kusanagi-config:$(kusanagi_version kusanagi-config)
 KUSANAGI_FTPD_IMAGE=primestrategy/kusanagi-ftpd:$(kusanagi_version kusanagi-ftpd)
 POSTGRESQL_IMAGE=postgres:$(postgresql_version)
@@ -44,7 +44,7 @@ cat <<EOF > ${KUSANAGILIBDIR:-.}/image_versions
 KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX_IMAGE
 KUSANAGI_HTTPD_IMAGE=$KUSANAGI_HTTPD_IMAGE
 KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP_IMAGE
-KUSANAGI_MARIADB_IMAGE=$KUSANAGI_MARIADB_IMAGE
+KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL_IMAGE
 KUSANAGI_FTPD_IMAGE=$KUSANAGI_FTPD_IMAGE
 KUSANAGI_CONFIG_IMAGE=$KUSANAGI_CONFIG_IMAGE
 POSTGRESQL_IMAGE=$POSTGRESQL_IMAGE

@@ -24,8 +24,8 @@ env PROFILE=$PROFILE \
 	$$HTTP_PORT $$HTTP_TLS_PORT $$DBLIB' \
 	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/wpcli.template $LIBDIR/templates/php.template) > docker-compose.yml
 if ! [ $NO_USE_DB ] ; then
-	env PROFILE=$PROFILE KUSANAGI_MARIADB_IMAGE=$KUSANAGI_MARIADB_IMAGE \
-	envsubst '$$PROFILE $$KUSANAGI_MARIADB_IMAGE' \
+	env PROFILE=$PROFILE KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL_IMAGE \
+	envsubst '$$PROFILE $$KUSANAGI_MYSQL_IMAGE' \
 	< $LIBDIR/templates/mysql.template >> docker-compose.yml
 fi
 if ! [ $NO_USE_FTP ] ; then

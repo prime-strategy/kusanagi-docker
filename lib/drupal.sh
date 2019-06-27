@@ -24,9 +24,9 @@ env PROFILE=$PROFILE \
 	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/config.template $LIBDIR/templates/php.template) > docker-compose.yml
 if ! [ $NO_USE_DB ] ; then
 	case "$KUSANAGI_DB_SYSTEM" in
-	mariadb)
-		env PROFILE=$PROFILE KUSANAGI_MARIADB_IMAGE=$KUSANAGI_MARIADB_IMAGE \
-		envsubst '$$PROFILE $$KUSANAGI_MARIADB_IMAGE' \
+	mysql)
+		env PROFILE=$PROFILE KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL_IMAGE \
+		envsubst '$$PROFILE $$KUSANAGI_MYSQL_IMAGE' \
 		< $LIBDIR/templates/mysql.template >> docker-compose.yml
 		;;
 	pgsql)

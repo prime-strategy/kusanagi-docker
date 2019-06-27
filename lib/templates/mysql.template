@@ -1,7 +1,7 @@
 ## MYSQL 
   db:
     container_name: ${PROFILE}_db
-    image: $KUSANAGI_MARIADB_IMAGE
+    image: $KUSANAGI_MYSQL_IMAGE
     user: "999:999"
     env_file:
       - .kusanagi.mysql
