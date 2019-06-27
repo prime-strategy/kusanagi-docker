@@ -61,7 +61,7 @@ elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then
 	tar cf - -C contents . | k_configcmd $DOCUMENTROOT tar xf - 
 else
 	k_configcmd $BASEDIR sh ./drupal.sh $DRUPAL_VERSION \
-	&& k_configcmd $BASEDIR rm ./drupal.sh \
-	|| return 1
+	&& sleep 1 \
+	&& k_configcmd $BASEDIR rm ./drupal.sh 
 fi
 

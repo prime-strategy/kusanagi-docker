@@ -94,6 +94,7 @@ else
 		-e ADMIN_PASSWORD=${ADMIN_PASSWORD} \
 		-e ADMIN_EMAIL="${ADMIN_EMAIL}" \
        		-w $DOCUMENTROOT config bash ../wp.sh \
+	&& sleep 1 \
 	&& k_configcmd $BASEDIR rm wp.sh \
 	&& k_configcmd $DOCUMENTROOT chmod 440 wp-config.php \
 	&& k_configcmd $DOCUMENTROOT mv wp-config.php .. \
