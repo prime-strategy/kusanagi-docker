@@ -51,7 +51,7 @@ function wp_lang() {
 }
 
 docker-compose up -d \
-&& k_configcmd_root chown 1000:1001 /home/kusanagi  \
+&& k_configcmd_root "/" chown 1000:1001 /home/kusanagi  \
 && k_configcmd "/" chmod 751 /home/kusanagi \
 && k_configcmd "/" mkdir -p $DOCUMENTROOT || return 1
 
