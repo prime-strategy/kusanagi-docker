@@ -27,7 +27,7 @@ function k_configcmd_root() {
 function k_mkusername() {
 	small=$1
 	[ $small ] && pattern='^[a-z][a-z0-9]+$' || pattern='^[a-zA-Z][a-zA-Z0-9]+$'
-	openssl rand -base64 1024 | fold -w 10 | egrep -e | head -1
+	openssl rand -base64 1024 | fold -w 10 | egrep -e "$pattern" | head -1
 }
 
 # make random password
