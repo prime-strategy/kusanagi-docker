@@ -9,7 +9,7 @@ export KUSANAGIDIR=$HOME/.kusanagi
 echo -e "\e[32m"cloning kusanagi-docker commands"\e[m" 1>&2
 branch=${1:-master}
 if [ -d $KUSANAGIDIR ] ; then
-	(cd $KUSANAGIDIR; git pull -b $branch)
+	(cd $KUSANAGIDIR; git pull)
 else	
 	git clone -b $branch https://github.com/prime-strategy/kusanagi-docker.git $KUSANAGIDIR
 fi
