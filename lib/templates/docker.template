@@ -21,6 +21,8 @@ services:
     ports:
       - "$HTTP_PORT:8080"
       - "$HTTP_TLS_PORT:8443"
+    extra_hosts:
+      - "$FQDN:127.0.0.1"
 
   certbot:
     container_name: ${PROFILE}_certbot

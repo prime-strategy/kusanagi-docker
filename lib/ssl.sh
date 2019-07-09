@@ -136,7 +136,7 @@ function k_ssl () {
 		docer-compse run --rm -e RENEWD_LINAGE=/etc/letsencrypt/live/$FQDN httpd /usr/bin/ct-submit.sh
 	fi
 	FQDN=$FQDN
-	DONOT_USE_FCACHE=$DONOT_USE_FCACHE
+	NO_USE_FCACHE=$NO_USE_FCACHE
 	if [ "$HSTS" = "on" -o $NO_USE_SSLST -eq 0 ] ; then
 		NO_USE_SSLST=0
 	else
@@ -165,7 +165,7 @@ function k_ssl () {
 	[ "x$OSCP" != "x" ] && USE_SSL_OSCP=${OSCP}
 	cat <<EOF > $TARGETDIR/.kusanagi.httpd
 FQDN=$FQDN
-DONOT_USE_FCACHE=$DONOT_USE_FCACHE
+NO_USE_FCACHE=$NO_USE_FCACHE
 USE_SSL_CT=$USE_SSL_CT
 USE_SSL_OSCP=$USE_SSL_OSCP
 EOF

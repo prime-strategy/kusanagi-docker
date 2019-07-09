@@ -25,7 +25,9 @@ function k_configcmd_root() {
 
 # make random username
 function k_mkusername() {
-	openssl rand -base64 1024 | fold -w 10 | egrep -e '^[a-zA-Z][a-zA-Z0-9]+$'| head -1
+	small=$1
+	[ $small ] && pattern='^[a-z][a-z0-9]+$' || pattern='^[a-zA-Z][a-zA-Z0-9]+$'
+	openssl rand -base64 1024 | fold -w 10 | egrep -e | head -1
 }
 
 # make random password
@@ -80,11 +82,19 @@ function k_helphelp {
 		case $1 in
 			provision)
 				echo $(eval_gettext "provision [options] --fqdn domainname target(like kusanagi.tokyo)")
-				echo "	"$(eval_gettext "[--WordPress [--wplang lang(like en_US, ja)]")
+				echo "	"$(eval_gettext "[--wp|--wordpress|--WordPress [WPOPTION]|")
+				echo "	"$(eval_gettext 'WPOPTION:')
+				echo "		"$(eval_gettext '--wplang lang(like en_US, ja)]')
 				echo "		"$(eval_gettext "[--admin-user admin] [--admin-passwd pass] [--admin-email email]")
 				echo "		"$(eval_gettext "[--wp-title title] [--kusanagi-pass pass] [--notfp|--no-ftp] |")
-				echo "	"$(eval_gettext ' --lamp|--concrete5|--drupal|--drupal7|--drupal8]')
+				echo "	"$(eval_gettext ' --lamp|--c5|--concrete5|')
+				echo "	"$(eval_gettext '--drupal|--drupal7|--drupal8]')
+				echo 
+				echo "	"$(eval_gettext '[--nginx|--httpd]')
+				echo "	"$(eval_gettext '[--http-port port][--tls-port port]')
+				echo "	"$(eval_gettext "[--dbsystem mysql|mariadb|pgsql|postgrsql]")
 				echo "	"$(eval_gettext "[--dbhost host]")
+				echo "	"$(eval_gettext '[--dbrootpass pasword')
 				echo "	"$(eval_gettext "[--dbname dbname]")
 				echo "	"$(eval_gettext "[--dbuser username]")
 				echo "	"$(eval_gettext "[--dbpass password]")

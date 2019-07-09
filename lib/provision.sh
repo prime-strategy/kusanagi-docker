@@ -146,20 +146,15 @@ function k_check_dbsystem() {
 	local PRE_OPT="$1"
 	local OPT="$2"
 	local DB="$3"
+	if [ "x$DB" = "x" ] ; then
+		k_print_notice $(eval_gettext "option:") $OPT: $(eval_gettext "can not be specified with another db system.")
+	fi
 	case "$OPT" in
 	'mysql'|'mariadb')
-		if [ "x$DB" = "x" ] ; then
-			echo mysql
-		else
-			k_print_notice $(eval_gettext "option:") $OPT: $(eval_gettext "can not be specified with another db system.")
-		fi
+		echo mysql
 		;;
 	'postgresql'|'pgsql')
-		if [ "x$DB" = "x" ] ; then
-			echo pgsql
-		else
-			k_print_notice $(eval_gettext "option:") $OPT: $(eval_gettext "can not be specified with another db system.")
-		fi
+		echo pgsql
 		;;
 	'*')
 		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "can not be specified.")
@@ -290,11 +285,12 @@ function k_provision () {
 				export OPT_WOO=0
 					k_print_notice $(eval_gettext "option:") $OPT: $(eval_gettext "not implimented.")
 				;;
-			'--wordpress'|'--WordPress')
+			'--wp'|'--wordpress'|'--WordPress')
 				if [ "x$APP" != "x" ] ; then
 					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
 				fi
 				APP='wp'
+				KUSANAGI_DB_SYSTEM=mysql
 				;;
 			'--c5'|'--concrete5')
 				if [ "x$APP" != "x" ] ; then
@@ -314,14 +310,15 @@ function k_provision () {
 				fi
 				APP='drupal'
 				DRUPAL_VERSION=7
+				KUSANAGI_DB_SYSTEM=mysql
 				;;
-
 			'--drupal'|'--drupal8')
 				if [ "x$APP" != "x" ] ; then
 					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
 				fi
 				APP='drupal'
 				DRUPAL_VERSION=8
+				KUSANAGI_DB_SYSTEM=mysql
 				;;
 			'--rails'|'--RubyonRails')
 				if [ "x$APP" != "x" ] ; then
@@ -413,7 +410,7 @@ function k_provision () {
 			'--admin_user')
 				OPT_ADMIN_USER=1
 				;;
-			--admin_user=*)
+			--admin-user=*)
 				ADMIN_USER=$(k_check_adminuser "${OPT%%=*}" "${OPT#*=}")
 				[ -z $ADMIN_USER ] && return 1
 				;;
@@ -424,10 +421,10 @@ function k_provision () {
 				KUSANAGI_PASS=$(k_check_passwd "${OPT%%=*}" "${OPT#*=}" kusanagi)
 				[ -z $KUSANAGI_PASS ] && return 1
 				;;
-			'--admin_pass')
+			'--admin-pass')
 				OPT_ADMIN_PASS=1
 				;;
-			--admin_pass=*)
+			--admin-pass=*)
 				ADMIN_PASS=$(k_check_passwd "${OPT%%=*}" "${OPT#*=}" admin)
 				[ -z $ADMIN_PASS ] && return 1
 				;;
@@ -456,7 +453,8 @@ function k_provision () {
 				OPT_DBSYSTEM=1
 				;;
 			--dbsystem=*)
-				KUSANAGI_DB_SYSTEM=$(k_check_dbsystem "${OPT%%=*}" "${OPT#*=}" "$KUSANAGI_DB_SYSTEM")
+				KUSANAGI_DB_SYSTEM=$(k_check_dbsystem \
+					"${OPT%%=*}" "${OPT#*=}" "$KUSANAGI_DB_SYSTEM")
 				[ -z $KUSANAGI_DB_SYSTEM ] && return 1
 				;;
 			--help|help)
@@ -480,6 +478,7 @@ function k_provision () {
 		DBLIB=/var/run/mysqld
 	else
 		DBLIB=/var/run/pgsql
+	    SMALL=1
 	fi
 	
 	## option check
@@ -533,8 +532,8 @@ function k_provision () {
 	else
 		export NO_USE_DB=1
 	fi
-	DBNAME=${DBNAME:-$(k_mkusername)}
-	DBUSER=${DBUSER:-$(k_mkusername)}
+	DBNAME=${DBNAME:-$(k_mkusername $SMALL)}
+	DBUSER=${DBUSER:-$(k_mkusername $SMALL)}
 	DBPASS=${DBPASS:-$(k_mkpasswd)}
 
 	MACHINE=$(k_machine)
@@ -558,12 +557,12 @@ EOF
 	# add .kusanagi.httpd
 	cat <<EOF > $PROFILE/.kusanagi.httpd
 FQDN=$FQDN
-DONOT_USE_FCACHE=1
-USE_SSL_CT=off
-USE_SSL_OSCP=off
-NO_USE_NAXSI=1
-NO_USE_SSLST=1
-NO_SSL_REDIRECT=1
+NO_USE_FCACHE=${NO_USE_FCACHE:-1}
+USE_SSL_CT=${USE_SSL_CT:-off}
+USE_SSL_OSCP=${USE_SSL_OSCP:-off}
+NO_USE_NAXSI=${NO_USE_NAXSI:-1}
+NO_USE_SSLST=${NO_USE_SSLST:-1}
+NO_SSL_REDIRECT=${NO_SSL_REDIRECT:-1}
 EOF
 	k_add_profile EXPIRE_DAYS 90 $PROFILE/.kusanagi.httpd
 	k_add_profile OSCP_RESOLV 8.8.8.8 $PROFILE/.kusanagi.httpd
@@ -587,7 +586,7 @@ EOF
 	[ "x$APP" = "xwp" ] && cat <<EOF > $PROFILE/.kusanagi.wp
 KUSANAGIPASS=$KUSANAGI_PASS
 WP_TITLE=$WP_TITLE
-DONOT_USE_BCACHE=1
+NO_USE_BCACHE=${NO_USE_BCACHE:-1}
 ADMIN_USER=$ADMIN_USER
 ADMIN_PASSWORD=$ADMIN_PASS
 ADMIN_EMAIL=$ADMIN_EMAIL
