@@ -8,5 +8,5 @@
     network_mode: "service:httpd"
     volumes:
       - database:/var/run/pgsql
-      - database:/var/lib/pgsql
+      - database:/var/lib/postgresql/data
  

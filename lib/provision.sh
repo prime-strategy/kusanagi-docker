@@ -539,7 +539,7 @@ function k_provision () {
 	MACHINE=$(k_machine)
 	
 	mkdir $PROFILE
-	local _rootdir=$([ "c5" = $APP ] && echo =public || echo DocumentRoot)
+	local _rootdir=$([ "c5" = $APP ] && echo public || echo DocumentRoot)
 	ROOT_DIR="${ROOT_DIR:-$_rootdir}"
 	DOCUMENTROOT="${DOCUMENTROOT:-/home/kusanagi/$PROFILE/$ROOT_DIR}"
 	# add .kusanagi
@@ -616,7 +616,9 @@ EOF
 POSTGRES_DB=$DBNAME
 POSTGRES_USER=$DBUSER
 POSTGRES_PASSWORD=$DBPASS
+PG_PASSWORD=$DBPASS
 POSTGRES_INITDB_ARGS=--encoding=UTF-8
+DATABASE_HOST=localhost
 EOF
 			k_add_profile PGDATA '' $PROFILE/.kusanagi.psql
 			k_add_profile POSTGRES_INITDB_WALDIR '' $PROFILE/.kusanagi.psql

@@ -25,9 +25,10 @@ function k_configcmd_root() {
 
 # make random username
 function k_mkusername() {
-	small=$1
-	[ $small ] && pattern='^[a-z][a-z0-9]+$' || pattern='^[a-zA-Z][a-zA-Z0-9]+$'
-	openssl rand -base64 1024 | fold -w 10 | egrep -e "$pattern" | head -1
+	local small=$1
+	local user=$(openssl rand -base64 1024 | fold -w 10 | \
+		egrep -e '^[a-zA-Z][a-zA-Z0-9]+$' | head -1)
+	[ $small ] && echo ${user,,} || echo $user
 }
 
 # make random password
@@ -86,7 +87,7 @@ function k_helphelp {
 				echo '    '$(eval_gettext 'WPOPTION:')
 				echo '        '$(eval_gettext ' --wplang lang(like en_US, ja)]')
 				echo '        '$(eval_gettext ' [--admin-user admin] [--admin-passwd pass] [--admin-email email]')
-				echo '        '$(eval_gettext ' [--wp-title title] [--kusanagi-pass pass] [--notfp|--no-ftp] |')
+				echo '        '$(eval_gettext ' [--wp-title title] [--kusanagi-pass pass] [--noftp|--no-ftp] |')
 				echo '    '$(eval_gettext ' --lamp|--c5|--concrete5|')
 				echo '    '$(eval_gettext ' --drupal|--drupal7|--drupal8]')
 				echo 
