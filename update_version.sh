@@ -6,21 +6,21 @@ function docker_repo_tag {
 }
 function kusanagi_version {
 	local _kusanagi=$1
-	local _ver=$(docker_repo_tag primestrategy/${_kusanagi}-[0-9\.]+- | grep -v latest | sort -Vr | head -1)
+	local _ver=$(docker_repo_tag primestrategy/${_kusanagi} | grep -v latest | sort -Vr | head -1)
 	echo ${_ver:-latest}
 }
 
 function mariadb_version {
-	local _ver=$(docker_repo_tag mariadb | grep '^[0-9\.]+-' | sort -Vr | head -1)
+	local _ver=$(docker_repo_tag mariadb | egrep '^[0-9\.]+-' | sort -Vr | head -1)
 	echo ${_ver:-latest}
 }
 function postgresql_version {
-	local _ver=$(docker_repo_tag postgres | grep '^[0-9\.]+-' | grep -v -e latest -e beta | sort -Vr | head -1)
+	local _ver=$(docker_repo_tag postgres | egrep '^[0-9\.]+-' | grep -v -e latest -e beta | sort -Vr | head -1)
 	echo ${_ver:-latest}
 }
 
 function wpcli_version {
-	local _ver=$(docker_repo_tag wordpress | grep '^cli-[0-9\.]+-' | grep -v -e latest -e beta | sort -r | head -1)
+	local _ver=$(docker_repo_tag wordpress | egrep '^cli-[0-9\.]+-' | grep -v -e latest -e beta | sort -r | head -1)
 	echo ${_ver:-latest}
 }
 
