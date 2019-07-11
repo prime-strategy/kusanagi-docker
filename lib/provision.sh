@@ -536,7 +536,7 @@ function k_provision () {
 	DBUSER=${DBUSER:-$(k_mkusername $SMALL)}
 	DBPASS=${DBPASS:-$(k_mkpasswd)}
 
-	MACHINE=$(k_machine)
+	#MACHINE=$(k_machine)
 	
 	mkdir $PROFILE
 	local _rootdir=$([ "c5" = $APP ] && echo public || echo DocumentRoot)
@@ -545,7 +545,6 @@ function k_provision () {
 	# add .kusanagi
 	cat <<EOF > $PROFILE/.kusanagi
 PROFILE=$PROFILE
-MACHINE=$MACHINE
 TARGET=$PROFILE
 TARGETDIR=$(pwd)/$PROFILE
 DOCUMENTROOT=$DOCUMENTROOT

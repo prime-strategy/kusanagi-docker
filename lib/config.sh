@@ -9,7 +9,7 @@ function k_bcache () {
 	shift
 	local cmd=$1
 	k_target > /dev/null || return 1
-	k_machine > /dev/null || return 1
+	#k_machine > /dev/null || return 1
 	source $TARGETDIR/.kusanagi
 	if [ $KUSANAGI_PROVISION != "wp" ] ; then
 		k_print_error $(eval_gettext "WordPress is not provision.")
@@ -34,7 +34,7 @@ function k_fcache() {
 	local cmd=$1
 	shift
 	k_target  > /dev/null || return 1
-	k_machine > /dev/null || return 1
+	#k_machine > /dev/null || return 1
 	source $TARGETDIR/.kusanagi
 	case $cmd in
 	on)
@@ -71,7 +71,7 @@ function k_naxsi() {
 	shift
 	local cmd=$1
 	k_target  > /dev/null || return 1
-	k_machine > /dev/null || return 1
+	#k_machine > /dev/null || return 1
 	source $TARGETDIR/.kusanagi
 	case $cmd in
 	on)
@@ -101,7 +101,7 @@ function k_wp() {
 	local _opts=($@)
 	local _target=
 	k_target  > /dev/null || return 1
-	k_machine > /dev/null || return 1
+	#k_machine > /dev/null || return 1
 
 	k_configcmd $DOCUMENTROOT ${_opts[@]}
 }
@@ -111,7 +111,7 @@ function k_content() {
 	shift
 	local _opts=($@)
 	k_target  > /dev/null || return 1
-	k_machine > /dev/null || return 1
+	#k_machine > /dev/null || return 1
 	source $TARGETDIR/.kusanagi
 	CONTENTDIR=$TARGETDIR/contents 
 	
@@ -155,7 +155,7 @@ function k_dbdump() {
 	shift
 	local _file=${1:-dbdump}
 	k_target  > /dev/null || return 1
-	k_machine > /dev/null || return 1
+	#k_machine > /dev/null || return 1
 	source $TARGETDIR/.kusanagi
 	source $TARGETDIR/.kusanagi.db
 	CONTENTDIR=$TARGETDIR/contents 
@@ -182,7 +182,7 @@ function k_dbrestore() {
 	shift
 	local _file=${1:-dbdump}
 	k_target  > /dev/null || return 1
-	k_machine > /dev/null || return 1
+	#k_machine > /dev/null || return 1
 	source $TARGETDIR/.kusanagi
 	source $TARGETDIR/.kusanagi.db
 	CONTENTDIR=$TARGETDIR/contents 

@@ -303,7 +303,7 @@ function k_init {
 	local _init=$2
 	return
 	k_target
-	export MACHINE=$(k_machine "$_init" 1)
+	#export MACHINE=$(k_machine "$_init" 1)
 }
 
 function k_machine() {
@@ -366,8 +366,8 @@ function k_startstop() {
 			k_print_error $_cmd: $_arg2 $(eval_gettext "service not found.")
 			return 1
 	esac
-	k\_target > /dev/null
-	k_machine > /dev/null
+	k_target > /dev/null
+	#k_machine > /dev/null
 	case $_cmd in
 	'start'|'stop'|'restart'|'ps')
 		cd $TARGETDIR && docker-compose $_cmd $_service
@@ -382,7 +382,7 @@ function k_startstop() {
 
 function k_remove() {
 	k_target $2
-	k_machine > /dev/null
+	#k_machine > /dev/null
 
 	local _PWD=$(pwd)
 	cd $TARGETDIR \
