@@ -2,7 +2,7 @@
 
 DOCKER_REPO=https://registry.hub.docker.com/v1/repositories
 function docker_repo_tag {
-	curl -s $DOCKER_REPO/${1}/tags | sed "s/,/\n/g" | \
+	curl -s $DOCKER_REPO/${1}/tags | tr , "\n" | \
 		awk -F\" '/name/ {print $4}'
 }
 function k_version {

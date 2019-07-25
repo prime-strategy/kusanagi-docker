@@ -7,7 +7,7 @@ LOCAL_KUSANAGI_FILE=.kusanagi
 CONFIGCMD="docker-compose run --rm config"
 export TEXTDOMAIN="kusanagi-docker" 
 export TEXTDOMAINDIR="$LIBDIR/locale"
-source /usr/bin/gettext.sh
+. $(which gettext.sh)
   
 function k_configcmd() {
 	local _dir=$1

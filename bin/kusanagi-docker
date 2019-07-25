@@ -5,7 +5,7 @@
 #
 
 _BASEDIR=$(dirname $(dirname $0))
-(echo $_BASEDIR | grep '^/' > /dev/null) || _BASEDIR=$(pwd)/$BASEDIR
+(echo $_BASEDIR | grep '^/' > /dev/null) || _BASEDIR=$(pwd)/$_BASEDIR
 COMMAND=$(basename $0)
 LIBDIR=$_BASEDIR/lib
 BINDIR=$_BASEDIR/bin
