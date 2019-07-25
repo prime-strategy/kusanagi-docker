@@ -6,6 +6,7 @@
     env_file:
       - .kusanagi
       - .kusanagi.wp
+      - .kusanagi.db
     volumes:
       - database:/var/run/mysqld
       - kusanagi:/home/kusanagi

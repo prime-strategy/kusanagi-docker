@@ -81,20 +81,7 @@ else
 	k_print_green "$(eval_gettext 'Provision WordPress')"
 	tar cf - -C $LIBDIR/wp/ tools settings wp-config-sample wp.sh | k_configcmd $BASEDIR tar xf - \
 	&& docker-compose run --rm \
-		-e BASEDIR=$BASEDIR \
-       		-e DBHOST=$DBHOST \
-		-e DBNAME=$DBNAME \
-       		-e DBUSER=$DBUSER \
-		-e DBPASS="$DBPASS" \
-		-e DBPREFIX=${DBPREFIX:+--dbprefix $DBPREFIX} \
-		-e MYSQL_CHARSET=${MYSQL_CHARSET:-utf8mb4} \
-		-e FQDN=$FQDN \
-		-e WP_TITLE=${WP_TITLE} \
-		-e WP_LANG=${WP_LANG} \
-		-e ADMIN_USER=${ADMIN_USER} \
-		-e ADMIN_PASSWORD=${ADMIN_PASSWORD} \
-		-e ADMIN_EMAIL="${ADMIN_EMAIL}" \
-       		-w $DOCUMENTROOT config bash ../wp.sh \
+       	-w $DOCUMENTROOT config bash ../wp.sh \
 	&& sleep 1 \
 	&& k_configcmd $BASEDIR rm wp.sh \
 	&& k_configcmd $DOCUMENTROOT chmod 440 wp-config.php \
