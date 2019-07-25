@@ -472,6 +472,7 @@ function k_provision () {
 		fi
 		PRE_OPT=$OPT
 	done
+
 	APP=${APP:-wp}
 	KUSANAGI_DB_SYSTEM=${KUSANAGI_DB_SYSTEM:-mysql}
 	if [ $KUSANAGI_DB_SYSTEM = "mysql" ] ; then
@@ -522,6 +523,7 @@ function k_provision () {
 		export NO_USE_FTP=${OPT_NO_FTP}
 	fi
 	
+	k_target $PROFILE
 	## db configuration
 	DBHOST=${DBHOST:-localhost}
 	if [ "$DBHOST" = 'localhost' ] ; then
@@ -628,7 +630,6 @@ EOF
 		fi
 	fi
 
-	k_target $PROFILE
 	cd $PROFILE
 	[ "$MACHINE" != "localhost" ] && eval $(docker-machine $MACHINE env)
 	[ -f "$LIBDIR/$APP.sh" ] || (k_print_error "$APP $(eval_gettext "is not implemented.")" && return 1)
