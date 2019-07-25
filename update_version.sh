@@ -2,40 +2,48 @@
 
 DOCKER_REPO=https://registry.hub.docker.com/v1/repositories
 function docker_repo_tag {
-	curl -s $DOCKER_REPO/${1}/tags | sed "s/,/\n/g" | awk -F\" '/name/ {print $4}'
+	curl -s $DOCKER_REPO/${1}/tags | sed "s/,/\n/g" | \
+		awk -F\" '/name/ {print $4}'
 }
-function kusanagi_version {
-	local _kusanagi=$1
-	local _ver=$(docker_repo_tag primestrategy/${_kusanagi} | grep -v latest | sort -Vr | head -1)
+function k_version {
+	local _kusanagi=kusanagi-$1
+	local _ver=$(docker_repo_tag primestrategy/${_kusanagi} | \
+		grep -v latest | sort -Vr | head -1)
 	echo ${_ver:-latest}
 }
 
 function mariadb_version {
-	local _ver=$(docker_repo_tag mariadb | fgrep . | sort -Vr | head -1)
+	local _ver=$(docker_repo_tag mariadb | \
+		fgrep . | sort -Vr | head -1)
 	echo ${_ver:-latest}
 }
 function postgresql_version {
-	local _ver=$(docker_repo_tag postgres | fgrep . | grep -v -e latest -e beta | sort -Vr | head -1)
+	local _ver=$(docker_repo_tag postgres | \
+		fgrep . | grep -v -e latest -e beta | sort -Vr | head -1)
 	echo ${_ver:-latest}
 }
 
 function wpcli_version {
-	local _ver=$(docker_repo_tag wordpress | fgrep . | grep -v -e latest -e beta | sort -r | head -1)
+	local _ver=$(docker_repo_tag wordpress | \
+		grep -Ee '^cli-[0-9][0-9A-z\.]*$' | \
+		grep -v -e latest -e beta | sort -r | head -1)
 	echo ${_ver:-latest}
 }
 
 function certbot_version {
-	local _ver=$(docker_repo_tag certbot/certbot | grep -v -e latest -e beta | sort -Vr | head -1)
+	local _ver=$(docker_repo_tag certbot/certbot | \
+		grep -v -e latest -e beta | sort -Vr | head -1)
 	echo ${_ver:-latest}
 }
 
+PS=primestrategy/kusanagi
 KUSANAGILIBDIR=$HOME/.kusanagi/lib
-KUSANAGI_NGINX_IMAGE=primestrategy/kusanagi-nginx:$(kusanagi_version kusanagi-nginx)
-KUSANAGI_HTTPD_IMAGE=primestrategy/kusanagi-httpd:$(kusanagi_version kusanagi-httpd)
-KUSANAGI_PHP_IMAGE=primestrategy/kusanagi-php:$(kusanagi_version kusanagi-php)
+KUSANAGI_NGINX_IMAGE=${PS}-nginx:$(k_version nginx)
+KUSANAGI_HTTPD_IMAGE=${PS}-httpd:$(k_version httpd)
+KUSANAGI_PHP_IMAGE=${PS}-php:$(k_version php)
 KUSANAGI_MYSQL_IMAGE=mariadb:$(mariadb_version)
-KUSANAGI_CONFIG_IMAGE=primestrategy/kusanagi-config:$(kusanagi_version kusanagi-config)
-KUSANAGI_FTPD_IMAGE=primestrategy/kusanagi-ftpd:$(kusanagi_version kusanagi-ftpd)
+KUSANAGI_CONFIG_IMAGE=${PS}-config:$(k_version config)
+KUSANAGI_FTPD_IMAGE=${PS}-ftpd:$(k_version ftpd)
 POSTGRESQL_IMAGE=postgres:$(postgresql_version)
 WPCLI_IMAGE=wordpress:$(wpcli_version)
 CERTBOT_IMAGE=certbot/certbot:$(certbot_version)
