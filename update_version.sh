@@ -25,7 +25,7 @@ function postgresql_version {
 
 function wpcli_version {
 	local _ver=$(docker_repo_tag wordpress | \
-		grep -Ee '^cli-*$' | grep -v -e latest -e beta | \
+		grep -Ee '^cli-.*$' | grep -v -e latest -e beta | \
 		sort -r | head -1)
 	echo ${_ver:-latest}
 }
