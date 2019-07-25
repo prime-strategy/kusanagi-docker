@@ -543,7 +543,7 @@ function k_provision () {
 	mkdir $PROFILE
 	local _rootdir=$([ "c5" = $APP ] && echo public || echo DocumentRoot)
 	ROOT_DIR="${ROOT_DIR:-$_rootdir}"
-	BASEOOT="${BASEDIR:-/home/kusanagi/$PROFILE}"
+	BASEDIR="${BASEDIR:-/home/kusanagi/$PROFILE}"
 	DOCUMENTROOT="${DOCUMENTROOT:-$BASEDIR/$ROOT_DIR}"
 	# add .kusanagi
 	cat <<EOF > $PROFILE/.kusanagi
