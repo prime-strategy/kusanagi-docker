@@ -184,12 +184,13 @@ function k_check_title() {
 
 function k_add_profile() {
 	local OPT="$1"
-	local DEFAULT="$2"
-	local FILE="$3"
-	if [ -n $OPT ] ; then
+	local VALUE="$2"
+	local DEFAULT="$3"
+	local FILE="$4"
+	if [ -n $VALUE ] ; then
 		echo "#$OPT=$DEFAULT" >> $FILE
 	else
-		echo "$OPT=${$OPT}" >> $FILE
+		echo "$OPT=$VALUE" >> $FILE
 	fi
 }
 
@@ -559,7 +560,8 @@ KUSANAGI_DB_SYSTEM=$KUSANAGI_DB_SYSTEM
 EOF
 
 	# add .kusanagi.httpd
-	cat <<EOF > $PROFILE/.kusanagi.httpd
+	OUTFILE=$PROFILE/.kusanagi.httpd
+	cat <<EOF > $OUTFILE
 NO_USE_FCACHE=${NO_USE_FCACHE:-1}
 USE_SSL_CT=${USE_SSL_CT:-off}
 USE_SSL_OSCP=${USE_SSL_OSCP:-off}
@@ -567,24 +569,26 @@ NO_USE_NAXSI=${NO_USE_NAXSI:-1}
 NO_USE_SSLST=${NO_USE_SSLST:-1}
 NO_SSL_REDIRECT=${NO_SSL_REDIRECT:-1}
 EOF
-	k_add_profile EXPIRE_DAYS 90 $PROFILE/.kusanagi.httpd
-	k_add_profile OSCP_RESOLV 8.8.8.8 $PROFILE/.kusanagi.httpd
+	k_add_profile EXPIRE_DAYS "$EXPIRE_DAYS" 90 $OUTFILE
+	k_add_profile OSCP_RESOLV "$OSCP_RESOLV" 8.8.8.8 $OUTFILE
 
 	# add .kusanagi.php
-	touch $PROFILE/.kusanagi.php
-	k_add_profile PHP_PORT '127.0.0.1:9000' $PROFILE/.kusanagi.php
-	k_add_profile PHP_MAX_CHILDLEN 500 $PROFILE/.kusanagi.php
-	k_add_profile PHP_START_SERVERS 10 $PROFILE/.kusanagi.php
-	k_add_profile PHP_MIN_SPARE_SERVERS 5 $PROFILE/.kusanagi.php
-	k_add_profile PHP_MAX_SPARE_SERVERS 15 $PROFILE/.kusanagi.php
-	k_add_profile PHP_MAX_REQUESTS 500 $PROFILE/.kusanagi.php
+	OUTFILE=$PROFILE/.kusanagi.php
+	touch $OUTFILE
+	k_add_profile PHP_PORT "$PHP_PORT"'127.0.0.1:9000' $OUTFILE
+	k_add_profile PHP_MAX_CHILDLEN "$PHP_MAX_CHILDLEN" 500 $OUTFILE
+	k_add_profile PHP_START_SERVERS "$PHP_START_SERVERS" 10 $OUTFILE
+	k_add_profile PHP_MIN_SPARE_SERVERS "$PHP_MIN_SPARE_SERVERS" 5 $OUTFILE
+	k_add_profile PHP_MAX_SPARE_SERVERS "PHP_MAX_SPARE_SERVERS" 115 $OUTFILE
+	k_add_profile PHP_MAX_REQUESTS "$PHP_MAX_REQUESTS" 500 $OUTFILE
 
 	# add .kusanagi.mail
-	MAILSERVER=${MAILSERVER:-localhost} > $PROFILE/.kusanagi.mail
-	k_add_profile MAILDOMAIN '' $PROFILE/.kusanagi.mail
-	k_add_profile MAILUSER '' $PROFILE/.kusanagi.mail
-	k_add_profile MAILPASS '' $PROFILE/.kusanagi.mail
-	k_add_profile MAILAUTH '' $PROFILE/.kusanagi.mail
+	OUTFILE=$PROFILE/.kusanagi.mail
+	MAILSERVER=${MAILSERVER:-localhost} > $OUTFILE
+	k_add_profile MAILDOMAIN "$MAILDOMAIN" '' $OUTFILE
+	k_add_profile MAILUSER "$MAILUSER" '' $OUTFILE
+	k_add_profile MAILPASS "$MAILPASS" '' $OUTFILE
+	k_add_profile MAILAUTH "$MAILAUTH" '' $OUTFILE
 
 	[ "x$APP" = "xwp" ] && cat <<EOF > $PROFILE/.kusanagi.wp
 KUSANAGIPASS=$KUSANAGI_PASS
@@ -606,20 +610,22 @@ DBPASS=$DBPASS
 EOF
 	if ! [ $NO_USE_DB ] ; then
 		if [ "$KUSANAGI_DB_SYSTEM" = "mysql" ] ; then
-			cat <<EOF > $PROFILE/.kusanagi.mysql
+			OUTFILE=$PROFILE/.kusanagi.mysql
+			cat <<EOF > $OUTFILE
 MYSQL_ROOT_PASSWORD=$DBROOTPASS
 MYSQL_DATABASE=$DBNAME
 MYSQL_USER=$DBUSER
 MYSQL_PASSWORD=$DBPASS
 MYSQL_CHARSET=${MYSQL_CHARSET:-utf8mb4}
 EOF
-			k_add_profile MYSQL_ALLOW_EMPTY_PASSWORD '' $PROFILE/.kusanagi.mysql
-			k_add_profile MYSQL_RANDOM_ROOT_PASSWORD '' $PROFILE/.kusanagi.mysql
-			k_add_profile SOCKET '' $PROFILE/.kusanagi.mysql
-			k_add_profile MYSQL_INITDB_SKIP_TZINFO '' $PROFILE/.kusanagi.mysql
-			k_add_profile MYSQL_ROOT_HOST '' $PROFILE/.kusanagi.mysql
+			k_add_profile MYSQL_ALLOW_EMPTY_PASSWORD "$MYSQL_ALLOW_EMPTY_PASSWORD" '' $OUTFILE
+			k_add_profile MYSQL_RANDOM_ROOT_PASSWORD "$MYSQL_RANDOM_ROOT_PASSWORD" '' $OUTFILE
+			k_add_profile SOCKET "$SOCKET" '' $OUTFILE
+			k_add_profile MYSQL_INITDB_SKIP_TZINFO "$MYSQL_INITDB_SKIP_TZINFO" '' $OUTFILE
+			k_add_profile MYSQL_ROOT_HOST "$MYSQL_ROOT_HOST" '' $OUTFILE
 		elif [ "$KUSANAGI_DB_SYSTEM" = "pgsql" ] ; then
-			cat <<EOF > $PROFILE/.kusanagi.pgsql
+			OUTFILE=$PROFILE/.kusanagi.pgsql
+			cat <<EOF > $OUTFILE
 POSTGRES_DB=$DBNAME
 POSTGRES_USER=$DBUSER
 POSTGRES_PASSWORD=$DBPASS
@@ -627,8 +633,8 @@ PG_PASSWORD=$DBPASS
 POSTGRES_INITDB_ARGS=--encoding=UTF-8
 DATABASE_HOST=localhost
 EOF
-			k_add_profile PGDATA '' $PROFILE/.kusanagi.psql
-			k_add_profile POSTGRES_INITDB_WALDIR '' $PROFILE/.kusanagi.psql
+			k_add_profile PGDATA "$PGDATA" '' $OUTFILE
+			k_add_profile POSTGRES_INITDB_WALDIR "$POSTGRES_INITDB_WALDIR" '' $OUTFILE
 		fi
 	fi
 
