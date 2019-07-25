@@ -473,6 +473,7 @@ function k_provision () {
 		PRE_OPT=$OPT
 	done
 
+
 	APP=${APP:-wp}
 	KUSANAGI_DB_SYSTEM=${KUSANAGI_DB_SYSTEM:-mysql}
 	if [ $KUSANAGI_DB_SYSTEM = "mysql" ] ; then
@@ -523,7 +524,6 @@ function k_provision () {
 		export NO_USE_FTP=${OPT_NO_FTP}
 	fi
 	
-	k_target $PROFILE
 	## db configuration
 	DBHOST=${DBHOST:-localhost}
 	if [ "$DBHOST" = 'localhost' ] ; then
@@ -543,7 +543,8 @@ function k_provision () {
 	mkdir $PROFILE
 	local _rootdir=$([ "c5" = $APP ] && echo public || echo DocumentRoot)
 	ROOT_DIR="${ROOT_DIR:-$_rootdir}"
-	DOCUMENTROOT="${DOCUMENTROOT:-/home/kusanagi/$PROFILE/$ROOT_DIR}"
+	BASEOOT="${BASEDIR:-/home/kusanagi/$PROFILE}"
+	DOCUMENTROOT="${DOCUMENTROOT:-$BASEDIR/$ROOT_DIR}"
 	# add .kusanagi
 	cat <<EOF > $PROFILE/.kusanagi
 PROFILE=$PROFILE
@@ -630,6 +631,7 @@ EOF
 		fi
 	fi
 
+	k_target $PROFILE
 	cd $PROFILE
 	[ "$MACHINE" != "localhost" ] && eval $(docker-machine $MACHINE env)
 	[ -f "$LIBDIR/$APP.sh" ] || (k_print_error "$APP $(eval_gettext "is not implemented.")" && return 1)
