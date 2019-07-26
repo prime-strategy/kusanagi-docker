@@ -14,7 +14,7 @@ RoDの使用を確認済みのOSは、以下のとおりです。
 RoDを使用するために必要なソフトウェアは以下のものになります。
 
 - bash
-- git
+- Git
 - sed
 - awk
 - grep
@@ -24,7 +24,6 @@ RoDを使用するために必要なソフトウェアは以下のものにな�
 - docker
 - docker-compose
 - docker-machine(オプショナル)
-
 
 
 ## KUSANAGI RoDのインストール
@@ -157,7 +156,7 @@ provision サブコマンドのオプションは以下のとおりです。
 | --fqdn  ドメイン名(必須)                  | FQDN                             | 作成するサイトのドメイン名を指定します。                     |
 | --wp/--wordpress/--WordPress              | APP=wp                           | WordPressの環境を構築します。環境変数APPを指定したり、--c5/--lamp/--drupalなどを設定しない場合は、このオプションが設定されます。 |
 | --wplang lang                             | WP_LANG                          | WordPressの言語を一つだけ指定します。無指定時は、en_US となります。 |
-| -admin-user admin                         | ADMIN_USER                       | WordPressの管理者ユーザ名を指定します。無指定時はランダム文字列となります。 |
+| --admin-user admin                         | ADMIN_USER                       | WordPressの管理者ユーザ名を指定します。無指定時はランダム文字列となります。 |
 | --admin-passwd pass                       | ADMIN_PASS                       | WordPressの管理者パスワードを指定します。無指定時はランダム文字列となります。 |
 | --admin-email email                       | ADMIN_EMAIL                      | WordPressの管理者メールアドレスを指定します。無指定時は、$ADMIN_USER@$FQDN となります。 |
 | --wp-title title                          | WP_TITLE                         | WordPressのタイトルを指定します。無指定時は「WordPress」となります。 |
@@ -167,11 +166,11 @@ provision サブコマンドのオプションは以下のとおりです。
 | --lamp/--LAMP                             | APP=lamp                         | LAMPの環境を構築します。                                     |
 | --drupal7                                 | APP=drupal<br />DRUPAL_VERSION=7 | drupal7の環境を構築します。                                  |
 | --drupal/--drupal8                        | APP=drupal<br />DRUPAL_VERSION=8 | drupal8の環境を構築します。                                  |
-| --httpd                                   |                                  | httpd(Apache2.4)を使用します。--nginxと同時に指定できません。 |
+| --httpd                                   |                                  | httpd(Apache 2.4)を使用します。--nginxと同時に指定できません。 |
 | --nginx                                   |                                  | nginxを使用します。--httpdと同時に指定できません。無指定時はnginxが使用されます。 |
 | --http-port num                           | HTTP_PORT                        | ホストにポートフォワードするhttpポート番号を指定します。無指定時は80が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
 | --tls-port num                            | HTTP_TLS_PORT                    | ホストにポートフォワードするhttpsポート番号を指定します。無指定時は443が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
-| --dbsystem mysql/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= mysql/pgsql  | 使用するDBシステムを指定します。ただし、WordPressおよびdrupal7/drupal8は必ずmysqlを使用します。postgresql は現在実験中です。 |
+| --dbsystem MySQL/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= MySQL/pgsql  | 使用するDBシステムを指定します。ただし、WordPressおよびdrupal7/drupal8は必ずMySQLを使用します。postgresql は現在実験中です。 |
 | --dbhost host                             | DBHOST                           | 接続するDBホスト名を指定します。無指定時はlocalhostです。    |
 | --dbrootpass pass                         | DB_ROOTPASS                      | 接続するDBホストのrootパスワードを指定します。無指定時はランダム文字列となります。 |
 | --dbname name                             | DBNAME                           | 接続するDB名を指定します。無指定時はランダム文字列となります。 |
@@ -189,12 +188,12 @@ provision サブコマンドのオプションは以下のとおりです。
 
 | ファイル・ディレクトリ名 | 説明                                               |
 | ------------------------ | -------------------------------------------------- |
-| .kusanagi.*              | docker-composeで使用する環境変数が記述されています |
+| .kusanagi.\*              | docker-composeで使用する環境変数が記述されています |
 | docker-compose.yml       | docker-composeの設定ファイル                       |
 | contents                 | Docker上に作成されたコンテンツディレクトリのコピー |
-| .git                     | git用のディレクトリ                                |
+| .Git                     | Git用のディレクトリ                                |
 
-プロビジョンが終わったあと、contents ディレクトリ以下にプロビジョンで生成されたDocker上のファイルをコピーし、git登録済みの状態になり、管理を行うことが出来ます。
+プロビジョンが終わったあと、contents ディレクトリ以下にプロビジョンで生成されたDocker上のファイルをコピーし、Git登録済みの状態になり、管理を行うことが出来ます。
 
 
 
@@ -224,7 +223,7 @@ logging方式の変更、共有ストレージの使用、swarm化などは、do
 
 ### その他環境変数
 
-provision実行時に、環境変数でのみ設定できる項目があります。これらの環境変数は、.kusanagi.* に書かれます。
+provision実行時に、環境変数でのみ設定できる項目があります。これらの環境変数は、.kusanagi.\* に書かれます。
 
 | 環境変数              | デフォルト値   | 説明                                                         |
 | --------------------- | -------------- | ------------------------------------------------------------ |
@@ -293,7 +292,7 @@ configコマンドは、RoD環境の設定や、情報のbackup/restore を行�
 | backup           | pull とdbdumpを同時に行う                                    |
 | restore          | pushとdbrestoreを同時に行う                                  |
 
-pullおよびdbdumpを実行しても、自動的にgitにcommitされません。適宜git コマンドを使用して管理してください。
+pullおよびdbdumpを実行しても、自動的にGitにcommitされません。適宜git コマンドを使用して管理してください。
 
 
 
@@ -330,8 +329,8 @@ KUSANAGI RoD向けのイメージは[DockerHub](https://hub.docker.com)で公開
 
 | 名称                                                         | 説明                                                        |
 | ------------------------------------------------------------ | ----------------------------------------------------------- |
-| [kusanagi-nginx](https://hub.docker.com/r/primestrategy/kusanagi-nginx) | NGINXイメージ(推奨はメインラインの最新版)                   |
-| [kusanagi-httpd](https://hub.docker.com/r/primestrategy/kusanagi-httpd) | httpd(Apache2.4) イメージ                                   |
+| [kusanagi-nginx](https://hub.docker.com/r/primestrategy/kusanagi-nginx) | nginxイメージ(推奨はメインラインの最新版)                   |
+| [kusanagi-httpd](https://hub.docker.com/r/primestrategy/kusanagi-httpd) | httpd(Apache 2.4) イメージ                                   |
 | [kusanagi-php](https://hub.docker.com/r/primestrategy/kusanagi-php) | PHP-FPMイメージ(推奨は最新版)                               |
 | [kusanagi-config](https://hub.docker.com/r/primestrategy/kusanagi-config) | kusanagi config コマンド用イメージ                          |
 | [wordpress:cli](https://hub.docker.com/_/wordpress)          | WordPress構築時用のconfig コマンドイメージ                  |
