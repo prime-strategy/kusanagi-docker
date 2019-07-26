@@ -38,7 +38,17 @@ echo >> docker-compose.yml
 echo 'volumes:' >> docker-compose.yml
 echo '  kusanagi:' >>  docker-compose.yml
 
-echo 'mysqli.default_socket = /var/run/mysqld/mysqld.sock' > .wp_mysqli.ini 
+mkdir -p wpcli
+cat <<EOT > wpcli/Dockerfile
+FROM $WPCLI_IMAGE 
+MAINTAINER kusanagi@prime-strategy.co.jp
+
+COPY wp_mysqli.ini /usr/local/etc/php/conf.d/wp_mysql.ini
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["wp", "shell"]
+EOT
+echo 'mysqli.default_socket = /var/run/mysqld/mysqld.sock' > wpcli/wp_mysqli.ini 
 
 [[ $DBHOST =~ ^localhost ]] && echo '  database:' >> docker-compose.yml
 
@@ -51,7 +61,7 @@ function wp_lang() {
 	fi
 }
 
-docker-compose up -d \
+k_compose up -d \
 && k_configcmd_root "/" chown 1000:1001 /home/kusanagi  \
 && k_configcmd "/" chmod 751 /home/kusanagi \
 && k_configcmd "/" mkdir -p $DOCUMENTROOT || return 1
@@ -80,8 +90,7 @@ else
 
 	k_print_green "$(eval_gettext 'Provision WordPress')"
 	tar cf - -C $LIBDIR/wp/ tools settings wp-config-sample wp.sh | k_configcmd $BASEDIR tar xf - \
-	&& docker-compose run --rm \
-       	-w $DOCUMENTROOT config bash ../wp.sh \
+	&& k_configcmd $DOCUMENTROOT bash ../wp.sh \
 	&& sleep 1 \
 	&& k_configcmd $BASEDIR rm wp.sh \
 	&& k_configcmd $DOCUMENTROOT chmod 440 wp-config.php \

@@ -124,7 +124,7 @@ function k_ssl () {
 	fi
 
 	if [ "x$EMAIL" != "x" ] ; then
-		docker-compose run --rm certbot certonly --text --noninteractive --webroot -w /var/www/html -d $FQDN -m $EMAIL --agree-tos
+		k_compose run --rm certbot certonly --text --noninteractive --webroot -w /var/www/html -d $FQDN -m $EMAIL --agree-tos
 		docer-compse run --rm -e RENEWD_LINAGE=/etc/letsencrypt/live/$FQDN httpd /usr/bin/ct-submit.sh
 		SSL_CERT=/etc/letsencrypt/live/$FQDN/fullchain.pem
 		SSL_KEY=/etc/letsencrypt/live/$FQDN/privkey.pem
@@ -132,8 +132,8 @@ function k_ssl () {
 		SSL_CERT=$(cat $CERT)
 		SSL_KEY=$(cat $KEY)
 	elif [ $OPT_RENEW ] ; then
-		docker-compose run --rm certbot certonly --text --noninteractive --webroot -w /var/www/html -d $FQDN -m $EMAIL --agree-tos
-		docer-compse run --rm -e RENEWD_LINAGE=/etc/letsencrypt/live/$FQDN httpd /usr/bin/ct-submit.sh
+		k_compose run --rm certbot certonly --text --noninteractive --webroot -w /var/www/html -d $FQDN -m $EMAIL --agree-tos
+		k_compose run --rm -e RENEWD_LINAGE=/etc/letsencrypt/live/$FQDN httpd /usr/bin/ct-submit.sh
 	fi
 	FQDN=$FQDN
 	NO_USE_FCACHE=$NO_USE_FCACHE
@@ -176,6 +176,6 @@ EOF
 	[ $NO_SSL_REDIRECT -eq 1 ] && echo NO_SSL_REDIRECT=$NO_SSL_REDIRECT >> $TARGETDIR/.kusanagi.httpd
 	[ $NO_USE_NAXSI -eq 1 ] && echo NO_USE_NAXSI=$NO_USE_NAXSI >> $TARGETDIR/.kusanagi.httpd
 
-	docker-compose up -d 
+	k_compose up -d 
 }
 
