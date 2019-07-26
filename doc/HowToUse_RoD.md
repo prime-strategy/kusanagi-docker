@@ -3,6 +3,7 @@
 ## KUSANAGI Runs on Docker(以下RoD)について
 
 KUSANAGI Runs on Docker(以下RoD)は、KUSANAGIの機能をDocker composeを使用して提供するものです。
+
 RoDの使用を確認済みのOSは、以下のとおりです。
 
 - CentOS7
@@ -23,6 +24,8 @@ RoDを使用するために必要なソフトウェアは以下のものにな�
 - docker
 - docker-compose
 - docker-machine(オプショナル)
+
+
 
 ## KUSANAGI RoDのインストール
 
@@ -46,6 +49,7 @@ $
 ```
 
 上記メッセージのように、$HOME/.kusanagi/bin をPATHに追加しておいてください。
+KUSANAGI RoDを更新するときは、$HOME/.kusanagi/install.sh を再実行してください。
 
 ## KUSANAGI RoDコマンド
 
@@ -119,6 +123,8 @@ start|stop|restart|status
 INFO: 完了しました。
 ```
 
+主なサブコマンドは以下になります。
+
 - provision
   KUSANAGI RoDの環境を作成します
 - remove
@@ -136,6 +142,8 @@ INFO: 完了しました。
 - status
   作成したKUSANAGI RoD環境の状態を確認します
 
+
+
 ## provision
 
 provisionサブコマンドでは、末尾に指定したtarget名のディレクトリをカレントディレクトリ以下に作成し、KUSANAGI RoDの環境を作成します。
@@ -147,7 +155,7 @@ provision サブコマンドのオプションは以下のとおりです。
 | オプション                                | 環境変数                         | 説明                                                         |
 | ----------------------------------------- | -------------------------------- | ------------------------------------------------------------ |
 | --fqdn  ドメイン名(必須)                  | FQDN                             | 作成するサイトのドメイン名を指定します。                     |
-| --wp/--wordpress/--WordPress              | APP=wp                           | WordPressの環境を構築します。                                |
+| --wp/--wordpress/--WordPress              | APP=wp                           | WordPressの環境を構築します。環境変数APPを指定したり、--c5/--lamp/--drupalなどを設定しない場合は、このオプションが設定されます。 |
 | --wplang lang                             | WP_LANG                          | WordPressの言語を一つだけ指定します。無指定時は、en_US となります。 |
 | -admin-user admin                         | ADMIN_USER                       | WordPressの管理者ユーザ名を指定します。無指定時はランダム文字列となります。 |
 | --admin-passwd pass                       | ADMIN_PASS                       | WordPressの管理者パスワードを指定します。無指定時はランダム文字列となります。 |
@@ -158,12 +166,12 @@ provision サブコマンドのオプションは以下のとおりです。
 | --c5/--concrete5                          | APP=c5                           | Concreate5の環境を構築します。                               |
 | --lamp/--LAMP                             | APP=lamp                         | LAMPの環境を構築します。                                     |
 | --drupal7                                 | APP=drupal<br />DRUPAL_VERSION=7 | drupal7の環境を構築します。                                  |
-| --drupal/--drupal                         | APP=drupal<br />DRUPAL_VERSION=8 | drupal8の環境を構築します。                                  |
+| --drupal/--drupal8                        | APP=drupal<br />DRUPAL_VERSION=8 | drupal8の環境を構築します。                                  |
 | --httpd                                   |                                  | httpd(Apache2.4)を使用します。--nginxと同時に指定できません。 |
 | --nginx                                   |                                  | nginxを使用します。--httpdと同時に指定できません。無指定時はnginxが使用されます。 |
-| --http-port num                           | HTTP_PORT                        | ホストにポートフォワードするhttpポート番号を指定します。無指定時は80が指定されます。 |
-| --tls-port num                            | HTTP_TLS_PORT                    | ホストにポートフォワードするhttpsポート番号を指定します。無指定時は443が指定されます。 |
-| --dbsystem mysql/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= mysql/pgsql  | 使用するDBシステムを指定します。ただし、WordPressおよびdrupal7/drupal8は必ずmysqlを使用します。postgresql は現在実験中の状態です。 |
+| --http-port num                           | HTTP_PORT                        | ホストにポートフォワードするhttpポート番号を指定します。無指定時は80が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
+| --tls-port num                            | HTTP_TLS_PORT                    | ホストにポートフォワードするhttpsポート番号を指定します。無指定時は443が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
+| --dbsystem mysql/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= mysql/pgsql  | 使用するDBシステムを指定します。ただし、WordPressおよびdrupal7/drupal8は必ずmysqlを使用します。postgresql は現在実験中です。 |
 | --dbhost host                             | DBHOST                           | 接続するDBホスト名を指定します。無指定時はlocalhostです。    |
 | --dbrootpass pass                         | DB_ROOTPASS                      | 接続するDBホストのrootパスワードを指定します。無指定時はランダム文字列となります。 |
 | --dbname name                             | DBNAME                           | 接続するDB名を指定します。無指定時はランダム文字列となります。 |
@@ -183,7 +191,7 @@ provision サブコマンドのオプションは以下のとおりです。
 | ------------------------ | -------------------------------------------------- |
 | .kusanagi.*              | docker-composeで使用する環境変数が記述されています |
 | docker-compose.yml       | docker-composeの設定ファイル                       |
-| contents                 | Docker上に作成されたコンテンツのコピー             |
+| contents                 | Docker上に作成されたコンテンツディレクトリのコピー |
 | .git                     | git用のディレクトリ                                |
 
 プロビジョンが終わったあと、contents ディレクトリ以下にプロビジョンで生成されたDocker上のファイルをコピーし、git登録済みの状態になり、管理を行うことが出来ます。
@@ -196,11 +204,11 @@ provision後、以下のDockerコンテナが起動されます。
 
 | 名称    | 説明                                                         |
 | ------- | ------------------------------------------------------------ |
-| httpd   | nginxもしくはhttpdが動作します。httpdコンテナは、httpdブリッジを通じてホスト側のネットワークにHTTP/TLSポートをポートフォワードして、Webサービスを行います。kusanagiボリューム内のアプリケーションディレクトリをrootディレクトリとして動作します。 |
-| php     | PHP-FPMが動作します。httpd コンテナとの通信はphpブリッジを介して行います。アプリケーションはkusanagiボリュームに配置します。DBとはDBボリューム上のソケットファイルを使用して接続します。 |
-| db      | MySQLもしくは、Postgresqlが動作します。外部のDBサーバ使用時には作成されません。dbはDBボリュームを使用しDBテーブルなどを配置します。 |
-| config  | 通常停止していますが、kusanagi-docker config 操作時に起動します。WordPressのときはwpcli コンテナが使用され、kusanagi-docker wpcli を使用してWorPressのプラグイン・テーマなどの操作を行うことが出来ます。kusanagiおよびdbボリュームを操作し、アプリケーション配置・バックアップ・リストアなどを行います。 |
-| ftp     | WordPressでprovisionしたときのみ起動します。phpコンテナから通信し、WordPress core・プラグイン・テーマの更新をKUSANAGIボリュームに対して行います。 |
+| httpd   | nginxもしくはhttpdが動作します。httpdコンテナは、httpdブリッジを通じてホスト側のネットワークからHTTP/TLSポートをポートフォワードして、Webサービスを行います。kusanagiボリューム内のアプリケーションディレクトリをrootディレクトリとして動作します。 |
+| php     | PHP-FPMが動作します。httpd コンテナとの通信はhttpdのネットワークを共有して行います。アプリケーションはkusanagiボリュームに配置します。DBとはDBボリューム上のソケットファイルを使用して接続します。<br />phpコンテナには、ssmtpコマンドが搭載されており、外部サーバへのSMTP転送が可能です。 |
+| db      | MySQLもしくは、Postgresqlが動作します。外部のDBサーバ使用時には作成されません。dbはDBボリュームを使用しDBテーブルなどを配置し、socketファイル経由でphpと通信します。 |
+| config  | 通常停止していますが、kusanagi-docker config での操作時に起動します。<br />kusanagi-docker configコマンドは、kusanagiおよびdbボリュームを操作し、アプリケーション配置・バックアップ・リストアなどを行います。<br />WordPress構築時はwpcli のイメージが使用され、WorPressのプラグイン・テーマ・言語などのインストール、アンインストールなどの操作を行うことも出来ます。 |
+| ftp     | WordPressでprovisionしたときのみ起動します。phpコンテナからftp通信し、WordPress core・プラグイン・テーマの更新を、WordPressのWeb画面経由で行います。 |
 | certbot | let's encryptからSSL証明書を取得します(現在実験中で使用方法を公開していません)。 |
 
 
@@ -210,13 +218,13 @@ provision後、以下のDockerコンテナが起動されます。
 
 
 provision実行後に作成されるdocker-compose.yml は、最低限の記述しかしていません。
-logging方式の変更、共有ストレージの使用、swarm化などは、docker-compose.yml を修正して対応してください。また、docker-composeを使用してのstart/stop/ps/run/exec なども可能です。
+logging方式の変更、共有ストレージの使用、swarm化などは、docker-compose.yml を修正して対応してください。また、docker-composeを使用して、start/stop/ps/run/exec などの操作が可能です。
 
 
 
 ### その他環境変数
 
-provision実行時に、環境変数でのみ設定できる項目があります。.kusanagi.* に書かれているので、
+provision実行時に、環境変数でのみ設定できる項目があります。これらの環境変数は、.kusanagi.* に書かれます。
 
 | 環境変数              | デフォルト値   | 説明                                                         |
 | --------------------- | -------------- | ------------------------------------------------------------ |
@@ -227,7 +235,7 @@ provision実行時に、環境変数でのみ設定できる項目がありま�
 | USE_SSL_OSCP          | off            | OCSP(Online Certificate Status Protocol)を有効にするかどうかを指定します。on/offを指定できます。USE_SSL_OSCPは、SSL自己証明書を使用する場合は指定できません。 |
 | OSCP_RESOLV           |                | OSCP使用時のDNSを指定します。無指定の場合は、8.8.4.4および8.8.8.8が使用されます。 |
 | NO_USE_NAXSI          | 1              | NAXSIを使用しないかどうかを指定します。使用しない場合には1を指定します。 |
-| NO_SSL_REDIRECT       | 1              | TLSポートへのリダイレクトを行うかどうかを指定します。使用ない場合には1を指定します。 |
+| NO_SSL_REDIRECT       | 1              | TLSポートへのリダイレクトを行うかどうかを指定します。使用しない場合には1を指定します。 |
 | EXPIRE_DAYS           | 90             | nginxでのexpiresヘッダの日数を指定します。                   |
 | PHP_PORT              | 127.0.0.1:9000 | PHP-FPMのLISTENポートを指定します。                          |
 | PHP_MAX_CHILDLEN      | 500            | PHP-FPMの同時に処理をする可能性がある子プロセス数を指定します。 |
@@ -235,11 +243,11 @@ provision実行時に、環境変数でのみ設定できる項目がありま�
 | PHP_MIN_SPARE_SERVERS | 5              | PHP-FPMの待ち状態の子プロセスの最小の数を指定します。        |
 | PHP_MAX_SPARE_SERVERS | 10             | PHP-FPMの待ち状態の子プロセスの最大の数を指定します。        |
 | PHP_MAX_REQUESTS      | 500            | PHP-FPMの各子プロセスが、再起動するまでに実行するリクエスト数を指定します。 |
-| MAILSERVER            | localhost      | PHPからメール転送する際の、メールサーバを指定します。        |
-| MAILDOMAIN            |                | PHP-FPMからメール送信する際の、ドメイン名を指定します。      |
-| MAILUSER              |                | PHP-FPMからメール送信する際の、ユーザ名を指定します          |
-| MAILPASS              |                | PHP-FPMからメール送信する際の、SMTP-AUTHで使用するパスワードを指定します |
-| MAILAUTH              |                | PHP-FPMからメール送信する際の、SMTP-AUTHの方法を指定します。 |
+| MAILSERVER            | localhost      | PHPコンテナからメール転送する際の、転送先メールサーバを指定します。 |
+| MAILDOMAIN            |                | PHPコンテナからメール送信する際の、ドメイン名を指定します。  |
+| MAILUSER              |                | PHPコンテナからメール送信する際の、ユーザ名を指定します      |
+| MAILPASS              |                | PHPコンテナからメール送信する際の、SMTP-AUTHで使用するパスワードを指定します |
+| MAILAUTH              |                | PHPコンテナからメール送信する際の、SMTP-AUTHの方法を指定します。 |
 
 
 
@@ -285,13 +293,13 @@ configコマンドは、RoD環境の設定や、情報のbackup/restore を行�
 | backup           | pull とdbdumpを同時に行う                                    |
 | restore          | pushとdbrestoreを同時に行う                                  |
 
-pullおよびdbdumpを実行しても、自動的にgitにcommitされません。適宜git コマンドを試用して管理してください。
+pullおよびdbdumpを実行しても、自動的にgitにcommitされません。適宜git コマンドを使用して管理してください。
 
 
 
 ## wp
 
-WordPressを試用しているときのみ使用できます。wpcliのコマンドを指定することで、WordPressに対する操作を行うことが出来ます。
+WordPressを使用しているときのみ使用できます。wpcliのコマンドを指定することで、WordPressに対する操作を行うことが出来ます。
 
 このコマンドは、ターゲットディレクトリ上で動作する必要があります。
 
@@ -311,7 +319,26 @@ start/stop/restartは、RoD環境のDockerコンテナを開始・停止・再�
 
 このコマンドは、ターゲットディレクトリ上で動作する必要があります。
 
-これらのコマンドは、docker-composeコマンドのwrapperなので、ターゲットディレクトリ上でdocker-composeを試用しても構いません。
+これらのコマンドは、docker-composeコマンドのwrapperなので、ターゲットディレクトリ上でdocker-composeを使用しても構いません。
+
+
+
+## 使用されるDocker イメージ
+
+KUSANAGI RoD向けのイメージは[DockerHub](https://hub.docker.com)で公開済みです。すべてalpine10ベースのイメージですが、今後変更される可能性があります。
+推奨バージョン(現状の最新版)を使用するには、$HOME/.kusanagi/update_version を定期的に実行してください。
+
+| 名称                                                         | 説明                                                        |
+| ------------------------------------------------------------ | ----------------------------------------------------------- |
+| [kusanagi-nginx](https://hub.docker.com/r/primestrategy/kusanagi-nginx) | NGINXイメージ(推奨はメインラインの最新版)                   |
+| [kusanagi-httpd](https://hub.docker.com/r/primestrategy/kusanagi-httpd) | httpd(Apache2.4) イメージ                                   |
+| [kusanagi-php](https://hub.docker.com/r/primestrategy/kusanagi-php) | PHP-FPMイメージ(推奨は最新版)                               |
+| [kusanagi-config](https://hub.docker.com/r/primestrategy/kusanagi-config) | kusanagi config コマンド用イメージ                          |
+| [wordpress:cli](https://hub.docker.com/_/wordpress)          | WordPress構築時用のconfig コマンドイメージ                  |
+| [kusanagi-ftpd](https://hub.docker.com/r/primestrategy/kusanagi-ftpd) | WordPress構築時のみ使用するvsftpdを起動するコンテナイメージ |
+| [mariadb](https://hub.docker.com/_/mariadb)                  | MySQLイメージ                                               |
+| [postgresql](https://hub.docker.com/_/postgres)              | Postgresqlイメージ                                          |
+| [certbot](https://hub.docker.com/r/certbot/certbot)          | Certbotイメージ                                             |
 
 
 
