@@ -8,7 +8,6 @@ RoDの使用を確認済みのOSは、以下のとおりです。
 
 - CentOS7
 - Ubuntu18.04
-- Windows10(WSL and docker-machine(VirtualBox or Other OS))
 - Mac(with Docker for mac)
 
 RoDを使用するために必要なソフトウェアは以下のものになります。
