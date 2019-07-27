@@ -44,7 +44,7 @@ echo 'volumes:' >> docker-compose.yml
 echo '  kusanagi:' >>  docker-compose.yml
 [[ $DBHOST =~ ^localhost ]] && echo '  database:' >> docker-compose.yml
 
-docker-compose up -d \
+$DOCKER_COMPOSE up -d \
 && k_configcmd_root "/" chown 1000:1001 /home/kusanagi \
 && k_configcmd "/" chmod 751 /home/kusanagi || return 1
 
@@ -59,13 +59,14 @@ elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then
 	git clone $GITPATH ./contents
 	tar cf - -C contents . | k_configcmd $BASEDIR tar xf - 
 else
-	docker-compose exec -u 0 php apk add -t .git git \
-	&& docker-compose exec -u 1000 php /usr/local/bin/composer create-project -n concrete5/composer /home/kusanagi/$PROFILE \
-	&& docker-compose exec -u 1000 php sh -c "grep -rl PhpSimple /home/kusanagi/$PROFILE/public |xargs -n 1 sed -i 's/Sunra/KubAT/g'" \
-	&& docker-compose exec -u 1000 php sed -i 's/sunra/kub-at/g' /home/kusanagi/$PROFILE/public/concrete/composer.json \
-	&& docker-compose exec -u 1000 php /usr/local/bin/composer remove -d /home/kusanagi/$PROFILE sunra/php-simple-html-dom-parser \
-	&& docker-compose exec -u 1000 php /usr/local/bin/composer require -d /home/kusanagi/$PROFILE kub-at/php-simple-html-dom-parser \
-	&& docker-compose exec -u 1000 php /usr/local/bin/composer update --with-dependencies -d /home/kusanagi/$PROFILE \
+	DOCKER_PHP="$DOCKER_COMPOSE exec -u 1000 php"
+	$DOCKER_COMPOSE exec -u 0 php apk add -t .git git \
+	&& $DOCKER_PHP /usr/local/bin/composer create-project -n concrete5/composer /home/kusanagi/$PROFILE \
+	&& $DOCKER_PHP sh -c "grep -rl PhpSimple /home/kusanagi/$PROFILE/public |xargs -n 1 sed -i 's/Sunra/KubAT/g'" \
+	&& $DOCKER_PHP sed -i 's/sunra/kub-at/g' /home/kusanagi/$PROFILE/public/concrete/composer.json \
+	&& $DOCKER_PHP /usr/local/bin/composer remove -d /home/kusanagi/$PROFILE sunra/php-simple-html-dom-parser \
+	&& $DOCKER_PHP /usr/local/bin/composer require -d /home/kusanagi/$PROFILE kub-at/php-simple-html-dom-parser \
+	&& $DOCKER_PHP /usr/local/bin/composer update --with-dependencies -d /home/kusanagi/$PROFILE \
 	&& k_configcmd_root /home/kusanagi chown -R 1000:1001 $PROFILE  \
 	&& k_configcmd /home/kusanagi chmod o-rwx $PROFILE  \
 	&& k_configcmd /home/kusanagi/$PROFILE/public mkdir -p application/languages \

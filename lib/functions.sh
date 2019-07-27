@@ -3,8 +3,10 @@
 # (C)2019 Prime-Strategy Co,Ltd
 # Licenced by GNU GPL v2
 #
+
+DOCKER_COMPOSE=$(which docker-compose)
 LOCAL_KUSANAGI_FILE=.kusanagi
-CONFIGCMD="docker-compose run --rm config"
+CONFIGCMD="$DOCKER_COMPOSE run --rm"
 export TEXTDOMAIN="kusanagi-docker" 
 export TEXTDOMAINDIR="$LIBDIR/locale"
 . $(which gettext.sh)
@@ -12,13 +14,13 @@ export TEXTDOMAINDIR="$LIBDIR/locale"
 function k_configcmd() {
 	local _dir=$1
 	shift
-	docker-compose run --rm -w $_dir config $@
+	$CONFIGCMD -w $_dir config $@
 }
 
 function k_configcmd_root() {
 	local _dir=$1
 	shift
-	docker-compose run --rm -u 0 -w $_dir config $@
+	$CONFIGCMD -u 0 -w $_dir config $@
 }
 
 
@@ -327,12 +329,12 @@ function k_machine() {
 	if [ $_is_print ] ; then
 		if [ "$_machine" = "localhost" -o "$MACHINE" = "localhost" ] ; then
 			[ "x$TARGETDIR" != "x" ] && \
-			       	(cd $TARGETDIR && docker-compose ps 1>&2 ) || docker ps 1>&2
+			       	(cd $TARGETDIR && $DOCKER_COMPOSE) || docker ps 1>&2
 		else
 			[ "x$TARGETDIR" != "x" ]  \
 			       	&& (cd $TARGETDIR && \
 			       		eval $(docker-machine env $_machine) && \
-				       		docker-compose ps) 1>&2 \
+				       		$DOCKER_COMPOSE ps) 1>&2 \
 				||  (eval $(docker-machine env $_machine) && docker ps 1>&2) 
 		fi
 	fi
@@ -370,10 +372,10 @@ function k_startstop() {
 	#k_machine > /dev/null
 	case $_cmd in
 	'start'|'stop'|'restart'|'ps')
-		cd $TARGETDIR && docker-compose $_cmd $_service
+		cd $TARGETDIR && $DOCKER_COMPOSE $_cmd $_service
 		;;
 	'status')
-		cd $TARGETDIR && docker-compose ps $_service
+		cd $TARGETDIR && $DOCKER_COMPOSE ps $_service
 		;;
 	*)
 	esac
@@ -386,7 +388,7 @@ function k_remove() {
 
 	local _PWD=$(pwd)
 	cd $TARGETDIR \
-	&& docker-compose down -v \
+	&& $DOCKER_COMPOSE down -v \
 	&& cd .. \
 	&& rm -rf $TARGETDIR \
 	&& ([ -d $_PWD ] && cd $_PWD || true)

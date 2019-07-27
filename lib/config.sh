@@ -16,7 +16,7 @@ function k_bcache () {
 		return 1
 	fi
 
-	local _ret=$(docker-compose run --rm -w $BASEDIR/tools config ./bcache.sh $cmd 2> /dev/null | sed 's/\r//g')
+	local _ret=$(k_configcmd $BASEDIR/tools config ./bcache.sh $cmd 2> /dev/null | sed 's/\r//g')
 	if [ $? -ne 0 ] ; then
 		k_print_error $(eval_gettext "WordPress is not provision.")
 		return 1
@@ -39,16 +39,16 @@ function k_fcache() {
 	case $cmd in
 	on)
 		k_rewrite NO_USE_FCACHE 0 $TARGETDIR/.kusanagi.httpd
-		docker-compose up -d
+		$DOCKER_COMPOSE up -d
 		k_print_info $(eval_gettext "fcache is on")
 		;;
 	off)
 		k_rewrite NO_USE_FCACHE 1 $TARGETDIR/.kusanagi.httpd
-		docker-compose up -d
+		$DOCKER_COMPOSE up -d
 		k_print_info $(eval_gettext "fcache is off")
 		;;
 	clear)
-		docker-compose run --rm -w $BASEDIR/tools config ./fcache.sh clear $* 2> /dev/null 
+		k_configcmd $BASEDIR/tools config ./fcache.sh clear $* 2> /dev/null 
 		if [ $? -ne 0 ] ; then
 			k_print_error $(eval_gettext "fcache can not clear")
 			return 1
@@ -76,12 +76,12 @@ function k_naxsi() {
 	case $cmd in
 	on)
 		k_rewrite DONOT_USE_NAXSI 0 $TARGETDIR/.kusanagi.httpd
-		docker-compose up -d
+		$DOCKER_COMPOSE up -d
 		k_print_info $(eval_gettext "naxsi is on")
 		;;
 	off)
 		k_rewrite DONOT_USE_NAXSI 1 $TARGETDIR/.kusanagi.httpd
-		docker-compose up -d
+		$DOCKER_COMPOSE up -d
 		k_print_info $(eval_gettext "naxsi is off")
 		;;
 	*)
@@ -130,7 +130,7 @@ function k_content() {
 		;;
 	push|restore)
 		#git commit -a -m "push at "$(date +%Y%m%dT%H%M%S%z)
-		tar cf - -C $CONTENTDIR --exclude-from=$TARGETDIR/.gitignore . | docker-compose run --rm -w $BASEDIR -u 0 config tar xf - 
+		tar cf - -C $CONTENTDIR --exclude-from=$TARGETDIR/.gitignore . | k_configcmd $BASEDIR -u 0 config tar xf - 
 		k_configcmd $BASEDIR chown -R kusanagi:www .
 		return 0
 		;;
