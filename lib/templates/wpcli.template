@@ -1,7 +1,8 @@
 ## CONFIG
   config:
     container_name: ${PROFILE}_config
-    image: $CONFIG_IMAGE
+    build:
+        context: ./wpcli
     user: "1000:1001"
     env_file:
       - .kusanagi
@@ -10,6 +11,5 @@
     volumes:
       - database:/var/run/mysqld
       - kusanagi:/home/kusanagi
-      - ./.wp_mysqli.ini:/usr/local/etc/php/conf.d/wp_mysqli.ini
     command: wp --version
 

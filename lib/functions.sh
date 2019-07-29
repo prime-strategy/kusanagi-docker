@@ -5,7 +5,7 @@
 #
 
 DOCKER_COMPOSE=$(which docker-compose)
-[ "xDOCKER_COMPOSE" = "x" ] DOCKER_COMPOSE=$(which docker-compose.exe)
+[ "x$DOCKER_COMPOSE" = "x" ] && DOCKER_COMPOSE=$(which docker-compose.exe)
 LOCAL_KUSANAGI_FILE=.kusanagi
 export TEXTDOMAIN="kusanagi-docker" 
 export TEXTDOMAINDIR="$LIBDIR/locale"

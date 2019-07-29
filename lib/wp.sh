@@ -38,7 +38,17 @@ echo >> docker-compose.yml
 echo 'volumes:' >> docker-compose.yml
 echo '  kusanagi:' >>  docker-compose.yml
 
-echo 'mysqli.default_socket = /var/run/mysqld/mysqld.sock' > .wp_mysqli.ini 
+mkdir -p wpcli
+cat <<EOT > wpcli/Dockerfile
+FROM $WPCLI_IMAGE 
+MAINTAINER kusanagi@prime-strategy.co.jp
+
+COPY wp_mysqli.ini /usr/local/etc/php/conf.d/wp_mysql.ini
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["wp", "shell"]
+EOT
+echo 'mysqli.default_socket = /var/run/mysqld/mysqld.sock' > wpcli/wp_mysqli.ini 
 
 [[ $DBHOST =~ ^localhost ]] && echo '  database:' >> docker-compose.yml
 
