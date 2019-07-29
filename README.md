@@ -16,6 +16,7 @@ And simple help is run kusanagi-docker help.
 ### Recommends OS
 - CentOS7
 - Ubuntu18.04
+- Windows10(WSL+Docker for Windows)
 - Mac(with Docker for mac)
 
 ### Requre commands.
