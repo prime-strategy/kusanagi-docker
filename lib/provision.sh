@@ -655,32 +655,32 @@ EOF
 		k_content pull
 	fi
 
-	local ENTRY=$($DOCKER_COMPOSE exec httpd ps | grep 'docker-entrypoint.sh') 
+	local ENTRY=$(k_compose exec httpd ps | grep 'docker-entrypoint.sh') 
 	local FIRST=1
 	while [ "x$ENTRY" != "x" ] ; do
 		[ $FIRST ] && FIRST= && \
 			echo -n -e "\e[32m" $(eval_gettext "Waiting HTTPD init process") 
 		echo -n "."
-		ENTRY=$($DOCKER_COMPOSE exec httpd ps | grep 'openssl') 
+		ENTRY=$(k_compose exec httpd ps | grep 'openssl') 
 		[ "x$ENTRY" = "x" ] && break
 		sleep 5
 	done
 	echo -e "\e[m"
 
 	# save SSL_DHPARAM
-	DHPARAM=$($DOCKER_COMPOSE exec httpd cat /etc/nginx/dhparam.key)
-	[ $? -ne 0 ] && DHPARAM=$($DOCKER_COMPOSE exec httpd cat /etc/httpd/dhparam.key)
+	DHPARAM=$(k_compose exec httpd cat /etc/nginx/dhparam.key)
+	[ $? -ne 0 ] && DHPARAM=$(k_compose exec httpd cat /etc/httpd/dhparam.key)
 	SSL_DHPARAM=$(echo $DHPARAM | sed -e 's/\n/ /g' -e 's/\r//g')
 	echo "SSL_DHPARAM=\"$SSL_DHPARAM\"" >> .kusanagi.httpd
 
 	# use let's encrypt
 	if [ "x$MAILADDR" != "x" ] ; then
-		$DOCKER_COMPOSE run certbot certonly --text \
+		k_compose run certbot certonly --text \
 		       	--noninteractive --webroot -w /usr/share/httpd/html/ -d $FQDN -m $MAILADDR --agree-tos
 		local FULLCHAINPATH=$(ls -1t /etc/letsencrypt/live/$FQDN*/fullchain.pem 2> /dev/null |head -1)
 		local LETSENCRYPTDIR=${FULLCHAINPATH%/*}  # dirname
 		if [ -n "$FULLCHAINPATH" ] ; then
-			$DOCKER_COMPOSE run --rm -e RENEWD_LINAGE=${LETSENCRYPTDIR} httpd /usr/bin/ct-submit.sh
+			k_compose run --rm -e RENEWD_LINAGE=${LETSENCRYPTDIR} httpd /usr/bin/ct-submit.sh
 		else
 			# certbot-auto was failed.
 			k_print_error $(eval_gettext "Cannot get Let\'s Encrypt SSL Certificate files.") #'
@@ -688,8 +688,8 @@ EOF
 		fi
 		echo "SSL_CERT=${LETSENCRYPTDIR}/fullchain.pem" >> .kusanagi.httpd
 		echo "SSL_KEY=${LETSENCRYPTDIR}/privkey.pem" >> .kusanagi.httpd
-		$DOCKER_COMPOSE down httpd
-		$DOCKER_COMPOSE up -d httpd
+		k_compose down httpd
+		k_compose up -d httpd
 	fi
 
 	git init -q

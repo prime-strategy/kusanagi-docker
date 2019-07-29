@@ -44,7 +44,7 @@ echo 'volumes:' >> docker-compose.yml
 echo '  kusanagi:' >>  docker-compose.yml
 [[ $DBHOST =~ ^localhost ]] && echo '  database:' >> docker-compose.yml
 
-$DOCKER_COMPOSE up -d \
+k_compose up -d \
 && k_configcmd_root "/" chown 1000:1001 /home/kusanagi \
 && k_configcmd "/" chmod 751 /home/kusanagi || return 1
 
@@ -59,7 +59,7 @@ elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then
 	git clone $GITPATH ./contents
 	tar cf - -C contents . | k_configcmd $BASEDIR tar xf - 
 else
-	DOCKER_PHP="$DOCKER_COMPOSE exec -u 1000 php"
+	DOCKER_PHP="k_compose exec -u 1000 php"
 	$DOCKER_COMPOSE exec -u 0 php apk add -t .git git \
 	&& $DOCKER_PHP /usr/local/bin/composer create-project -n concrete5/composer /home/kusanagi/$PROFILE \
 	&& $DOCKER_PHP sh -c "grep -rl PhpSimple /home/kusanagi/$PROFILE/public |xargs -n 1 sed -i 's/Sunra/KubAT/g'" \

@@ -45,7 +45,7 @@ echo '  kusanagi:' >>  docker-compose.yml
 [[ $DBHOST =~ ^localhost ]] || [[ $DBHOST = localhost ]] && echo '  database:' >> docker-compose.yml
 
 k_print_green "$(eval_gettext 'Provision LAMP')"
-$DOCKER_COMPOSE up -d \
+k_compose up -d \
 && k_configcmd_root "/" chown 1000:1001 /home/kusanagi  \
 && k_configcmd "/" chmod 751 /home/kusanagi \
 && k_configcmd "/" mkdir -p $DOCUMENTROOT || return 1

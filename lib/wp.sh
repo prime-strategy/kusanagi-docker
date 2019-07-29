@@ -51,7 +51,7 @@ function wp_lang() {
 	fi
 }
 
-$DOCKER_COMPOSE up -d \
+k_compose up -d \
 && k_configcmd_root "/" chown 1000:1001 /home/kusanagi  \
 && k_configcmd "/" chmod 751 /home/kusanagi \
 && k_configcmd "/" mkdir -p $DOCUMENTROOT || return 1
@@ -80,7 +80,7 @@ else
 
 	k_print_green "$(eval_gettext 'Provision WordPress')"
 	tar cf - -C $LIBDIR/wp/ tools settings wp-config-sample wp.sh | k_configcmd $BASEDIR tar xf - \
-	&& k_configcmd $DOCUMENTROOT config bash ../wp.sh \
+	&& k_configcmd $DOCUMENTROOT bash ../wp.sh \
 	&& sleep 1 \
 	&& k_configcmd $BASEDIR rm wp.sh \
 	&& k_configcmd $DOCUMENTROOT chmod 440 wp-config.php \
