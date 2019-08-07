@@ -640,7 +640,7 @@ EOF
 
 	k_target $PROFILE
 	cd $PROFILE
-	[ "$MACHINE" != "localhost" ] && eval $(docker-machine $MACHINE env)
+	#[ "$MACHINE" != "localhost" ] && eval $(docker-machine $MACHINE env)
 	[ -f "$LIBDIR/$APP.sh" ] || (k_print_error "$APP $(eval_gettext "is not implemented.")" && return 1)
 	source "$LIBDIR/$APP.sh" || return 1
 	source "$LIBDIR/config.sh" || return 1
