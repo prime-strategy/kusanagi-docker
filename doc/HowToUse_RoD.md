@@ -31,7 +31,7 @@ RoDを使用するために必要なソフトウェアは以下のものにな�
 以下のようにコマンドを実行すると、KUSANAGI RoDが$HOME/.kusanagi 以下にインストールされます。
 
 ```shell
-$ curl https://raw.githubusercontent.com/prime-strategy/kusanagi-docker/release/install.sh | bash 
+$ curl https://raw.githubusercontent.com/prime-strategy/kusanagi-docker/master/install.sh | bash 
 cloning kusanagi-docker commands
 Cloning into '/home/kusanagi/.kusanagi'...
 remote: Enumerating objects: 193, done.
