@@ -5,7 +5,7 @@ KUSANAGI Runs on Docker (hereinafter RoD) provides the functions of KUSANAGI usi
 For install kusanagi RoD, run this commands localy. And install kusanagi-docker command and other files in ```$HOME/.kusanagi```. 
 
 ```
-curl https://raw.githubusercontent.com/prime-strategy/kusanagi-docker/release/install.sh | bash
+curl https://raw.githubusercontent.com/prime-strategy/kusanagi-docker/master/install.sh | bash
 ```
 
 ## How to Run
