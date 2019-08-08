@@ -1,0 +1,12 @@
+## Postgresql 
+  db:
+    container_name: ${PROFILE}_db
+    image: $POSTGRESQL_IMAGE
+    user: "70:70"
+    env_file:
+      - .kusanagi.pgsql
+    network_mode: "service:httpd"
+    volumes:
+      - database:/var/run/pgsql
+      - database:/var/lib/postgresql/data
+ 

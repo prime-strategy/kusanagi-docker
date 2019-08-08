@@ -1,0 +1,38 @@
+@charset "utf-8";
+
+#wpadminbar #wp-admin-bar-wp-performances {
+	float: right;
+}
+#wpadminbar #wp-admin-bar-wp-performances.good {
+	background: darkgreen;
+}
+#wpadminbar #wp-admin-bar-wp-performances.attention {
+	background: #ff8000;
+}
+#wpadminbar #wp-admin-bar-wp-performances.bad {
+	background: red;
+}
+#wpadminbar #wp-admin-bar-wp-performances .ab-icon:before {
+	font-family: 'dashicons';
+	content: "\f311";
+	color: white;
+	font-size: 1.2em;
+	top: 1px;
+}
+
+#wpadminbar #wp-admin-bar-wp-cache-clear .ab-icon:before {
+	font-family: 'dashicons';
+    content: "\f463";
+	color: red;
+	font-size: 1.2em;
+	top: 1px;
+}
+
+@media screen and (max-width: 782px) {
+	#wp-toolbar > ul > li#wp-admin-bar-wp-performances {
+		display: block;
+	}
+	#wp-toolbar > ul > li#wp-admin-bar-wp-cache-clear  {
+		display: block;
+	}
+}

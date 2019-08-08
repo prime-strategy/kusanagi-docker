@@ -1,0 +1,166 @@
+@charset "utf-8";
+.kusanagi-module-desc:after,
+.tab-menu:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.tab-menu li {
+	float: left;
+	margin: 0;
+}
+.tab-menu li a {
+	display: block;
+	padding : 10px 20px;
+	background: #333;
+	color: #eee;
+	text-decoration: none;
+	white-space: nowrap;
+}
+.tab-menu li.current a {
+	color: #fff;
+	background: #0073aa;
+}
+.tab-menu li.tab-item a:hover {
+	color : #00b9eb;
+	background: #000;
+}
+.admin-color-light .tab-menu li a {
+	background: #e5e5e5;
+	color: #333;
+}
+.admin-color-light .tab-menu li.current a {
+	background: #888;
+	color: #fff;
+}
+.admin-color-light .tab-menu li.tab-item a:hover {
+	background: #888;
+	color: #fff;
+}
+.admin-color-blue .tab-menu li a {
+	background: #52accc;
+}
+.admin-color-blue .tab-menu li.current a {
+	background: #096484;
+}
+.admin-color-blue .tab-menu li.tab-item a:hover {
+	color: #fff;
+	background: #096484;
+}
+.admin-color-coffee .tab-menu li a {
+	color: #fff;
+	background: #59524c;
+}
+.admin-color-coffee .tab-menu li.current a {
+	background: #c7a589;
+}
+.admin-color-coffee .tab-menu li.tab-item a:hover {
+	color: #fff;
+	background: #c7a589;
+}
+.admin-color-ectoplasm .tab-menu li a {
+	background: #523f6d;
+}
+.admin-color-ectoplasm .tab-menu li.current a {
+	background: #a3b745;
+}
+.admin-color-ectoplasm .tab-menu li.tab-item a:hover {
+	color: #fff;
+	background: #a3b745;
+}
+.admin-color-midnight .tab-menu li a {
+	background: #26292c;
+}
+.admin-color-midnight .tab-menu li.current a {
+	background: #e14d43;
+}
+.admin-color-midnight .tab-menu li.tab-item a:hover {
+	color: #fff;
+	background: #e14d43;
+}
+.admin-color-ocean .tab-menu li a {
+	background: #738e96;
+}
+.admin-color-ocean .tab-menu li.current a {
+	background: #9ebaa0;
+}
+.admin-color-ocean .tab-menu li.tab-item a:hover {
+	color: #fff;
+	background: #9ebaa0;
+}
+.admin-color-sunrise .tab-menu li a {
+	background: #cf4944;
+}
+.admin-color-sunrise .tab-menu li.current a {
+	background: #dd823b;
+}
+.admin-color-sunrise .tab-menu li.tab-item a:hover {
+	color: #fff;
+	background: #dd823b;
+}
+
+.kusanagi-module-desc li {
+	background: #fff;
+	border: solid 1px #e5e5e5;
+	float: left;
+	width: 32%;
+	margin-right: 1%;
+}
+.kusanagi-module-desc .desc {
+	padding: 0 10px;
+}
+.kusanagi-module-desc .link {
+	padding: 0 10px 10px;
+	text-align: right;
+}
+.kusanagi-module-desc h4 {
+	color: #000;
+	border-bottom: solid 1px #eee;
+	padding: 10px;
+	margin: 0;
+}
+
+.kusanagi-informations {
+	background: #fff;
+	border: solid 1px #e5e5e5;
+	width: 98%;
+}
+.kusanagi-informations li {
+	border-bottom: solid 1px #eee;
+	padding: 10px;
+	margin: 0;
+}
+.kusanagi-informations li.tail {
+	border: none;
+}
+.kusanagi-informations span {
+	display: table-cell;
+	padding-right: 20px;
+}
+.kusanagi-informations a {
+	display: table-cell;
+}
+
+#disable-theme-switch {
+	background: #fff;
+	border: solid 1px #e5e5e5;
+	padding: 10px;
+}
+#disable-theme-switch label {
+	padding-right: 20px;
+	line-height: 26px;
+}
+@media screen and (max-width: 782px) {
+.tab-menu li {
+	float: none;
+}
+.kusanagi-module-desc li {
+	float: none;
+	width: auto;
+	margin-right: 0;
+}
+.kusanagi-informations {
+	width: 100%;
+}
+}

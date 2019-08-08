@@ -1,0 +1,11 @@
+bash
+git
+sed
+awk
+grep
+gettext.sh
+envsubst
+curl
+docker
+docker-compose
+docker-machine

@@ -1,0 +1,12 @@
+  php:
+    container_name: ${PROFILE}_php
+    image: $KUSANAGI_PHP_IMAGE
+    env_file:
+      - .kusanagi
+      - .kusanagi.php
+      - .kusanagi.mail
+    network_mode: "service:httpd"
+    volumes:
+      - database:${DBLIB}
+      - kusanagi:/home/kusanagi
+

@@ -1,0 +1,370 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WP KUSANAGI\n"
+"POT-Creation-Date: 2016-04-22 19:46+0900\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: kusanagi-core/templates/theme-switcher-content-device.php:18
+#: kusanagi-core/modules/theme-switcher.php:730
+msgid "Device Name"
+msgstr ""
+
+#: kusanagi-core/templates/theme-switcher-content-device.php:22
+msgid "Keyword"
+msgstr ""
+
+#: kusanagi-core/templates/theme-switcher-content-device.php:26
+#: kusanagi-core/templates/theme-switcher-content-list.php:20
+#: kusanagi-core/modules/theme-switcher.php:732
+msgid "Group"
+msgstr ""
+
+#: kusanagi-core/templates/theme-switcher-content-list.php:16
+msgid "Disable switch theme"
+msgstr ""
+
+#: kusanagi-core/templates/theme-switcher-content-list.php:18
+msgid "Save Changes"
+msgstr ""
+
+#: kusanagi-core/templates/theme-switcher-content-list.php:20
+#: kusanagi-core/templates/theme-switcher-content-list.php:22
+msgid "Add New"
+msgstr ""
+
+#: kusanagi-core/templates/theme-switcher-content-list.php:22
+msgid "Device"
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:7
+#: kusanagi-core/templates/tab-home.php:13
+#: kusanagi-core/modules/page-cache.php:62
+msgid "Page Cache"
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:10
+msgid ""
+"The page cache system is not enabled. If you want to enable it, please input "
+"<code>kusanagi bcache on</code> on virtual machine console."
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:20
+msgid "Front page"
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:22
+#: kusanagi-core/templates/tab-page-cache.php:28
+#: kusanagi-core/templates/tab-page-cache.php:34
+msgid "minutes"
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:26
+msgid "Archives"
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:32
+msgid "Article"
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:38
+msgid "Cache excluded URL"
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:41
+msgid ""
+"You can specify a URL pattern (regular expression is available) that you "
+"want to exclude the cache. If you specify multiple patterns, please insert "
+"line feeds."
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:45
+msgid "Query string to cache"
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:48
+msgid "Please enter a key of valid query string as a cache data."
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:53
+msgid "Range of cache to delete when disclosing article"
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:55
+msgid "Do not delete"
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:56
+msgid "Article only"
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:57
+msgid "Article and front page"
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:58
+msgid "All"
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:62
+msgid "Clear Cache"
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:63
+msgid "Clear all caches"
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:67
+msgid "Regeneration of advanced-cache.php"
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:69
+msgid "Regenerate advanced-cache.php"
+msgstr ""
+
+#: kusanagi-core/templates/tab-page-cache.php:71
+#, php-format
+msgid ""
+"You do not have a write permission to write in advanced-cache.php or %s1. To "
+"regenerate advanced-cache.php, please set the write permission."
+msgstr ""
+
+#: kusanagi-core/templates/tab-image-optimizer.php:2
+#: kusanagi-core/modules/image-optimizer.php:31
+msgid "Image Optimizer"
+msgstr ""
+
+#: kusanagi-core/templates/tab-image-optimizer.php:5
+msgid "Enable Image Optimize"
+msgstr ""
+
+#: kusanagi-core/templates/tab-image-optimizer.php:10
+#: kusanagi-core/templates/tab-translate-accelerator.php:9
+#: kusanagi-core/templates/tab-performance-viewer.php:10
+msgid "Enable"
+msgstr ""
+
+#: kusanagi-core/templates/tab-image-optimizer.php:15
+msgid "Jpeg quality"
+msgstr ""
+
+#: kusanagi-core/templates/tab-image-optimizer.php:21
+msgid "Max full image widh"
+msgstr ""
+
+#: kusanagi-core/templates/tab-image-optimizer.php:23
+msgid "* larger than 320px"
+msgstr ""
+
+#: kusanagi-core/templates/tab-replacer.php:4
+#: kusanagi-core/modules/replacer.php:17
+msgid "Replacing"
+msgstr ""
+
+#: kusanagi-core/templates/tab-replacer.php:8
+msgid "Replacing at login/signup page"
+msgstr ""
+
+#: kusanagi-core/templates/tab-replacer.php:12
+msgid "Yes"
+msgstr ""
+
+#: kusanagi-core/templates/tab-replacer.php:16
+msgid "No"
+msgstr ""
+
+#: kusanagi-core/templates/tab-replacer.php:21
+#: kusanagi-core/templates/tab-replacer.php:26
+msgid "Replacement string"
+msgstr ""
+
+#: kusanagi-core/templates/tab-replacer.php:25
+msgid "Target string"
+msgstr ""
+
+#: kusanagi-core/templates/tab-replacer.php:39
+#: kusanagi-core/templates/tab-replacer.php:53
+msgid "Delete Rule"
+msgstr ""
+
+#: kusanagi-core/templates/tab-replacer.php:57
+msgid "Add New Rule"
+msgstr ""
+
+#: kusanagi-core/templates/tab-translate-accelerator.php:2
+#: kusanagi-core/templates/tab-home.php:37
+#: kusanagi-core/modules/translate-accelerator.php:37
+msgid "Translate Accelerator"
+msgstr ""
+
+#: kusanagi-core/templates/tab-translate-accelerator.php:5
+msgid "Enable to accleration."
+msgstr ""
+
+#: kusanagi-core/templates/tab-translate-accelerator.php:14
+msgid "Type"
+msgstr ""
+
+#: kusanagi-core/templates/tab-translate-accelerator.php:17
+msgid "Files"
+msgstr ""
+
+#: kusanagi-core/templates/tab-translate-accelerator.php:18
+msgid "Cache directory :"
+msgstr ""
+
+#: kusanagi-core/templates/tab-translate-accelerator.php:20
+msgid "APC"
+msgstr ""
+
+#: kusanagi-core/templates/tab-translate-accelerator.php:25
+msgid "Translated text displayed in your site"
+msgstr ""
+
+#: kusanagi-core/templates/tab-translate-accelerator.php:28
+#: kusanagi-core/templates/tab-translate-accelerator.php:38
+#: kusanagi-core/templates/tab-translate-accelerator.php:48
+msgid "Enable cache"
+msgstr ""
+
+#: kusanagi-core/templates/tab-translate-accelerator.php:29
+#: kusanagi-core/templates/tab-translate-accelerator.php:39
+#: kusanagi-core/templates/tab-translate-accelerator.php:49
+msgid "Disable translation"
+msgstr ""
+
+#: kusanagi-core/templates/tab-translate-accelerator.php:30
+#: kusanagi-core/templates/tab-translate-accelerator.php:40
+#: kusanagi-core/templates/tab-translate-accelerator.php:50
+msgid "Use language file's for translation"
+msgstr ""
+
+#: kusanagi-core/templates/tab-translate-accelerator.php:35
+msgid "Login/signup page translation"
+msgstr ""
+
+#: kusanagi-core/templates/tab-translate-accelerator.php:45
+msgid "Admin pages translation"
+msgstr ""
+
+#: kusanagi-core/templates/tab-translate-accelerator.php:55
+msgid "Delete cache"
+msgstr ""
+
+#: kusanagi-core/templates/tab-translate-accelerator.php:59
+msgid "Force deletion of all cache"
+msgstr ""
+
+#: kusanagi-core/templates/tab-theme-switcher.php:1
+#: kusanagi-core/templates/tab-home.php:25
+#: kusanagi-core/modules/theme-switcher.php:38
+msgid "Device Theme Switcher"
+msgstr ""
+
+#: kusanagi-core/templates/tab-theme-switcher.php:1
+msgid "Back"
+msgstr ""
+
+#: kusanagi-core/templates/tab-performance-viewer.php:2
+#: kusanagi-core/modules/performance-viewer.php:21
+msgid "Performance Viewer"
+msgstr ""
+
+#: kusanagi-core/templates/tab-performance-viewer.php:5
+msgid "Display performance on admin-bar."
+msgstr ""
+
+#: kusanagi-core/templates/tab-performance-viewer.php:15
+msgid "Requierd capability to display performance"
+msgstr ""
+
+#: kusanagi-core/templates/tab-home.php:3
+msgid "http://en.kusanagi.tokyo/feed/"
+msgstr ""
+
+#: kusanagi-core/templates/tab-home.php:10
+msgid "Modules"
+msgstr ""
+
+#: kusanagi-core/templates/tab-home.php:16
+msgid ""
+"<p>Page cache is a function for saving an HTML to display as a temporary "
+"data and reusing it in order to improve the WordPress performance.</p>"
+msgstr ""
+
+#: kusanagi-core/templates/tab-home.php:21
+#: kusanagi-core/templates/tab-home.php:33
+#: kusanagi-core/templates/tab-home.php:45
+msgid "Settings"
+msgstr ""
+
+#: kusanagi-core/templates/tab-home.php:28
+msgid ""
+"<p>Device switching is a function to change and optimize a theme to display "
+"for mobile terminals such as a smartphone.</p>"
+msgstr ""
+
+#: kusanagi-core/templates/tab-home.php:40
+msgid ""
+"<p>Translate Accelerator makes the translation cache files, and shortens the "
+"execution time to display your WordPress site.</p>"
+msgstr ""
+
+#: kusanagi-core/templates/tab-home.php:50
+msgid "Information"
+msgstr ""
+
+#: kusanagi-core/templates/theme-switcher-content-group.php:15
+#: kusanagi-core/modules/theme-switcher.php:615
+msgid "Group Name"
+msgstr ""
+
+#: kusanagi-core/templates/theme-switcher-content-group.php:19
+#: kusanagi-core/modules/theme-switcher.php:616
+msgid "Theme"
+msgstr ""
+
+#: kusanagi-core/templates/theme-switcher-content-group.php:22
+msgid "Use current theme"
+msgstr ""
+
+#: kusanagi-core/templates/theme-switcher-content-group.php:42
+#: kusanagi-core/modules/theme-switcher.php:617
+msgid "Slug"
+msgstr ""
+
+#: kusanagi-core/templates/theme-switcher-content-group.php:46
+#: kusanagi-core/modules/theme-switcher.php:618
+msgid "Priority"
+msgstr ""
+
+#: kusanagi-core/modules/replacer.php:46
+#: kusanagi-core/modules/performance-viewer.php:67
+#: kusanagi-core/modules/theme-switcher.php:45
+#: kusanagi-core/modules/theme-switcher.php:82
+#: kusanagi-core/modules/translate-accelerator.php:169
+#: kusanagi-core/modules/image-optimizer.php:78
+#: kusanagi-core/modules/page-cache.php:167
+msgid "Update settings successfully."
+msgstr ""
+
+#: kusanagi-core/modules/theme-switcher.php:316
+msgid "Tablet"
+msgstr ""
+
+#: kusanagi-core/modules/theme-switcher.php:317
+msgid "Smart Phone"
+msgstr ""
+
+#: kusanagi-core/modules/theme-switcher.php:619
+msgid "Devices"
+msgstr ""
+
+#: kusanagi-core/modules/theme-switcher.php:731
+msgid "Keywords"
+msgstr ""
+
+#: kusanagi-core/modules/image-optimizer.php:161
+msgid "Resize path invalid"
+msgstr ""

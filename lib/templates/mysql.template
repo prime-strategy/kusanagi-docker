@@ -1,0 +1,12 @@
+## MYSQL 
+  db:
+    container_name: ${PROFILE}_db
+    image: $KUSANAGI_MYSQL_IMAGE
+    user: "999:999"
+    env_file:
+      - .kusanagi.mysql
+    network_mode: "service:httpd"
+    volumes:
+      - database:/var/run/mysqld
+      - database:/var/lib/mysql
+ 
