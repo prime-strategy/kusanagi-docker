@@ -30,5 +30,3 @@ And simple help is run kusanagi-docker help.
 - docker(over 18.09)
 - docker-compose
 - docker-machine
-
->>>>>>> develop
