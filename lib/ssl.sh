@@ -129,8 +129,8 @@ function k_ssl () {
 		SSL_CERT=/etc/letsencrypt/live/$FQDN/fullchain.pem
 		SSL_KEY=/etc/letsencrypt/live/$FQDN/privkey.pem
 	elif [ "x$CERT$KEY" != "x" ] ; then
-		SSL_CERT=$(cat $CERT)
-		SSL_KEY=$(cat $KEY)
+		SSL_CERT=$(cat $CERT |tr "\r\n" " " | sed 's/  / /g')
+		SSL_KEY=$(cat $KEY |tr "\r\n" " " | sed 's/  / /g')
 	elif [ $OPT_RENEW ] ; then
 		k_compose run --rm certbot certonly --text --noninteractive --webroot -w /var/www/html -d $FQDN -m $EMAIL --agree-tos
 		k_compose run --rm -e RENEWD_LINAGE=/etc/letsencrypt/live/$FQDN httpd /usr/bin/ct-submit.sh

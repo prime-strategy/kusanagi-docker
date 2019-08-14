@@ -264,13 +264,17 @@ function k_provision () {
 			ADMIN_PASS=$(k_check_passwd "$PRE_OPT" "$OPT" admin)
 			[ -z $ADMIN_PASS ] && return 1
 			OPT_ADMIN_USER=
+		elif [ $OPT_ADMIN_EMAIL ] ; then
+			ADMINMAIL=$(k_check_email "$PRE_OPT" "$OPT")
+			[ -z $ADMINMAIL ] && return 1
+			OPT_ADMIN_EMAIL=
 		elif [ $OPT_KUSANAGI_PASS ] ; then
 			KUSANAGI_PASS=$(k_check_passwd "$PRE_OPT" "$OPT" kusanagi)
 			[ -z $KUSANAGI_PASS ] && return 1
 			OPT_KUSANAGI_USER=
 		elif [ $OPT_WP_TITLE ] ; then
 			WP_TITLE=$(k_check_title "$PRE_OPT" "$OPT")
-			[ -z $WP_TITLE ] && return 1
+			[ -z "$WP_TITLE" ] && return 1
 			OPT_WP_TITLE=
 		elif [ $OPT_GIT ] ; then
 			GITPATH=$(k_check_path "$PRE_OPT" "$OPT")
@@ -281,7 +285,7 @@ function k_provision () {
 			[ -z $TARPATH ] && return 1
 			OPT_TAR=
 		else
-			case "${OPT}" in
+			case "$OPT" in
 			'--woo'|'--WooCommerce')
 				export OPT_WOO=0
 					k_print_notice $(eval_gettext "option:") $OPT: $(eval_gettext "not implimented.")
@@ -351,7 +355,7 @@ function k_provision () {
 			'--tls-port'|'--https-port')
 				OPT_TLS_PORT=1
 				;;
-			--tls-port=*|--http-port=*)
+			--tls-port=*|--https-port=*)
 				HTTP_TLS_PORT=$(k_check_port "${OPT%%=*}" "${OPT#*=}")
 				[ -z $HTTP_TLS_PORT ] && return 1
 				;;
@@ -408,7 +412,7 @@ function k_provision () {
 			'--httpd')
 				OPT_HTTPD=1
 				;;
-			'--admin_user')
+			'--admin-user')
 				OPT_ADMIN_USER=1
 				;;
 			--admin-user=*)
@@ -422,19 +426,26 @@ function k_provision () {
 				KUSANAGI_PASS=$(k_check_passwd "${OPT%%=*}" "${OPT#*=}" kusanagi)
 				[ -z $KUSANAGI_PASS ] && return 1
 				;;
-			'--admin-pass')
-				OPT_ADMIN_PASS=1
-				;;
 			--admin-pass=*)
 				ADMIN_PASS=$(k_check_passwd "${OPT%%=*}" "${OPT#*=}" admin)
 				[ -z $ADMIN_PASS ] && return 1
+				;;
+				'--admin-pass')
+				OPT_ADMIN_PASS=1
+				;;
+			'--admin-email')
+				OPT_ADMIN_EMAIL=1
+				;;
+			--admin-email=*)
+				ADMIN_EMAIL=$(k_check_email "${OPT%%=*}" "${OPT#*=}" admin)
+				[ -z $ADMIN_EMAIL ] && return 1
 				;;
 			'--wp-title')
 				OPT_WP_TITLE=1
 				;;
 			--wp-title=*)
 				WP_TITLE=$(k_check_title "${OPT%%=*}" "${OPT#*=}")
-				[ -z $WP_TITLE ] && return 1
+				[ -z "$WP_TITLE" ] && return 1
 				;;
 			'--git')
 				OPT_GIT=1
@@ -512,7 +523,7 @@ function k_provision () {
 	fi
 
 	if [ "wp" = $APP ]; then
-		WP_TITLE=${WP_TITLE:-WordPress}
+		WP_TITLE="${WP_TITLE:-WordPress}"
 		WPLANG=${WPLANG:-ja_JP}
 		## kusanagi user password
 		KUSANAGI_PASS=${KUSANAGI_PASS:-$(k_mkpasswd)}
@@ -592,7 +603,7 @@ EOF
 
 	[ "x$APP" = "xwp" ] && cat <<EOF > $PROFILE/.kusanagi.wp
 KUSANAGIPASS=$KUSANAGI_PASS
-WP_TITLE=$WP_TITLE
+WP_TITLE="$WP_TITLE"
 WP_LANG=$WP_LANG
 DBPREFIX=${DBPREFIX:+--dbprefix $DBPREFIX}
 MYSQL_CHARSET=${MYSQL_CHARSET:-utf8mb4}
@@ -670,7 +681,7 @@ EOF
 	# save SSL_DHPARAM
 	DHPARAM=$(k_compose exec httpd cat /etc/nginx/dhparam.key)
 	[ $? -ne 0 ] && DHPARAM=$(k_compose exec httpd cat /etc/httpd/dhparam.key)
-	SSL_DHPARAM=$(echo $DHPARAM | sed -e 's/\n/ /g' -e 's/\r//g')
+	SSL_DHPARAM=$(echo $DHPARAM | tr "\r\n" " " | sed 's/  / /g')
 	echo "SSL_DHPARAM=\"$SSL_DHPARAM\"" >> .kusanagi.httpd
 
 	# use let's encrypt

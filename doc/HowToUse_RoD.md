@@ -81,7 +81,7 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
     [--wp|--wordpress|--WordPress [WPOPTION]|
     WPOPTION:
          --wplang lang(like en_US, ja)]
-         [--admin-user admin] [--admin-passwd pass] [--admin-email email]
+         [--admin-user admin] [--admin-pass pass] [--admin-email email]
          [--wp-title title] [--kusanagi-pass pass] [--notfp|--no-ftp] |
      --lamp|--c5|--concrete5|
      --drupal|--drupal7|--drupal8]
@@ -101,7 +101,7 @@ ssl [options]
     [--redirect|--noredirect]
     [--hsts [on|off]]
     [--oscp [on|off]]
-    [--ct [on|off] [--no-register|--noregister]]
+    [--ct [on|off] 
     [--help|help]
 config command
     bcache [on|off]
@@ -157,7 +157,7 @@ provision サブコマンドのオプションは以下のとおりです。
 | --wp/--wordpress/--WordPress              | APP=wp                           | WordPressの環境を構築します。環境変数APPを指定したり、--c5/--lamp/--drupalなどを設定しない場合は、このオプションが設定されます。 |
 | --wplang lang                             | WP_LANG                          | WordPressの言語を一つだけ指定します。無指定時は、en_US となります。 |
 | --admin-user admin                         | ADMIN_USER                       | WordPressの管理者ユーザ名を指定します。無指定時はランダム文字列となります。 |
-| --admin-passwd pass                       | ADMIN_PASS                       | WordPressの管理者パスワードを指定します。無指定時はランダム文字列となります。 |
+| --admin-pass pass                       | ADMIN_PASS                       | WordPressの管理者パスワードを指定します。無指定時はランダム文字列となります。 |
 | --admin-email email                       | ADMIN_EMAIL                      | WordPressの管理者メールアドレスを指定します。無指定時は、$ADMIN_USER@$FQDN となります。 |
 | --wp-title title                          | WP_TITLE                         | WordPressのタイトルを指定します。無指定時は「WordPress」となります。 |
 | --kusanagi-pass pass                      | KUSANAGI_PASS                    | WordPressでの更新で使用するkusanagiユーザのパスワードを指定します。無指定時はランダム文字列となります。 |
@@ -269,7 +269,6 @@ RoD環境のSSL周りの設定を行います。
 | --hsts on\|off                     | hsts(HTTP Strict Transport Security)をonにするかどうかを指定します | off           |
 | --oscp on\|off                     | OSCP(Online Certificate Status Protocol)をonにするかどうかを指定します | off           |
 | --ct on\|off                       | CT(Certificate Transparency)をonにするかどうかを指定します   | off           |
-| --no-register\| <br />--noregister | --ct on 時に、Google Siteに情報を登録するかどうかを指定します | -             |
 
 --hsts、--oscp、--ct は、自己SSL証明書を指定していると指定できないのに注意してください。
 
