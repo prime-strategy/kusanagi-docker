@@ -274,7 +274,7 @@ function k_provision () {
 			OPT_KUSANAGI_USER=
 		elif [ $OPT_WP_TITLE ] ; then
 			WP_TITLE=$(k_check_title "$PRE_OPT" "$OPT")
-			[ -z $WP_TITLE ] && return 1
+			[ -z "$WP_TITLE" ] && return 1
 			OPT_WP_TITLE=
 		elif [ $OPT_GIT ] ; then
 			GITPATH=$(k_check_path "$PRE_OPT" "$OPT")
@@ -445,7 +445,7 @@ function k_provision () {
 				;;
 			--wp-title=*)
 				WP_TITLE=$(k_check_title "${OPT%%=*}" "${OPT#*=}")
-				[ -z $WP_TITLE ] && return 1
+				[ -z "$WP_TITLE" ] && return 1
 				;;
 			'--git')
 				OPT_GIT=1
