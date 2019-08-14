@@ -1,9 +1,9 @@
-KUSANAGI_NGINX_IMAGE=primestrategy/kusanagi-nginx:1.17.1-r0
+KUSANAGI_NGINX_IMAGE=primestrategy/kusanagi-nginx:1.17.2-r0
 KUSANAGI_HTTPD_IMAGE=primestrategy/kusanagi-httpd:2.4.39-r0
-KUSANAGI_PHP_IMAGE=primestrategy/kusanagi-php:7.3.7-r0
-KUSANAGI_MYSQL_IMAGE=mariadb:10.4.6-bionic
+KUSANAGI_PHP_IMAGE=primestrategy/kusanagi-php:7.3.8-r0
+KUSANAGI_MYSQL_IMAGE=mariadb:10.4.7-bionic
 KUSANAGI_FTPD_IMAGE=primestrategy/kusanagi-ftpd:1.0.1-r0
 KUSANAGI_CONFIG_IMAGE=primestrategy/kusanagi-config:1.0.1-r0
 POSTGRESQL_IMAGE=postgres:11.4-alpine
 WPCLI_IMAGE=wordpress:cli-php7.3
-CERTBOT_IMAGE=certbot/certbot:v0.36.0
+CERTBOT_IMAGE=certbot/certbot:v0.37.0

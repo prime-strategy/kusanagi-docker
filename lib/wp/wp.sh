@@ -24,8 +24,8 @@ wp core download \
 	--dbcharset=${MYSQL_CHARSET:-utf8mb4} --extra-php < $EXTRAPHP \
 && sleep 1 \
 && wp core install --url=http://${FQDN} \
-	--title=${WP_TITLE} --admin_user=${ADMIN_USER} \
-	--admin_password=${ADMIN_PASSWORD} --admin_email="${ADMIN_EMAIL}" \
+	--title="${WP_TITLE}" --admin_user="${ADMIN_USER}" \
+	--admin_password="${ADMIN_PASSWORD}" --admin_email="${ADMIN_EMAIL}" \
 && wp_lang $WP_LANG \
 || exit 1
 

@@ -15,42 +15,42 @@ source $LIBDIR/functions.sh
 case ${1} in
 	provision)
 		source $LIBDIR/provision.sh
-		k_provision $@
+		k_provision "$@"
 		;;
 	remove)
-		k_remove $@
+		k_remove "$@"
 		;;
 	start|stop|restart|status)
-		k_startstop $@
+		k_startstop "$@"
 		;;
 	httpd)
-		k_httpd $@
+		k_httpd "$@"
 		;;
 	nginx)
-		k_nginx $@
+		k_nginx "$@"
 		;;
 	ssl)
 		source $LIBDIR/ssl.sh
-		k_ssl $@
+		k_ssl "$@"
 		;;
 	config)
 		source $LIBDIR/config.sh
-		k_config $@
+		k_config "$@"
 		;;
 	export)
 		source $LIBDIR/config.sh
-		k_config push $@ && k_config dbrestore $@
+		k_config push "$@" && k_config dbrestore "$@"
 		;;
 	import)
 		source $LIBDIR/config.sh
-		k_config pull $@ && k_config dbdump $@
+		k_config pull "$@" && k_config dbdump "$@"
 		;;
 	wp)
 		source $LIBDIR/config.sh
-		k_wp $@
+		k_wp "$@"
 		;;
 	update)
-		k_update $@
+		k_update "$@"
 		;;
 	-v|-V|--version)
 		k_version

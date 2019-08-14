@@ -92,7 +92,7 @@ function k_helphelp {
 				echo '    '$(eval_gettext '[--wp|--wordpress|--WordPress [WPOPTION]|')
 				echo '    '$(eval_gettext 'WPOPTION:')
 				echo '        '$(eval_gettext ' --wplang lang(like en_US, ja)]')
-				echo '        '$(eval_gettext ' [--admin-user admin] [--admin-passwd pass] [--admin-email email]')
+				echo '        '$(eval_gettext ' [--admin-user admin] [--admin-pass pass] [--admin-email email]')
 				echo '        '$(eval_gettext ' [--wp-title title] [--kusanagi-pass pass] [--noftp|--no-ftp] |')
 				echo '    '$(eval_gettext ' --lamp|--c5|--concrete5|')
 				echo '    '$(eval_gettext ' --drupal|--drupal7|--drupal8]')
@@ -163,7 +163,7 @@ function k_helphelp {
 				echo '    '$(eval_gettext '[--redirect|--noredirect]')
 				echo '    '$(eval_gettext '[--hsts  [on|off]]')
 				echo '    '$(eval_gettext '[--oscp  [on|off]]')
-				echo '    '$(eval_gettext '[--ct  [on|off] [--no-register|--noregister]]')
+				echo '    '$(eval_gettext '[--ct  [on|off]]')
 				echo '    '$(eval_gettext '[--help|help]')
 
 #				echo $(eval_gettext 'SSL: modify SSL Certificate configurations.')
