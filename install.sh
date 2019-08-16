@@ -1,10 +1,10 @@
 #!/bin/bash
 
-for r in mkdir curl tar gettext msgfmt  ; do
-	if [ $(uname) == 'Darwin' ]; then
-		export PATH="/usr/local/opt/gettext/bin:$PATH"
-	fi
+if [ $(uname) == 'Darwin' ]; then
+	export PATH="/usr/local/opt/gettext/bin:$PATH"
+fi
 
+for r in mkdir curl tar gettext msgfmt  ; do
 	which $r 2>&1 > /dev/null \
 		|| (echo -e "\e[31m"you needs installing $r."\e[m"; exit 1) \
 		|| exit 127
