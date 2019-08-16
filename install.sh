@@ -1,8 +1,13 @@
 #!/bin/bash
 
 for r in mkdir curl tar gettext msgfmt  ; do
+	if [ $(uname) == 'Darwin' ]; then
+		export PATH="/usr/local/opt/gettext/bin:$PATH"
+	fi
+
 	which $r 2>&1 > /dev/null \
-		|| (echo -e "\e[31m"you needs installing $r."\e[m"; exit 1)
+		|| (echo -e "\e[31m"you needs installing $r."\e[m"; exit 1) \
+		|| exit 127
 done
 
 export KUSANAGIDIR=$HOME/.kusanagi
@@ -23,7 +28,8 @@ echo -e "\e[32m"check commands requires kusanagi-docker"\e[m" 1>&2
 for r in $(cat $KUSANAGILIBDIR/.requires) ; do
 	which $r 2>&1 > /dev/null \
 	|| which ${r}.exe 2>&1 > /dev/null \
-	|| echo -e "\e[31myou needs installing $r.\e[m"
+	|| (echo -e "\e[31myou needs installing $r.\e[m"; exit 1) \
+	|| exit 127
 done
 echo -e "\e[32m"kusanagi-docker command install completes."\e[m"
 echo -e "\e[32m"Please add these line to .bashrc or .zshrc"\e[m"
