@@ -13,15 +13,15 @@ RoDの使用を確認済みのOSは、以下のとおりです。
 
 RoDを使用するために必要なソフトウェアは以下のものになります。
 
-- bash
-- Git
+- bash(4.x 以上)
+- git
 - sed
 - awk
 - grep
 - gettext
 - envsubst
 - curl
-- docker
+- docker(18.0x以上)
 - docker-compose
 - docker-machine(オプショナル)
 

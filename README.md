@@ -20,13 +20,14 @@ And simple help is run kusanagi-docker help.
 - Mac(with Docker for mac)
 
 ### Requre commands.
-- bash
+- bash(over 4.x)
 - git
 - sed
 - awk
 - grep
 - gettext(gettext.sh, envsubst)
 - curl
-- docker(over 18.09)
+- docker(over 18.0x)
 - docker-compose
 - docker-machine
+
