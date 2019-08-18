@@ -1,4 +1,4 @@
-#!env bash
+#!/usr/bin/env bash
 # KUSANAGI Docker command
 # (C)2019 Prime-Strategy co,Ltd
 # Licenced by GNU GPLv2
