@@ -496,13 +496,11 @@ function k_provision () {
 	fi
 	
 	## option check
-	if [ $OPT_NGINX -a $OPT_HTTPD ] ; then
-		if [ "x$OPT_NGINX" = "x" ] ; then
-			OPT_NGINX=1
-		else
-			k_print_error $(eval_gettext "option --nginx and --httpd is can not specify both at the same time.")
-			return 1
-		fi
+	if [ "x$OPT_NGINX" = "x" -a "x$OPT_HTTPD" = "x" ] ; then
+		OPT_NGINX=1
+	elif [ "x$OPT_NGINX" = "x1" -a "x$OPT_HTTPD" = "x1" ] ; then
+		k_print_error $(eval_gettext "option --nginx and --httpd is can not specify both at the same time.")
+		return 1
 	fi
 
 	## check profile name and directory 
