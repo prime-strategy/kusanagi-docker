@@ -263,7 +263,7 @@ function k_provision () {
 		elif [ $OPT_ADMIN_PASS ] ; then
 			ADMIN_PASS=$(k_check_passwd "$PRE_OPT" "$OPT" admin)
 			[ -z $ADMIN_PASS ] && return 1
-			OPT_ADMIN_USER=
+			OPT_ADMIN_PASS=
 		elif [ $OPT_ADMIN_EMAIL ] ; then
 			ADMINMAIL=$(k_check_email "$PRE_OPT" "$OPT")
 			[ -z $ADMINMAIL ] && return 1
@@ -271,7 +271,7 @@ function k_provision () {
 		elif [ $OPT_KUSANAGI_PASS ] ; then
 			KUSANAGI_PASS=$(k_check_passwd "$PRE_OPT" "$OPT" kusanagi)
 			[ -z $KUSANAGI_PASS ] && return 1
-			OPT_KUSANAGI_USER=
+			OPT_KUSANAGI_PASS=
 		elif [ $OPT_WP_TITLE ] ; then
 			WP_TITLE=$(k_check_title "$PRE_OPT" "$OPT")
 			[ -z "$WP_TITLE" ] && return 1
