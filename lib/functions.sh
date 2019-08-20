@@ -497,17 +497,17 @@ function k_print_notice () {
 
 function k_print_red () {
 	local OUT="${1}"
-	k_is_tty && echo -e "\e[31m${OUT}\e[m" || echo "$OUT" 1&>2
+	k_is_tty && echo -e "\e[31m${OUT}\e[m" || echo "$OUT" 1>&2
 }
 
 function k_print_green () {
 	local OUT="${1}"
-	k_is_tty && echo -e "\e[32m${OUT}\e[m" || echo "$OUT" 1&>2
+	k_is_tty && echo -e "\e[32m${OUT}\e[m" || echo "$OUT" 1>&2
 }
 
 function k_print_yellow () {
 	local OUT="${1}"
-	k_is_tty && echo -e "\e[33m${OUT}\e[m" || echo "$OUT" 1&>2
+	k_is_tty && echo -e "\e[33m${OUT}\e[m" || echo "$OUT" 1>&2
 }
 		
 
