@@ -2,6 +2,7 @@
   ftp:
     container_name: ${PROFILE}_ftp
     image: $KUSANAGI_FTPD_IMAGE
+    restart: always
     network_mode: "service:httpd"
     env_file:
       - .kusanagi

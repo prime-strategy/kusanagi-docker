@@ -1,6 +1,7 @@
 ## CONFIG
   config:
     container_name: ${PROFILE}_config
+    restart: always
     build:
         context: ./wpcli
     user: "1000:1001"
