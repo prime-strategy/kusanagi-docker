@@ -2,6 +2,7 @@
   db:
     container_name: ${PROFILE}_db
     image: $POSTGRESQL_IMAGE
+    restart: always
     user: "70:70"
     env_file:
       - .kusanagi.pgsql

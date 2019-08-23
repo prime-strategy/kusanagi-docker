@@ -1,6 +1,7 @@
   php:
     container_name: ${PROFILE}_php
     image: $KUSANAGI_PHP_IMAGE
+    restart: always
     env_file:
       - .kusanagi
       - .kusanagi.php
