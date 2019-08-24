@@ -5,10 +5,9 @@ for r in mkdir curl tar gettext msgfmt  ; do
 		|| (echo -e "\e[31m"you needs installing $r."\e[m"; exit 1)
 done
 
-export KUSANAGIDIR=$HOME/.kusanagi
-echo -e "\e[32m"cloning kusanagi-docker commands"\e[m" 1>&2
+echo -e "\e[32m"cloning kusanagi-docker commands to ${KUSANAGIDIR:=$HOME/.kusanagi}"\e[m" 1>&2
 branch=${1:-master}
-if [ -d $KUSANAGIDIR ] ; then
+if [ -d $KUSANAGIDIR -a -f $KUSANAGIDIR/bin/kusanagi-docker ] ; then
 	(cd $KUSANAGIDIR; git pull)
 else	
 	git clone -b $branch https://github.com/prime-strategy/kusanagi-docker.git $KUSANAGIDIR
