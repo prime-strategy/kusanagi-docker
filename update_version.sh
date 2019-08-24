@@ -37,7 +37,7 @@ function certbot_version {
 }
 
 PS=primestrategy/kusanagi
-KUSANAGILIBDIR=$HOME/.kusanagi/lib
+KUSANAGIDIR=${KUSANAGIDIR:=$(cd $(dirname ${BASH_SOURCE:-$0}); pwd)} # the default is path to install.sh
 KUSANAGI_NGINX_IMAGE=${PS}-nginx:$(k_version nginx)
 KUSANAGI_HTTPD_IMAGE=${PS}-httpd:$(k_version httpd)
 KUSANAGI_PHP_IMAGE=${PS}-php:$(k_version php)
@@ -48,7 +48,7 @@ POSTGRESQL_IMAGE=postgres:$(postgresql_version)
 WPCLI_IMAGE=wordpress:$(wpcli_version)
 CERTBOT_IMAGE=certbot/certbot:$(certbot_version)
 
-cat <<EOF > ${KUSANAGILIBDIR:-.}/image_versions
+cat <<EOF > $KUSANAGIDIR/lib/image_versions
 KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX_IMAGE
 KUSANAGI_HTTPD_IMAGE=$KUSANAGI_HTTPD_IMAGE
 KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP_IMAGE

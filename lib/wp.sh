@@ -106,7 +106,7 @@ fi
 
 #if [ $OPT_WOO ] ; then
 #	k_configcmd "" theme install storefront
-#	docker cp $PROFILE_httpd $KUSANAGILIBDIR/wp/wc4jp-gmo-pg.1.2.0.zip $PROFILE_httpd:$DOCUMENTROOT
+#	docker cp $PROFILE_httpd $KUSANAGIDIR/lib/wp/wc4jp-gmo-pg.1.2.0.zip $PROFILE_httpd:$DOCUMENTROOT
 #	k_configcmd "" unzip -q -d $DOCUMENTROOT/wp-content/plugins $DOCUMENTROOT/wc4jp-gmo-pg.1.2.0.zip
 #	k_configcmd "" rm $DOCUMENTROOT/wc4jp-gmo-pg.1.2.0.zip
 #	if [[ WP_LANG =~ ja ]] ; then

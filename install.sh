@@ -13,13 +13,13 @@ else
 	git clone -b $branch https://github.com/prime-strategy/kusanagi-docker.git $KUSANAGIDIR
 fi
 (cd $KUSANAGIDIR; git show -s --format=%D) > $KUSANAGIDIR/.version
-KUSANAGILIBDIR=$KUSANAGIDIR/lib
+
 source $KUSANAGIDIR/update_version.sh
 [ -d $KUSANAGIDIR/lib/locale/ja/LC_MESSAGES ] || mkdir -p $KUSANAGIDIR/lib/locale/ja/LC_MESSAGES
 msgfmt -f -o $KUSANAGIDIR/lib/locale/ja/LC_MESSAGES/kusanagi-docker.mo $KUSANAGIDIR/lib/locale/kusanagi-docker.po
 
 echo -e "\e[32m"check commands requires kusanagi-docker"\e[m" 1>&2
-for r in $(cat $KUSANAGILIBDIR/.requires) ; do
+for r in $(cat $KUSANAGIDIR/lib/.requires) ; do
 	which $r 2>&1 > /dev/null \
 	|| which ${r}.exe 2>&1 > /dev/null \
 	|| echo -e "\e[31myou needs installing $r.\e[m"
