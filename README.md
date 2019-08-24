@@ -8,6 +8,12 @@ For install kusanagi RoD, run this commands localy. And install kusanagi-docker 
 curl https://raw.githubusercontent.com/prime-strategy/kusanagi-docker/master/install.sh | bash
 ```
 
+If you want to install to other path, specify there by `KUSANAGIDIR`.
+
+```
+KUSANAGIDIR=path/to/dir curl https://raw.githubusercontent.com/prime-strategy/kusanagi-docker/master/install.sh | bash
+```
+
 ## How to Run
 For use KUSANAGI RoD, run kusanagi-docker command. Recommended to add "$HOME /.kusanagi/bin" in the environment variable PATH.
 And simple help is run kusanagi-docker help.
