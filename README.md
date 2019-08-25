@@ -11,7 +11,7 @@ curl https://raw.githubusercontent.com/prime-strategy/kusanagi-docker/master/ins
 If you want to install to other path, specify there by `KUSANAGIDIR`.
 
 ```
-KUSANAGIDIR=path/to/dir curl https://raw.githubusercontent.com/prime-strategy/kusanagi-docker/master/install.sh | bash
+curl https://raw.githubusercontent.com/prime-strategy/kusanagi-docker/master/install.sh | KUSANAGIDIR=path/to/dir bash
 ```
 
 ## How to Run
