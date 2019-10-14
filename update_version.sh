@@ -37,7 +37,8 @@ function certbot_version {
 }
 
 PS=primestrategy/kusanagi
-KUSANAGILIBDIR=$HOME/.kusanagi/lib
+KUSANAGIDIR=${KUSANGIDIR:-$HOME/.kusanagi}
+KUSANAGILIBDIR=$KUSANAGIDIR/.kusanagi/lib
 KUSANAGI_NGINX_IMAGE=${PS}-nginx:$(k_version nginx)
 KUSANAGI_HTTPD_IMAGE=${PS}-httpd:$(k_version httpd)
 KUSANAGI_PHP_IMAGE=${PS}-php:$(k_version php)

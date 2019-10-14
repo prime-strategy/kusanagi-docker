@@ -474,12 +474,6 @@ function k_is_fuction_exists () {
 	return ${RET}
 }
 
-# check the current KUSANAGI version.
-function k_version () {
-	cat $BASEDIR/.version
-	return 0
-}
-
 # display info message
 function k_print_info () {
 	k_print_green "INFO: $*"
