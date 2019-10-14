@@ -6,7 +6,7 @@
 
 _BASEDIR=$(cd $(dirname $0); pwd)
 COMMAND=$(basename $0)
-KUSANAGIDIR=${$KUSANGIDIR:-$_BASEDIR}
+KUSANAGIDIR=${$KUSANAGIDIR:-$_BASEDIR}
 LIBDIR=$KUSANGIDIR/lib
 
 source $LIBDIR/functions.sh
