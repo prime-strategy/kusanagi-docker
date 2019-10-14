@@ -19,7 +19,7 @@ for r in mkdir curl tar gettext msgfmt envsubst ; do
 		|| (echo -e "\e[31m"you needs installing $r."\e[m"; exit 1)
 done
 
-export KUSANAGIDIR=$HOME/.kusanagi
+export KUSANAGIDIR=${KUSANAGIDIR:-$HOME/.kusanagi}
 echo -e "\e[32m"cloning kusanagi-docker commands"\e[m" 1>&2
 branch=${1:-$version}
 if [ -d $KUSANAGIDIR ] ; then

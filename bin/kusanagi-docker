@@ -4,11 +4,10 @@
 # Licenced by GNU GPLv2
 #
 
-_BASEDIR=$(dirname $(dirname $0))
-(echo $_BASEDIR | grep '^/' > /dev/null) || _BASEDIR=$(pwd)/$_BASEDIR
+_BASEDIR=$(cd $(dirname $0); pwd)
 COMMAND=$(basename $0)
-LIBDIR=$_BASEDIR/lib
-BINDIR=$_BASEDIR/bin
+KUSANAGIDIR=${$KUSANGIDIR:-$_BASEDIR}
+LIBDIR=$KUSANGIDIR/lib
 
 source $LIBDIR/functions.sh
 
