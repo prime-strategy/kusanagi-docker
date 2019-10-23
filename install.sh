@@ -1,19 +1,13 @@
 #!/bin/bash
 
-DOCKER_REPO=https://registry.hub.docker.com/v1/repositories
-function docker_repo_tag {
-	curl -s $DOCKER_REPO/${1}/tags | tr , "\n" | \
-		awk -F\" '/name/ {print $4}'
-}
 function k_version {
-	local _kusanagi=kusanagi-$1
-	local _ver=$(docker_repo_tag primestrategy/${_kusanagi} | \
-		grep -v latest | sort -Vr | head -1)
-	echo ${_ver:-latest}
+	local _ver=$(git ls-remote https://github.com/prime-strategy/kusanagi-docker | \
+		 awk -F/ '/tags/ {print $3}' | sort | tail -1 )
+	echo ${_ver:-master}
 }
 
 
-version=$(k_version docker)
+version=$(k_version)
 for r in mkdir curl tar gettext msgfmt envsubst ; do
 	which $r 2>&1 > /dev/null \
 		|| (echo -e "\e[31m"you needs installing $r."\e[m"; exit 1)
@@ -22,7 +16,7 @@ done
 export KUSANAGIDIR=${KUSANAGIDIR:-$HOME/.kusanagi}
 echo -e "\e[32m"cloning kusanagi-docker commands"\e[m" 1>&2
 branch=${1:-$version}
-if [ -d $KUSANAGIDIR ] ; then
+if [ -d $KUSANAGIDIR/.git ] ; then
 	(cd $KUSANAGIDIR && git pull && git checkout --tags $version)
 else	
 	git clone -b $branch https://github.com/prime-strategy/kusanagi-docker.git $KUSANAGIDIR
