@@ -17,10 +17,12 @@ export KUSANAGIDIR=${KUSANAGIDIR:-$HOME/.kusanagi}
 echo -e "\e[32m"cloning kusanagi-docker commands"\e[m" 1>&2
 branch=${1:-$version}
 if [ -d $KUSANAGIDIR/.git ] ; then
-	(cd $KUSANAGIDIR && git pull && git checkout --tags $version)
+	(cd $KUSANAGIDIR && git pull )
 else	
-	git clone -b $branch https://github.com/prime-strategy/kusanagi-docker.git $KUSANAGIDIR
+	git clone https://github.com/prime-strategy/kusanagi-docker.git $KUSANAGIDIR
 fi
+cd $KUSANAGIDIR
+git checkout --tags $version
 echo $version > $KUSANAGIDIR/.version
 KUSANAGILIBDIR=$KUSANAGIDIR/lib
 source $KUSANAGIDIR/update_version.sh
