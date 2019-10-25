@@ -4,10 +4,12 @@
 # Licenced by GNU GPLv2
 #
 
-_BASEDIR=$(cd $(dirname $0); pwd)
-COMMAND=$(basename $0)
-KUSANAGIDIR=${$KUSANAGIDIR:-$_BASEDIR}
-LIBDIR=$KUSANGIDIR/lib
+CMDNAME=$0
+echo $CMDNAME|grep / 2>&1 > /dev/null || CMDNAME=$(which $CMDNAME)
+_BASEDIR=$(cd $(dirname $CMDNAME); pwd)
+COMMAND=$(basename $CMDNAME)
+KUSANAGIDIR=${KUSANAGIDIR:-$(dirname $_BASEDIR)}
+LIBDIR=$KUSANAGIDIR/lib
 
 source $LIBDIR/functions.sh
 
