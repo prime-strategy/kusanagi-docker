@@ -43,7 +43,7 @@ function k_mkpasswd() {
 }
 
 function k_version() {
-	[ -f $KUSANAGIDIR/.version] && cat $KUSANAGIDIR/.version || (k_print_error "version not defined."; false)
+	[ -f $KUSANAGIDIR/.version ] && cat $KUSANAGIDIR/.version || (k_print_error "version not defined."; false)
 }
 
 function k_help() {
