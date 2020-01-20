@@ -130,7 +130,11 @@ function k_content() {
 		;;
 	push|restore)
 		#git commit -a -m "push at "$(date +%Y%m%dT%H%M%S%z)
-		tar cf - -C $CONTENTDIR --exclude-from=$TARGETDIR/.gitignore . | k_configcmd $BASEDIR -u 0 config tar xf - 
+		tar cf $PROFILE.tar -C $CONTENTDIR --exclude-from=$TARGETDIR/.gitignore .
+		docker cp $PROFILE.tar ${PROFILE}_httpd:/home/kusanagi/
+		rm $PROFILE.tar
+		k_configcmd $BASEDIR tar xf /home/kusanagi/$PROFILE.tar
+		k_configcmd $BASEDIR rm //home/kusanagi/$PROFILE.tar
 		k_configcmd $BASEDIR chown -R kusanagi:www .
 		return 0
 		;;
