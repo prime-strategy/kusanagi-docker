@@ -35,14 +35,17 @@ case ${1} in
 		k_ssl "$@"
 		;;
 	config)
+		shift
 		source $LIBDIR/config.sh
 		k_config "$@"
 		;;
 	export)
+		shift
 		source $LIBDIR/config.sh
 		k_config push "$@" && k_config dbrestore "$@"
 		;;
 	import)
+		shift
 		source $LIBDIR/config.sh
 		k_config pull "$@" && k_config dbdump "$@"
 		;;

@@ -16,7 +16,7 @@ function k_bcache () {
 		return 1
 	fi
 
-	local _ret=$(k_configcmd $BASEDIR/tools config ./bcache.sh $cmd 2> /dev/null | sed 's/\r//g')
+	local _ret=$(k_configcmd $BASEDIR/tools ./bcache.sh $cmd 2> /dev/null | sed 's/\r//g')
 	if [ $? -ne 0 ] ; then
 		k_print_error $(eval_gettext "WordPress is not provision.")
 		return 1
@@ -122,8 +122,8 @@ function k_content() {
 	case $_cmd in
 	pull|backup)
 		k_configcmd $BASEDIR tar cf /home/kusanagi/$PROFILE.tar .
-		docker cp ${PROFILE}_httpd:/home/kusanagi/$PROFILE.tar .
-		k_configcmd $BASEDIR rm //home/kusanagi/$PROFILE.tar
+		docker cp ${PROFILE}_config:/home/kusanagi/$PROFILE.tar .
+		k_configcmd $BASEDIR rm /home/kusanagi/$PROFILE.tar
 		tar xf $PROFILE.tar -C $CONTENTDIR
 		rm $PROFILE.tar
 		#git commit -a -m "pull at "$(date +%Y%m%dT%H%M%S%z)
@@ -131,10 +131,10 @@ function k_content() {
 	push|restore)
 		#git commit -a -m "push at "$(date +%Y%m%dT%H%M%S%z)
 		tar cf $PROFILE.tar -C $CONTENTDIR --exclude-from=$TARGETDIR/.gitignore .
-		docker cp $PROFILE.tar ${PROFILE}_httpd:/home/kusanagi/
+		docker cp $PROFILE.tar ${PROFILE}_config:/home/kusanagi/
 		rm $PROFILE.tar
 		k_configcmd $BASEDIR tar xf /home/kusanagi/$PROFILE.tar
-		k_configcmd $BASEDIR rm //home/kusanagi/$PROFILE.tar
+		k_configcmd $BASEDIR rm /home/kusanagi/$PROFILE.tar
 		k_configcmd $BASEDIR chown -R kusanagi:www .
 		return 0
 		;;
@@ -156,7 +156,6 @@ function k_content() {
 }
 
 function k_dbdump() {
-	shift
 	local _file=${1:-dbdump}
 	k_target  > /dev/null || return 1
 	#k_machine > /dev/null || return 1
@@ -183,7 +182,6 @@ function k_dbdump() {
 
 
 function k_dbrestore() {
-	shift
 	local _file=${1:-dbdump}
 	k_target  > /dev/null || return 1
 	#k_machine > /dev/null || return 1
@@ -211,7 +209,6 @@ function k_dbrestore() {
 }
 
 function k_config () {
-	shift
 	# sub command
 	case "$1" in
 	bcache)# [on|off]
@@ -224,13 +221,13 @@ function k_config () {
 		k_naxsi $@
 		;;
 	pull|push|tag|log|commit|backup|restore)
-		k_content $@
+		k_content $1
 		;;
 	dbdump)
-		k_dbdump $@
+		k_dbdump $2
 		;;
 	dbrestore)
-		k_dbrestore $@
+		k_dbrestore $2
 		;;
 	--help|help)
 		k_helphelp config help
