@@ -7,14 +7,28 @@ function docker_repo_tag {
 }
 function k_version {
 	local _kusanagi=kusanagi-$1
-	local _ver=$(docker_repo_tag primestrategy/${_kusanagi} | \
-		grep -v latest | sort -Vr | head -1)
+	local _version=$2
+	local _ver
+	if [ -z "$_version" ] ; then
+		_ver=$(docker_repo_tag primestrategy/${_kusanagi} | \
+			   grep -v latest | sort -Vr | head -1)
+	else
+		_ver=$(docker_repo_tag primestrategy/${_kusanagi} | \
+			   grep "^$_version" | sort -Vr | head -1)
+	fi
 	echo ${_ver:-latest}
 }
 
 function mariadb_version {
-	local _ver=$(docker_repo_tag mariadb | \
+	local _version=$1
+	local _ver
+	if [ -z "$_version" ] ; then
+		_ver=$(docker_repo_tag mariadb | \
 		fgrep . | sort -Vr | head -1)
+    else
+		 _ver=$(docker_repo_tag mariadb | \
+		grep "^$_version" | sort -Vr | head -1)
+	fi
 	echo ${_ver:-latest}
 }
 function postgresql_version {
@@ -39,24 +53,25 @@ function certbot_version {
 PS=primestrategy/kusanagi
 KUSANAGIDIR=${KUSANGIDIR:-$HOME/.kusanagi}
 KUSANAGILIBDIR=$KUSANAGIDIR/lib
-KUSANAGI_NGINX_IMAGE=${PS}-nginx:$(k_version nginx)
+
+cat <<EOF > ${KUSANAGILIBDIR:-.}/image_versions
+KUSANAGI_NGINX116_IMAGE=${PS}-nginx:$(k_version nginx 1.16)
+KUSANAGI_NGINX117_IMAGE=${PS}-nginx:$(k_version nginx 1.17)
+KUSANAGI_NGINX_IMAGE=${PS}-nginx:$(k_version nginx 1.17)
 KUSANAGI_HTTPD_IMAGE=${PS}-httpd:$(k_version httpd)
-KUSANAGI_PHP_IMAGE=${PS}-php:$(k_version php)
-KUSANAGI_MYSQL_IMAGE=mariadb:$(mariadb_version)
+KUSANAGI_PHP71_IMAGE=${PS}-php:$(k_version php 7.1)
+KUSANAGI_PHP72_IMAGE=${PS}-php:$(k_version php 7.2)
+KUSANAGI_PHP73_IMAGE=${PS}-php:$(k_version php 7.3)
+KUSANAGI_PHP74_IMAGE=${PS}-php:$(k_version php 7.4)
+KUSANAGI_PHP_IMAGE=${PS}-php:$(k_version php 7.4)
+KUSANAGI_MYSQL102_IMAGE=mariadb:$(mariadb_version 10.2)
+KUSANAGI_MYSQL103_IMAGE=mariadb:$(mariadb_version 10.3)
+KUSANAGI_MYSQL104_IMAGE=mariadb:$(mariadb_version 10.4)
+KUSANAGI_MYSQL105_IMAGE=mariadb:$(mariadb_version 10.5)
+KUSANAGI_MYSQL_IMAGE=mariadb:$(mariadb_version 10.5)
 KUSANAGI_CONFIG_IMAGE=${PS}-config:$(k_version config)
 KUSANAGI_FTPD_IMAGE=${PS}-ftpd:$(k_version ftpd)
 POSTGRESQL_IMAGE=postgres:$(postgresql_version)
 WPCLI_IMAGE=wordpress:$(wpcli_version)
 CERTBOT_IMAGE=certbot/certbot:$(certbot_version)
-
-cat <<EOF > ${KUSANAGILIBDIR:-.}/image_versions
-KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX_IMAGE
-KUSANAGI_HTTPD_IMAGE=$KUSANAGI_HTTPD_IMAGE
-KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP_IMAGE
-KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL_IMAGE
-KUSANAGI_FTPD_IMAGE=$KUSANAGI_FTPD_IMAGE
-KUSANAGI_CONFIG_IMAGE=$KUSANAGI_CONFIG_IMAGE
-POSTGRESQL_IMAGE=$POSTGRESQL_IMAGE
-WPCLI_IMAGE=$WPCLI_IMAGE
-CERTBOT_IMAGE=$CERTBOT_IMAGE
 EOF

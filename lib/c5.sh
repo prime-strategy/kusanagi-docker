@@ -5,7 +5,6 @@
 #
 
 source .kusanagi
-source $LIBDIR/image_versions
 
 IMAGE=$([ $OPT_NGINX ] && echo $KUSANAGI_NGINX_IMAGE || ([ $OPT_HTTPD ] && echo $KUSANAGI_HTTPD_IMAGE))
 # create docker-compose.yml
@@ -60,13 +59,8 @@ elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then
 	tar cf - -C contents . | k_configcmd $BASEDIR tar xf - 
 else
 	DOCKER_PHP="k_compose exec -u 1000 php"
-	$DOCKER_COMPOSE exec -u 0 php apk add -t .git git \
+	$DOCKER_COMPOSE exec -u 0 php apk add git patch \
 	&& $DOCKER_PHP /usr/local/bin/composer create-project -n concrete5/composer /home/kusanagi/$PROFILE \
-	&& $DOCKER_PHP sh -c "grep -rl PhpSimple /home/kusanagi/$PROFILE/public |xargs -n 1 sed -i 's/Sunra/KubAT/g'" \
-	&& $DOCKER_PHP sed -i 's/sunra/kub-at/g' /home/kusanagi/$PROFILE/public/concrete/composer.json \
-	&& $DOCKER_PHP /usr/local/bin/composer remove -d /home/kusanagi/$PROFILE sunra/php-simple-html-dom-parser \
-	&& $DOCKER_PHP /usr/local/bin/composer require -d /home/kusanagi/$PROFILE kub-at/php-simple-html-dom-parser \
-	&& $DOCKER_PHP /usr/local/bin/composer update --with-dependencies -d /home/kusanagi/$PROFILE \
 	&& k_configcmd_root /home/kusanagi chown -R 1000:1001 $PROFILE  \
 	&& k_configcmd /home/kusanagi chmod o-rwx $PROFILE  \
 	&& k_configcmd /home/kusanagi/$PROFILE/public mkdir -p application/languages \

@@ -196,6 +196,8 @@ function k_add_profile() {
 
 
 function k_provision () {
+	source "$LIBDIR/image_versions" || return 1
+
 	local OPT_WOO=	# use WooCommerce option(1 = use/other no use)
 	local OPT_WPLANG OPT_FQDN OPT_EMAIL OPT_DBHOST OPT_DBROOTPASS
 	local OPT_DBNAME OPT_DBUSER OPT_DBPASS OPT_KUSANAGI_PASS OPT_DBSYSTEM
@@ -469,6 +471,45 @@ function k_provision () {
 					"${OPT%%=*}" "${OPT#*=}" "$KUSANAGI_DB_SYSTEM")
 				[ -z $KUSANAGI_DB_SYSTEM ] && return 1
 				;;
+			--nginx1.17|--nginx117)
+				KUSANAGI_NGINX_IMAGE=KUSANAGI_NGINX117_IMAGE
+				;;
+			--nginx1.16|--nginx116)
+				KUSANAGI_NGINX_IMAGE=KUSANAGI_NGINX116_IMAGE
+				;;
+			--nginx=*)
+				KUSANAGI_NGINX_IMAGE=primestrategy/kusanagi-nginx:"${OPT%%=*}"
+				;;
+			--php7.1|--php71)
+				KUSANAGI_PHP_IMAGE=KUSANAGI_PHP71_IMAGE
+				;;
+			--php7.2|--php72)
+				KUSANAGI_PHP_IMAGE=KUSANAGI_PHP72_IMAGE
+				;;
+			--php7.3|--php73)
+				KUSANAGI_PHP_IMAGE=KUSANAGI_PHP73_IMAGE
+				;;
+			--php7.4|--php74)
+				KUSANAGI_PHP_IMAGE=KUSANAGI_PHP74_IMAGE
+				;;
+			--php=*)
+				KUSANAGI_PHP_IMAGE=primestrategy/kusanagi-php:"${OPT%%=*}"
+				;;
+			--mariadb102|--mariadb10.2)
+				KUSANAGI_MYSQL_IMAGE=KUSANAGI_MYSQL102_IMAGE
+				;;
+			--mariadb103|--mariadb10.3)
+				KUSANAGI_MYSQL_IMAGE=KUSANAGI_MYSQL103_IMAGE
+				;;
+			--mariadb104|--mariadb10.4)
+				KUSANAGI_MYSQL_IMAGE=KUSANAGI_MYSQL104_IMAGE
+				;;
+			--mariadb105|--mariadb10.5)
+				KUSANAGI_MYSQL_IMAGE=KUSANAGI_MYSQL105_IMAGE
+				;;
+			--mariadb=*)
+				KUSANAGI_MYSQL_IMAGE=mariadb:"${OPT%%=*}"
+				;;
 			--help|help)
 				k_helphelp provision help
 				return 0
@@ -657,20 +698,20 @@ EOF
 	if [ "x$TARPATH" != "x" ] && [ -f $TARPATH ] ; then
 		tar xf $TARFILE -C contents/$_rootdir
 		k_content push
-	elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then 
+	elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then
 		git clone $GITPATH contents/$_rootdir
 		k_content push
 	else
 		k_content pull
 	fi
 
-	local ENTRY=$(k_compose exec httpd ps | grep 'docker-entrypoint.sh') 
+	local ENTRY=$(k_compose exec httpd ps | grep 'docker-entrypoint.sh')
 	local FIRST=1
 	while [ "x$ENTRY" != "x" ] ; do
 		[ $FIRST ] && FIRST= && \
-			echo -n -e "\e[32m" $(eval_gettext "Waiting HTTPD init process") 
+			echo -n -e "\e[32m" $(eval_gettext "Waiting HTTPD init process")
 		echo -n "."
-		ENTRY=$(k_compose exec httpd ps | grep 'openssl') 
+		ENTRY=$(k_compose exec httpd ps | grep 'openssl')
 		[ "x$ENTRY" = "x" ] && break
 		sleep 5
 	done

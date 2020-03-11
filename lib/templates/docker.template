@@ -5,7 +5,6 @@ networks:
     driver: bridge
     driver_opts:
       com.docker.network.driver.mtu: 9000
-      com.docker.network.enable_ipv6: "true"
 
 services:
   httpd:
