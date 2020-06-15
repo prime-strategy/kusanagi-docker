@@ -126,17 +126,23 @@ function k_content() {
 		k_configcmd $BASEDIR rm /home/kusanagi/$PROFILE.tar
 		tar xf $PROFILE.tar -C $CONTENTDIR
 		rm $PROFILE.tar
+		[ $_cmd = "backup" ] && k_dbdump
 		#git commit -a -m "pull at "$(date +%Y%m%dT%H%M%S%z)
 		;;
 	push|restore)
 		#git commit -a -m "push at "$(date +%Y%m%dT%H%M%S%z)
+		local is_dir=$(k_configcmd '/' test -d $BASEDIR ; echo $?)
+		if [ $is_dir = 1 ] ; then
+			k_configcmd_root '/' mkdir -p $BASEDIR
+			k_configcmd_root '/home/kusanagi' chown -R 1000:1001 /home/kusanagi
+		fi
 		tar cf $PROFILE.tar -C $CONTENTDIR --exclude-from=$TARGETDIR/.gitignore .
 		docker cp $PROFILE.tar ${PROFILE}_config:/home/kusanagi/
 		rm $PROFILE.tar
 		k_configcmd $BASEDIR tar xf /home/kusanagi/$PROFILE.tar
 		k_configcmd $BASEDIR rm /home/kusanagi/$PROFILE.tar
 		k_configcmd $BASEDIR chown -R kusanagi:www .
-		return 0
+		[ $_cmd = "restore" ] && k_dbrestore
 		;;
 	commit)
 		(cd $CONTENTDIR; git commit ${_opts[@]})
