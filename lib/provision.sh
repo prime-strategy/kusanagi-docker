@@ -222,10 +222,6 @@ function k_provision () {
 			FQDN=$(k_check_fqdn "$PRE_OPT" "$OPT")
 			[ -z $FQDN ] && return 1
 			OPT_FQDN=
-		elif [ $OPT_EMAIL ] ; then
-			MAILADDR=$(k_check_email "$PRE_OPT" "$OPT")
-			[ -z $MAILADDR ] && return 1
-			OPT_EMAIL=
 		elif [ $OPT_HTTP_PORT ] ; then
 			HTTP_PORT=$(k_check_port "$PRE_OPT" "$OPT")
 			[ -z $HTTP_PORT ] && return 1
@@ -327,12 +323,6 @@ function k_provision () {
 				DRUPAL_VERSION=8
 				KUSANAGI_DB_SYSTEM=mysql
 				;;
-			'--rails'|'--RubyonRails')
-				if [ "x$APP" != "x" ] ; then
-					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
-				fi
-				APP='rails';
-				;;
 			'--wplang')
 				OPT_WPLANG=1
 				;;
@@ -360,15 +350,6 @@ function k_provision () {
 			--tls-port=*|--https-port=*)
 				HTTP_TLS_PORT=$(k_check_port "${OPT%%=*}" "${OPT#*=}")
 				[ -z $HTTP_TLS_PORT ] && return 1
-				;;
-			'--email'|'--ssl')
-				OPT_EMAIL=1
-				OPT_NO_EMAIL=0
-				;;
-			--email=*|--ssl=*)
-				MAILADDR=$(k_check_email "${OPT%%=*}" "${OPT#*=}")
-				[ -z $MAILADDR ] && return 1
-				OPT_NO_EMAIL=0
 				;;
 			'--dbhost')
 				OPT_DBHOST=1
@@ -471,20 +452,14 @@ function k_provision () {
 					"${OPT%%=*}" "${OPT#*=}" "$KUSANAGI_DB_SYSTEM")
 				[ -z $KUSANAGI_DB_SYSTEM ] && return 1
 				;;
-			--nginx1.17|--nginx117)
-				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX117_IMAGE
+			--nginx1.19|--nginx119)
+				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX119_IMAGE
 				;;
-			--nginx1.16|--nginx116)
-				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX116_IMAGE
+			--nginx1.18|--nginx118)
+				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX118_IMAGE
 				;;
 			--nginx=*)
 				KUSANAGI_NGINX_IMAGE=primestrategy/kusanagi-nginx:"${OPT%%=*}"
-				;;
-			--php7.1|--php71)
-				KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP71_IMAGE
-				;;
-			--php7.2|--php72)
-				KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP72_IMAGE
 				;;
 			--php7.3|--php73)
 				KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP73_IMAGE
@@ -494,9 +469,6 @@ function k_provision () {
 				;;
 			--php=*)
 				KUSANAGI_PHP_IMAGE=primestrategy/kusanagi-php:"${OPT%%=*}"
-				;;
-			--mariadb102|--mariadb10.2)
-				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL102_IMAGE
 				;;
 			--mariadb103|--mariadb10.3)
 				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL103_IMAGE

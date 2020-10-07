@@ -24,16 +24,3 @@ services:
     extra_hosts:
       - "$FQDN:127.0.0.1"
 
-  certbot:
-    container_name: ${PROFILE}_certbot
-    image: $CERTBOT_IMAGE
-    restart: always
-    network_mode: "service:httpd"
-    env_file:
-      - .kusanagi.httpd
-    volumes:
-      - kusanagi:/var/www/html/.well-known
-      - kusanagi:/etc/letsencrypt
-    command:
-      - --version
-
