@@ -82,26 +82,30 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
     WPOPTION:
          --wplang lang(like en_US, ja)]
          [--admin-user admin] [--admin-pass pass] [--admin-email email]
-         [--wp-title title] [--kusanagi-pass pass] [--notfp|--no-ftp] |
+         [--wp-title title] [--kusanagi-pass pass] a |
      --lamp|--c5|--concrete5|
      --drupal|--drupal7|--drupal8]
-
     [--nginx|--httpd]
+    [--nginx1.19|--nginx119|--nginx1.18|--nginx118]
     [--http-port port][--tls-port port]
+    [--php7.4|--php74|--php7.3|--php73
     [--dbsystem mysql|mariadb|pgsql|postgrsql]
+    [--mariadb10.3|--mariadb103|
+     --mariadb10.4|--mariadb104|
+     --mariadb10.5|--mariadb10.5]
     [--dbhost host]
     [--dbrootpass pasword
     [--dbname dbname]
     [--dbuser username]
     [--dbpass password]
-remove [-y] [target]
+remove [-y] a
 - configuration (runs on target dir) -
 ssl [options]
     [--cert file --key file]
     [--redirect|--noredirect]
     [--hsts [on|off]]
     [--oscp [on|off]]
-    [--ct [on|off] 
+    [--ct [on|off]]
     [--help|help]
 config command
     bcache [on|off]
@@ -156,8 +160,8 @@ provision サブコマンドのオプションは以下のとおりです。
 | --fqdn  ドメイン名(必須)                  | FQDN                             | 作成するサイトのドメイン名を指定します。                     |
 | --wp/--wordpress/--WordPress              | APP=wp                           | WordPressの環境を構築します。環境変数APPを指定したり、--c5/--lamp/--drupalなどを設定しない場合は、このオプションが設定されます。 |
 | --wplang lang                             | WP_LANG                          | WordPressの言語を一つだけ指定します。無指定時は、en_US となります。 |
-| --admin-user admin                         | ADMIN_USER                       | WordPressの管理者ユーザ名を指定します。無指定時はランダム文字列となります。 |
-| --admin-pass pass                       | ADMIN_PASS                       | WordPressの管理者パスワードを指定します。無指定時はランダム文字列となります。 |
+| --admin-user admin                        | ADMIN_USER                       | WordPressの管理者ユーザ名を指定します。無指定時はランダム文字列となります。 |
+| --admin-pass pass                         | ADMIN_PASS                       | WordPressの管理者パスワードを指定します。無指定時はランダム文字列となります。 |
 | --admin-email email                       | ADMIN_EMAIL                      | WordPressの管理者メールアドレスを指定します。無指定時は、$ADMIN_USER@$FQDN となります。 |
 | --wp-title title                          | WP_TITLE                         | WordPressのタイトルを指定します。無指定時は「WordPress」となります。 |
 | --kusanagi-pass pass                      | KUSANAGI_PASS                    | WordPressでの更新で使用するkusanagiユーザのパスワードを指定します。無指定時はランダム文字列となります。 |
@@ -168,9 +172,16 @@ provision サブコマンドのオプションは以下のとおりです。
 | --drupal/--drupal8                        | APP=drupal<br />DRUPAL_VERSION=8 | drupal8の環境を構築します。                                  |
 | --httpd                                   |                                  | httpd(Apache 2.4)を使用します。--nginxと同時に指定できません。 |
 | --nginx                                   |                                  | nginxを使用します。--httpdと同時に指定できません。無指定時はnginxが使用されます。 |
+| --nginx1.19/--nginx119                    |                                  | nginx使用時に、kusanagi-nginx:1.19.x を使用します。無指定時はkusanagi-nginx:1.19.xを使用します。 |
+| --nginx1.18/--nginx118                    |                                  | nginx使用時に、kusanagi-nginx:1.18.x を使用します。          |
 | --http-port num                           | HTTP_PORT                        | ホストにポートフォワードするhttpポート番号を指定します。無指定時は80が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
 | --tls-port num                            | HTTP_TLS_PORT                    | ホストにポートフォワードするhttpsポート番号を指定します。無指定時は443が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
+| --php7.4/--php74                          |                                  | kusanagi-php:7.4.xを使用します。無指定時はkusanagi-php:7.4.xが使用されます。 |
+| --php7.3/--php73                          |                                  | kusanagi-php:7.3.xを使用します。                             |
 | --dbsystem mysql/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= mysql/pgsql  | 使用するDBシステムを指定します。ただし、WordPressおよびdrupal7/drupal8は必ずMySQLを使用し、このオプションは指定不要です。postgresql は現在実験中です。 |
+| --mariadb10.5/--mariadb105                |                                  | DBとして、mariadb:10.5.x-focal を使用します。無指定時はmariadb:10.5.x-focalを使用します。 |
+| --mariadb10.4/--mariadb104                |                                  | DBとして、mariadb:10.4.x-focal を使用します。                |
+| --mariadb10.3/--mariadb103                |                                  | DBとして、mariadb:10.3.x-focal を使用します。                |
 | --dbhost host                             | DBHOST                           | 接続するDBホスト名を指定します。無指定時はlocalhostです。    |
 | --dbrootpass pass                         | DB_ROOTPASS                      | 接続するDBホストのrootパスワードを指定します。無指定時はランダム文字列となります。 |
 | --dbname name                             | DBNAME                           | 接続するDB名を指定します。無指定時はランダム文字列となります。 |
