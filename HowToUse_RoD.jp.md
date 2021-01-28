@@ -4,11 +4,13 @@
 
 KUSANAGI Runs on Docker(以下RoD)は、KUSANAGIの機能をDocker composeを使用して提供するものです。
 
-RoDの使用を確認済みのOSは、以下のとおりです。
+RoDの利用確認済みOSは、以下のとおりです。
 
 - CentOS7
+- CentOS8
 - Ubuntu18.04
-- Windows10(WSL+Docker for Windows)
+- Ubuntu20.04
+- Windows10(WSL+Docker for Windows/WSL2+Docker for Windows)
 - Mac(with Docker for mac)
 
 RoDを使用するために必要なソフトウェアは以下のものになります。
@@ -47,8 +49,9 @@ export PATH=/home/kusanagi/.kusanagi/bin:$PATH
 $
 ```
 
-上記メッセージのように、$HOME/.kusanagi/bin をPATHに追加しておいてください。
+上記メッセージのように、$HOME/.kusanagi/bin をPATHに追加してください。
 KUSANAGI RoDを更新するときは、$HOME/.kusanagi/install.sh を再実行してください。
+KUSANAGI RoDで使用するイメージを最新版にするときは、$HOME/.kusanagi/ update_version.shを実行してください。
 
 ## KUSANAGI RoDコマンド
 
@@ -88,7 +91,8 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
     [--nginx|--httpd]
     [--nginx1.19|--nginx119|--nginx1.18|--nginx118]
     [--http-port port][--tls-port port]
-    [--php7.4|--php74|--php7.3|--php73
+    [--php8.0|--php80|
+     --php7.4|--php74|--php7.3|--php73]
     [--dbsystem mysql|mariadb|pgsql|postgrsql]
     [--mariadb10.3|--mariadb103|
      --mariadb10.4|--mariadb104|
@@ -135,13 +139,13 @@ INFO: 完了しました。
 - ssl
   KUSANAGI RoDのSSL関連の設定を変更します
 - config
-  KUSANAGI RoD の設定を行います
+  KUSANAGI RoD を設定を変更します
 - wp
   WordPressのCLIコマンドを実施します(WordPressのみ)
 - import/export
   Docker上に設定したファイルおよびDB情報をローカルディレクトリにimport/exportします
 - start/stop/restart
-  作成したKUSANAGI RoD環境を開始/停止/再起動を行います
+  作成したKUSANAGI RoD環境を開始/停止/再起動します
 - status
   作成したKUSANAGI RoD環境の状態を確認します
 
@@ -176,6 +180,7 @@ provision サブコマンドのオプションは以下のとおりです。
 | --nginx1.18/--nginx118                    |                                  | nginx使用時に、kusanagi-nginx:1.18.x を使用します。          |
 | --http-port num                           | HTTP_PORT                        | ホストにポートフォワードするhttpポート番号を指定します。無指定時は80が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
 | --tls-port num                            | HTTP_TLS_PORT                    | ホストにポートフォワードするhttpsポート番号を指定します。無指定時は443が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
+| --php8.0/--php80                          |                                  | kusanagi-php:8.0.xを使用します。                             |
 | --php7.4/--php74                          |                                  | kusanagi-php:7.4.xを使用します。無指定時はkusanagi-php:7.4.xが使用されます。 |
 | --php7.3/--php73                          |                                  | kusanagi-php:7.3.xを使用します。                             |
 | --dbsystem mysql/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= mysql/pgsql  | 使用するDBシステムを指定します。ただし、WordPressおよびdrupal7/drupal8は必ずMySQLを使用し、このオプションは指定不要です。postgresql は現在実験中です。 |
@@ -202,9 +207,9 @@ provision サブコマンドのオプションは以下のとおりです。
 | .kusanagi.\*              | docker-composeで使用する環境変数が記述されています |
 | docker-compose.yml       | docker-composeの設定ファイル                       |
 | contents                 | Docker上に作成されたコンテンツディレクトリのコピー |
-| .Git                     | Git用のディレクトリ                                |
+| .git                     | git用のディレクトリ                                |
 
-プロビジョンが終わったあと、contents ディレクトリ以下にプロビジョンで生成されたDocker上のファイルをコピーし、Git登録済みの状態になり、管理を行うことが出来ます。
+プロビジョンが終わったあと、contents ディレクトリ以下にプロビジョンで生成されたDocker上のファイルをコピーし、Git登録済みの状態になり、管理できます。
 
 
 
@@ -217,7 +222,7 @@ provision後、以下のDockerコンテナが起動されます。
 | httpd   | nginxもしくはhttpdが動作します。httpdコンテナは、httpdブリッジを通じてホスト側のネットワークからHTTP/TLSポートをポートフォワードして、Webサービスを行います。kusanagiボリューム内のアプリケーションディレクトリをrootディレクトリとして動作します。 |
 | php     | PHP-FPMが動作します。httpd コンテナとの通信はhttpdのネットワークを共有して行います。アプリケーションはkusanagiボリュームに配置します。DBとはDBボリューム上のソケットファイルを使用して接続します。<br />phpコンテナには、ssmtpコマンドが搭載されており、外部サーバへのSMTP転送が可能です。 |
 | db      | MySQLもしくは、Postgresqlが動作します。外部のDBサーバ使用時には作成されません。dbはDBボリュームを使用しDBテーブルなどを配置し、socketファイル経由でphpと通信します。 |
-| config  | 通常停止していますが、kusanagi-docker config での操作時に起動します。<br />kusanagi-docker configコマンドは、kusanagiおよびdbボリュームを操作し、アプリケーション配置・バックアップ・リストアなどを行います。<br />WordPress構築時はwpcli のイメージが使用され、WorPressのプラグイン・テーマ・言語などのインストール、アンインストールなどの操作を行うことも出来ます。 |
+| config  | 通常停止していますが、kusanagi-docker config での操作時に起動します。<br />kusanagi-docker configコマンドは、kusanagiおよびdbボリュームを操作し、アプリケーション配置・バックアップ・リストアなどを行います。<br />WordPress構築時はwpcli のイメージが使用され、WorPressのプラグイン・テーマ・言語などのインストール、アンインストールなどの操作できます。 |
 | ftp     | WordPressでprovisionしたときのみ起動します。phpコンテナからftp通信し、WordPress core・プラグイン・テーマの更新を、WordPressのWeb画面経由で行います。 |
 | certbot | let's encryptからSSL証明書を取得します(現在実験中で使用方法を公開していません)。 |
 
@@ -269,7 +274,7 @@ provisionで作成したRoD環境を削除します。このとき、作成さ�
 
 ## ssl
 
-RoD環境のSSL周りの設定を行います。
+RoD環境のSSL周りの設定を変更します。
 
 このコマンドは、ターゲットディレクトリ上で動作する必要があります。
 
@@ -293,9 +298,9 @@ configコマンドは、RoD環境の設定や、情報のbackup/restore を行�
 
 | サブコマンド     | 説明                                                         |
 | ---------------- | ------------------------------------------------------------ |
-| bcache on \| off | bcache のon/offの設定を行う(初期値はoff)                     |
-| fcache on \| off | fcache のon/offの設定を行う(初期値はoff、nginx使用時のみ有効) |
-| pull             | KUSANGIボリュームの情報をcontens以下にダウンロードする       |
+| bcache on \| off | bcache のon/offの設定する(初期値はoff)                     |
+| fcache on \| off | fcache のon/offの設定する(初期値はoff、nginx使用時のみ有効) |
+| pull             | kusanagiボリュームの情報をcontens以下にダウンロードする       |
 | push             | contens以下の内容をKUSANAGIボリュームへアップロードする      |
 | dbdump [file]    | DBのdump情報をターゲットディレクトリ上のデータファイル(無指定時はdbdump)に出力する |
 | dbrestore [file] | ターゲットディレクトリ上のデータファイル(無指定時はdbdump)をDBにrestoreする |
@@ -308,7 +313,7 @@ pullおよびdbdumpを実行しても、自動的にGitにcommitされません�
 
 ## wp
 
-WordPressを使用しているときのみ使用できます。wpcliのコマンドを指定することで、WordPressに対する操作を行うことが出来ます。
+WordPressを使用しているときのみ使用できます。wpcliのコマンドを指定することで、WordPressに対する操作できます。
 
 このコマンドは、ターゲットディレクトリ上で動作する必要があります。
 
@@ -324,7 +329,7 @@ kusanagi-docker config backup/restore と同じ動作をします。
 
 ## start/stop/restart/status
 
-start/stop/restartは、RoD環境のDockerコンテナを開始・停止・再起動を行います。statusはDockerコンテナの状況を確認することが出来ます。また、httpd/php/db/ftp などコンテナ名を指定することで、特定コンテナだけを開始・停止/再起動を行うことが出来ます
+start/stop/restartは、RoD環境のDockerコンテナを開始・停止・再起動します。statusはDockerコンテナの状況を確認できます。また、httpd/php/db/ftp などコンテナ名を指定することで、特定コンテナだけを開始・停止/再起動出来ます。
 
 このコマンドは、ターゲットディレクトリ上で動作する必要があります。
 
@@ -341,7 +346,7 @@ KUSANAGI RoD向けのイメージは[DockerHub](https://hub.docker.com)で公開
 | ------------------------------------------------------------ | ----------------------------------------------------------- |
 | [kusanagi-nginx](https://hub.docker.com/r/primestrategy/kusanagi-nginx) | nginxイメージ(推奨はメインラインの最新版)                   |
 | [kusanagi-httpd](https://hub.docker.com/r/primestrategy/kusanagi-httpd) | httpd(Apache 2.4) イメージ                                   |
-| [kusanagi-php](https://hub.docker.com/r/primestrategy/kusanagi-php) | PHP-FPMイメージ(推奨は最新版)                               |
+| [kusanagi-php](https://hub.docker.com/r/primestrategy/kusanagi-php) | PHP-FPMイメージ(推奨は7.4の最新版)                               |
 | [kusanagi-config](https://hub.docker.com/r/primestrategy/kusanagi-config) | kusanagi config コマンド用イメージ                          |
 | [wordpress:cli](https://hub.docker.com/_/wordpress)          | WordPress構築時用のconfig コマンドイメージ                  |
 | [kusanagi-ftpd](https://hub.docker.com/r/primestrategy/kusanagi-ftpd) | WordPress構築時のみ使用するvsftpdを起動するコンテナイメージ |
@@ -353,9 +358,9 @@ KUSANAGI RoD向けのイメージは[DockerHub](https://hub.docker.com)で公開
 
 ## docker-machineとの併用
 
-KUSANAGI RoDは、docker-machineと併用することが出来ます。通常通りdocker-machineを作成し、```eval $(docker-machine env ホスト名```を実行して、kusanagi-docker provisionを行ってください。
+KUSANAGI RoDは、docker-machineと併用できます。通常通りdocker-machineを作成し、```eval $(docker-machine env ホスト名```を実行して、kusanagi-docker provisionを行ってください。
 
-また以下の手順で、既存コンテナを別docker-machineへ移行することが可能です。
+また以下の手順で、既存コンテナを別docker-machineへ移行できます。
 
 1. ```kusanagi-docker import```を実施して、現状のコンテナ情報をimportする
 
