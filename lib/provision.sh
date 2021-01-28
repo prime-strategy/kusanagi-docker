@@ -467,6 +467,9 @@ function k_provision () {
 			--php7.4|--php74)
 				KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP74_IMAGE
 				;;
+			--php8.0|--php80)
+				KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP80_IMAGE
+				;;
 			--php=*)
 				KUSANAGI_PHP_IMAGE=primestrategy/kusanagi-php:"${OPT%%=*}"
 				;;
