@@ -244,8 +244,11 @@ function k_startstop() {
 	k_target > /dev/null
 	#k_machine > /dev/null
 	case $_cmd in
-	'start'|'stop'|'restart'|'ps')
+	'start'|'stop'|'ps')
 		cd $TARGETDIR && k_compose $_cmd $_service
+		;;
+	'restart')
+		cd $TARGETDIR && k_compose down && k_compose up -d
 		;;
 	'status')
 		cd $TARGETDIR && k_compose ps $_service

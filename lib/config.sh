@@ -39,11 +39,15 @@ function k_fcache() {
 	case $cmd in
 	on)
 		k_rewrite NO_USE_FCACHE 0 $TARGETDIR/.kusanagi.httpd
+		k_compose stop php
+		k_compose rm -f php
 		k_compose up -d
 		k_print_info $(eval_gettext "fcache is on")
 		;;
 	off)
 		k_rewrite NO_USE_FCACHE 1 $TARGETDIR/.kusanagi.httpd
+		k_compose stop php
+		k_compose rm -f php
 		k_compose up -d
 		k_print_info $(eval_gettext "fcache is off")
 		;;
@@ -76,11 +80,15 @@ function k_naxsi() {
 	case $cmd in
 	on)
 		k_rewrite DONOT_USE_NAXSI 0 $TARGETDIR/.kusanagi.httpd
+		k_compose stop php
+		k_compose rm -f php
 		k_compose up -d
 		k_print_info $(eval_gettext "naxsi is on")
 		;;
 	off)
 		k_rewrite DONOT_USE_NAXSI 1 $TARGETDIR/.kusanagi.httpd
+		k_compose stop php
+		k_compose rm -f php
 		k_compose up -d
 		k_print_info $(eval_gettext "naxsi is off")
 		;;
