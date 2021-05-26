@@ -452,6 +452,12 @@ function k_provision () {
 					"${OPT%%=*}" "${OPT#*=}" "$KUSANAGI_DB_SYSTEM")
 				[ -z $KUSANAGI_DB_SYSTEM ] && return 1
 				;;
+			--nginx1.21|--nginx121)
+				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX121_IMAGE
+				;;
+			--nginx1.20|--nginx120)
+				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX120_IMAGE
+				;;
 			--nginx1.19|--nginx119)
 				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX119_IMAGE
 				;;
@@ -699,23 +705,23 @@ EOF
 	echo "SSL_DHPARAM=\"$SSL_DHPARAM\"" >> .kusanagi.httpd
 
 	# use let's encrypt
-	if [ "x$MAILADDR" != "x" ] ; then
-		k_compose run certbot certonly --text \
-		       	--noninteractive --webroot -w /usr/share/httpd/html/ -d $FQDN -m $MAILADDR --agree-tos
-		local FULLCHAINPATH=$(ls -1t /etc/letsencrypt/live/$FQDN*/fullchain.pem 2> /dev/null |head -1)
-		local LETSENCRYPTDIR=${FULLCHAINPATH%/*}  # dirname
-		if [ -n "$FULLCHAINPATH" ] ; then
-			k_compose run --rm -e RENEWD_LINAGE=${LETSENCRYPTDIR} httpd /usr/bin/ct-submit.sh
-		else
-			# certbot-auto was failed.
-			k_print_error $(eval_gettext "Cannot get Let\'s Encrypt SSL Certificate files.") #'
-			return 1
-		fi
-		echo "SSL_CERT=${LETSENCRYPTDIR}/fullchain.pem" >> .kusanagi.httpd
-		echo "SSL_KEY=${LETSENCRYPTDIR}/privkey.pem" >> .kusanagi.httpd
-		k_compose down httpd
-		k_compose up -d httpd
-	fi
+#	if [ "x$MAILADDR" != "x" ] ; then
+#		k_compose run certbot certonly --text \
+#		       	--noninteractive --webroot -w /usr/share/httpd/html/ -d $FQDN -m $MAILADDR --agree-tos
+#		local FULLCHAINPATH=$(ls -1t /etc/letsencrypt/live/$FQDN*/fullchain.pem 2> /dev/null |head -1)
+#		local LETSENCRYPTDIR=${FULLCHAINPATH%/*}  # dirname
+#		if [ -n "$FULLCHAINPATH" ] ; then
+#			k_compose run --rm -e RENEWD_LINAGE=${LETSENCRYPTDIR} httpd /usr/bin/ct-submit.sh
+#		else
+#			# certbot-auto was failed.
+#			k_print_error $(eval_gettext "Cannot get Let\'s Encrypt SSL Certificate files.") #'
+#			return 1
+#		fi
+#		echo "SSL_CERT=${LETSENCRYPTDIR}/fullchain.pem" >> .kusanagi.httpd
+#		echo "SSL_KEY=${LETSENCRYPTDIR}/privkey.pem" >> .kusanagi.httpd
+#		k_compose down httpd
+#		k_compose up -d httpd
+#	fi
 
 	git init -q
 	echo '*~' > .gitignore

@@ -15,7 +15,7 @@ services:
       - .kusanagi
       - .kusanagi.httpd
     volumes:
-      - kusanagi:/home/kusanagi
+      - kusanagi:/home/kusanagi:ro
       - kusanagi:/etc/letsencrypt
       - kusanagi:/var/www/html/.well-known
     ports:

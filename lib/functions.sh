@@ -97,7 +97,7 @@ function k_helphelp {
 				echo '    '$(eval_gettext ' --lamp|--c5|--concrete5|')
 				echo '    '$(eval_gettext ' --drupal|--drupal7|--drupal8]')
 				echo '    '$(eval_gettext '[--nginx|--httpd]')
-				echo '    '$(eval_gettext '[--nginx1.19|--nginx119|--nginx1.18|--nginx118]')
+				echo '    '$(eval_gettext '[--nginx1.21|--nginx121|--nginx1.20|--nginx120|--nginx1.19|--nginx119|--nginx1.18|--nginx118]')
 				echo '    '$(eval_gettext '[--http-port port][--tls-port port]')
 				echo '    '$(eval_gettext '[--php8.0|--php80|')
 				echo '    '$(eval_gettext ' --php7.4|--php74|--php7.3|--php73]')
