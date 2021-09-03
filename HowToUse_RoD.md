@@ -6,11 +6,11 @@ KUSANAGI Runs on Docker (RoD) provides the functionality of KUSANAGI using Docke
 
 The following operating systems have been confirmed for use with RoD.
 
-- CentOS7
-- CentOS8
-- Ubuntu18.04
-- Ubuntu20.04
-- Windows10(WSL+Docker for Windows/WSL2+Docker for Windows)
+- CentOS7 or later
+- Ubuntu18.04 or later
+- Windows10(WSL+Docker for Windows)
+- Windows10(WSL2+Docker for Windows)
+- Windows10(WSL2+Docker CE)
 - Mac(with Docker for mac)
 
 The software required to use RoD will be the following.
@@ -26,8 +26,6 @@ The software required to use RoD will be the following.
 - docker(18.0x and above)
 - docker-compose
 - docker-machine (optional)
-
-
 
 
 ## Installing the KUSANAGI RoD
@@ -93,10 +91,10 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
      --lamp|--c5|--concrete5|
      --drupal|--drupal7|--drupal8]
     [--nginx|--httpd]
-    [--nginx1.19|--nginx119|--nginx1.18|--nginx118]
+    [--nginx1.21|--nginx121|--nginx1.20|--nginx120|--nginx=version]
     [--http-port port][--tls-port port]
-    [--php8.0|--php80|
-     --php7.4|--php74|--php7.3|--php73]
+    [--php7.4|--php74|--php=version
+     --php7.3|--php73|--php8.0|--php80]
     [--dbsystem mysql|mariadb|pgsql|postgrsql]
     [--mariadb10.3|--mariadb103|
      --mariadb10.4|--mariadb104|
@@ -182,13 +180,15 @@ The options for the provision subcommand are as follows.
 | --drupal/--drupal8                        | APP=drupal<br />DRUPAL_VERSION=8 | Build a drupal8 environment.                                 |
 | --httpd                                   |                                  | Use httpd (Apache 2.4). Cannot be specified at the same time as the --nginx option. |
 | --nginx                                   |                                  | Use nginx. Cannot be specified at the same time as the --httpd option. If not specified, nginx will be used. |
-| --nginx1.19/--nginx119                    |                                  | When nginx is used, kusanagi-nginx:1.19.x is used. When not specified, kusanagi-nginx:1.19.x is used. |
-| --nginx1.18/--nginx118                    |                                  | When using nginx, kusanagi-nginx:1.18.x is used.             |
+| --nginx1.21/--nginx121                    |                                  | When nginx is used, kusanagi-nginx:1.21.x is used. When not specified, kusanagi-nginx:1.21.x is used. |
+| --nginx1.20/--nginx120                    |                                  | When using nginx, kusanagi-nginx:1.20.x is used.             |
+| --nginx=versions                          |                                  | When using nginx, you can use any version published on Docker Hub. 1.18/1.19 can also be specified, but they have not been updated yet. You can also specify 1.18/1.19, but they are not updated yet, so use them at your own risk. |
 | --http-port num                           | HTTP_PORT                        | Specifies the http port number to be port-forwarded to the host. If not specified, 80 will be specified. If you select a port that is already in use, the build will fail. |
 | --tls-port num                            | HTTP_TLS_PORT                    | Specifies the https port number to be port-forwarded to the host. If not specified, 443 will be specified. If you select a port that is already in use, the build will fail. |
 | --php8.0/--php80                          |                                  | Use kusanagi-php:8.0.x.                                      |
 | --php7.4/--php74                          |                                  | kusanagi-php:7.4.x is used. If not specified, kusanagi-php:7.4.x will be used. |
 | --php7.3/--php73                          |                                  | Use kusanagi-php:7.3.x.                                      |
+| --php=version                             |                                  | Use any version of PHP that is available on DockerHub.  |
 | --dbsystem mysql/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= mysql/pgsql  | Specify the DB system to use. However, WordPress, drupal7, and drupal8 always use MySQL and do not require this option. postgresql is currently under experimentation. |
 | --mariadb10.5/--mariadb105                |                                  | Use mariadb:10.5.x-focal as the DB. When not specified, mariadb:10.5.x-focal is used. |
 | --mariadb10.4/--mariadb104                |                                  | Use mariadb:10.4.x-focal as the DB                           |

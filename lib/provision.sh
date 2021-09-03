@@ -458,12 +458,6 @@ function k_provision () {
 			--nginx1.20|--nginx120)
 				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX120_IMAGE
 				;;
-			--nginx1.19|--nginx119)
-				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX119_IMAGE
-				;;
-			--nginx1.18|--nginx118)
-				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX118_IMAGE
-				;;
 			--nginx=*)
 				KUSANAGI_NGINX_IMAGE=primestrategy/kusanagi-nginx:"${OPT%%=*}"
 				;;

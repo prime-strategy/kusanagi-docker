@@ -55,8 +55,6 @@ KUSANAGIDIR=${KUSANGIDIR:-$HOME/.kusanagi}
 KUSANAGILIBDIR=$KUSANAGIDIR/lib
 
 cat <<EOF > ${KUSANAGILIBDIR:-.}/image_versions
-KUSANAGI_NGINX118_IMAGE=${PS}-nginx:$(k_version nginx 1.18)
-KUSANAGI_NGINX119_IMAGE=${PS}-nginx:$(k_version nginx 1.19)
 KUSANAGI_NGINX120_IMAGE=${PS}-nginx:$(k_version nginx 1.20)
 KUSANAGI_NGINX121_IMAGE=${PS}-nginx:$(k_version nginx 1.21)
 KUSANAGI_NGINX_IMAGE=${PS}-nginx:$(k_version nginx 1.21)

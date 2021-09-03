@@ -14,10 +14,11 @@ And simple help is run kusanagi-docker help.
 
 ## Recommends or Requires
 ### Recommends OS
-- CentOS7
-- Ubuntu18.04
-- Windows10(WSL+Docker for Windows)
-- Mac(with Docker for mac)
+- CentOS7 or later
+- Ubuntu18.04 or later
+- Windows10(WSL2+DockerCE)
+- Windows10(WSL2 + Docker Desktop for Windows)
+- Mac(with Docker Desktop for mac)
 
 ### Requre commands.
 - bash(over 4.x)
