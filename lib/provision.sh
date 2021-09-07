@@ -482,6 +482,9 @@ function k_provision () {
 			--mariadb105|--mariadb10.5)
 				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL105_IMAGE
 				;;
+			--mariadb106|--mariadb10.6)
+				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL106_IMAGE
+				;;
 			--mariadb=*)
 				KUSANAGI_MYSQL_IMAGE=mariadb:"${OPT%%=*}"
 				;;
