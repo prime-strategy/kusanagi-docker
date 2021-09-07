@@ -7,6 +7,31 @@
 source .kusanagi
 source .kusanagi.wp
 
+WSL1_BUILD=
+WSL1_CONTEXTS=
+WSL_INI=
+if (df . | awk 'END { print $1}' | grep / > /dev/null) ; then
+    # WSL1以外
+    WSL1_BUILD="    image: $WPCLI_IMAGE"
+    WSL_INI="- ./.wp_mysqli.ini:/usr/local/etc/php/conf.d/wp_mysqli.ini"
+    echo 'mysqli.default_socket = /var/run/mysqld/mysqld.sock' > .wp_mysqli.ini
+else
+    # WSL1
+    WSL1_BUILD="    build:"
+    WSL1_CONTEXTS="        context: ./wpcli"
+    mkdir -p wpcli
+cat <<EOT > wpcli/Dockerfile
+FROM $WPCLI_IMAGE
+MAINTAINER kusanagi@prime-strategy.co.jp
+
+COPY wp_mysqli.ini /usr/local/etc/php/conf.d/wp_mysql.ini
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["wp", "shell"]
+EOT
+    echo 'mysqli.default_socket = /var/run/mysqld/mysqld.sock' > wpcli/wp_mysqli.ini
+fi
+
 IMAGE=$([ $OPT_NGINX ] && echo $KUSANAGI_NGINX_IMAGE || ([ $OPT_HTTPD ] && echo $KUSANAGI_HTTPD_IMAGE))
 # create docker-compose.yml
 env FQDN=$FQDN \
@@ -18,10 +43,14 @@ env FQDN=$FQDN \
     HTTP_PORT=$HTTP_PORT \
     HTTP_TLS_PORT=$HTTP_TLS_PORT \
     DBLIB=$DBLIB \
+    WSL1_BUILD="$WSL1_BUILD" \
+    WSL1_CONTEXT="$WSL1_CONTEXTS" \
+    WSL_INI="$WSL_INI" \
 	envsubst '$$FQDN $$PROFILE $$HTTPD_IMAGE
 	$$KUSANAGI_PHP_IMAGE $$KUSANAGI_FTPD_IMAGE
 	$$CONFIG_IMAGE $$CERTBOT_IMAGE
-	$$HTTP_PORT $$HTTP_TLS_PORT $$DBLIB' \
+	$$HTTP_PORT $$HTTP_TLS_PORT $$DBLIB
+    $$WSL1_BUILD $$WSL1_CONTEXTS $$WSL_INI' \
 	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/wpcli.template $LIBDIR/templates/php.template) > docker-compose.yml
 if ! [ $NO_USE_DB ] ; then
 	env PROFILE=$PROFILE KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL_IMAGE \
@@ -37,18 +66,6 @@ echo >> docker-compose.yml
 echo 'volumes:' >> docker-compose.yml
 echo '  kusanagi:' >>  docker-compose.yml
 
-mkdir -p wpcli
-cat <<EOT > wpcli/Dockerfile
-FROM $WPCLI_IMAGE 
-MAINTAINER kusanagi@prime-strategy.co.jp
-
-COPY wp_mysqli.ini /usr/local/etc/php/conf.d/wp_mysql.ini
-
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["wp", "shell"]
-EOT
-echo 'mysqli.default_socket = /var/run/mysqld/mysqld.sock' > wpcli/wp_mysqli.ini 
-
 [[ $DBHOST =~ ^localhost ]] && echo '  database:' >> docker-compose.yml
 
 function wp_lang() {
@@ -56,7 +73,7 @@ function wp_lang() {
 		k_configcmd $DOCUMENTROOT language core install ${WP_LANG} && \
 		k_configcmd $DOCUMENTROOT language plugin install --all ${WP_LANG} && \
 		k_configcmd $DOCUMENTROOT language theme install --all ${WP_LANG} && \
-		k_configcmd $DOCUMENTROOT site switch-language ${WP_LANG} 
+		k_configcmd $DOCUMENTROOT site switch-language ${WP_LANG}
 	fi
 }
 
@@ -68,8 +85,8 @@ k_compose up -d \
 if [ "x$TARPATH" != "x" ] && [ -f $TARPATH ] ; then
 	mkdir contents && \
 	tar xf $TARPATH -C contents && \
-	tar cf - -C contents . | k_configcmd $DOCUMENTROOT tar xf - 
-elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then 
+	tar cf - -C contents . | k_configcmd $DOCUMENTROOT tar xf -
+elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then
 	mkdir contents && \
 	git clone $GITPATH ./contents && \
 	tar cf - -C contents . | k_configcmd $DOCUMENTROOT tar xf -

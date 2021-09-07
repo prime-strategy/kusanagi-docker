@@ -8,7 +8,7 @@ RoDの利用確認済みOSは、以下のとおりです。
 
 - CentOS7 or later
 - Ubuntu18.04 or later
-- Windows10(WSL+Docker for Windows)
+- Windows10(WSL+Docker for Windows. 非推奨)
 - Windows10(WSL2+Docker for Windows)
 - Windows10(WSL2+Docker CE)
 - Mac(with Docker for mac)
@@ -186,6 +186,7 @@ provision サブコマンドのオプションは以下のとおりです。
 | --php7.3/--php73                          |                                  | kusanagi-php:7.3.xを使用します。                             |
 | --php=version                             |                                  | DockerHub上にある任意のバージョンのPHPを使用します。                             |
 | --dbsystem mysql/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= mysql/pgsql  | 使用するDBシステムを指定します。ただし、WordPressおよびdrupal7/drupal8は必ずMySQLを使用し、このオプションは指定不要です。postgresql は現在実験中です。 |
+| --mariadb10.6/--mariadb106                |                                  | DBとして、mariadb:10.6.x-focal を使用します。                |
 | --mariadb10.5/--mariadb105                |                                  | DBとして、mariadb:10.5.x-focal を使用します。無指定時はmariadb:10.5.x-focalを使用します。 |
 | --mariadb10.4/--mariadb104                |                                  | DBとして、mariadb:10.4.x-focal を使用します。                |
 | --mariadb10.3/--mariadb103                |                                  | DBとして、mariadb:10.3.x-focal を使用します。                |

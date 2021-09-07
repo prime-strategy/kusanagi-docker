@@ -2,8 +2,8 @@
   config:
     container_name: ${PROFILE}_config
     restart: always
-    build:
-        context: ./wpcli
+${WSL1_BUILD}
+${WSL1_CONTEXTS}
     user: "1000:1001"
     env_file:
       - .kusanagi
@@ -12,5 +12,6 @@
     volumes:
       - database:/var/run/mysqld
       - kusanagi:/home/kusanagi
+      ${WSL_INI}
     command: wp --version
 

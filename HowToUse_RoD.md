@@ -8,8 +8,8 @@ The following operating systems have been confirmed for use with RoD.
 
 - CentOS7 or later
 - Ubuntu18.04 or later
-- Windows10(WSL+Docker for Windows)
-- Windows10(WSL2+Docker for Windows)
+- Windows10(WSL+Docker for Windows. NOT Recommended)
+- Windows10(WSL2+Docker for Windows.)
 - Windows10(WSL2+Docker CE)
 - Mac(with Docker for mac)
 
@@ -190,6 +190,7 @@ The options for the provision subcommand are as follows.
 | --php7.3/--php73                          |                                  | Use kusanagi-php:7.3.x.                                      |
 | --php=version                             |                                  | Use any version of PHP that is available on DockerHub.  |
 | --dbsystem mysql/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= mysql/pgsql  | Specify the DB system to use. However, WordPress, drupal7, and drupal8 always use MySQL and do not require this option. postgresql is currently under experimentation. |
+| --mariadb10.6/--mariadb106                |                                  | Use mariadb:10.6.x-focal as the DB                           |
 | --mariadb10.5/--mariadb105                |                                  | Use mariadb:10.5.x-focal as the DB. When not specified, mariadb:10.5.x-focal is used. |
 | --mariadb10.4/--mariadb104                |                                  | Use mariadb:10.4.x-focal as the DB                           |
 | --mariadb10.3/--mariadb103                |                                  | Use mariadb:10.3.x-focal as the DB                           |
