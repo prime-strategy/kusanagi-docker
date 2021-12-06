@@ -93,8 +93,8 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
     [--nginx|--httpd]
     [--nginx1.21|--nginx121|--nginx1.20|--nginx120|--nginx=version]
     [--http-port port][--tls-port port]
-    [--php7.4|--php74|--php=version
-     --php7.3|--php73|--php8.0|--php80]
+    [--php7.4|--php74|--php=version|
+     --php8.0|--php80|--php8.1|--php81]
     [--dbsystem mysql|mariadb|pgsql|postgrsql]
     [--mariadb10.3|--mariadb103|
      --mariadb10.4|--mariadb104|
@@ -185,10 +185,10 @@ The options for the provision subcommand are as follows.
 | --nginx=versions                          |                                  | When using nginx, you can use any version published on Docker Hub. 1.18/1.19 can also be specified, but they have not been updated yet. You can also specify 1.18/1.19, but they are not updated yet, so use them at your own risk. |
 | --http-port num                           | HTTP_PORT                        | Specifies the http port number to be port-forwarded to the host. If not specified, 80 will be specified. If you select a port that is already in use, the build will fail. |
 | --tls-port num                            | HTTP_TLS_PORT                    | Specifies the https port number to be port-forwarded to the host. If not specified, 443 will be specified. If you select a port that is already in use, the build will fail. |
+| --php8.1/--php81                          |                                  | Use kusanagi-php:8.1.x. If not specified, kusanagi-php:8.1.x will be used. |
 | --php8.0/--php80                          |                                  | Use kusanagi-php:8.0.x.                                      |
-| --php7.4/--php74                          |                                  | kusanagi-php:7.4.x is used. If not specified, kusanagi-php:7.4.x will be used. |
-| --php7.3/--php73                          |                                  | Use kusanagi-php:7.3.x.                                      |
-| --php=version                             |                                  | Use any version of PHP that is available on DockerHub.  |
+| --php7.4/--php74                          |                                  | Use kusanagi-php:7.4.x.                                      |
+| --php=version                             |                                  | Use any version of PHP that is available on DockerHub.       |
 | --dbsystem mysql/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= mysql/pgsql  | Specify the DB system to use. However, WordPress, drupal7, and drupal8 always use MySQL and do not require this option. postgresql is currently under experimentation. |
 | --mariadb10.6/--mariadb106                |                                  | Use mariadb:10.6.x-focal as the DB                           |
 | --mariadb10.5/--mariadb105                |                                  | Use mariadb:10.5.x-focal as the DB. When not specified, mariadb:10.5.x-focal is used. |

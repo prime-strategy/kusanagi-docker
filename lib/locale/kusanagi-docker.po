@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kusanagi-docker 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-07 09:55+0900\n"
+"POT-Creation-Date: 2021-12-06 12:10+0900\n"
 "PO-Revision-Date: 2019-02-11 00:00+0900\n"
 "Last-Translator: Satoru MIYAZAKI<satoru@prime-strategy.co.jp>\n"
 "Language-Team: Satoru MIYAZAKI<satoru@prime-strategy.co.jp>\n"
@@ -138,12 +138,12 @@ msgstr ""
 
 #: lib/functions.sh:102
 #, sh-format
-msgid "[--php7.4|--php74|--php=version"
+msgid "[--php7.4|--php74|--php=version|"
 msgstr ""
 
 #: lib/functions.sh:103
 #, sh-format
-msgid " |--php7.3|--php73|--php8.0|--php80]"
+msgid " --php8.0|--php80|--php8.1|--php81]"
 msgstr ""
 
 #: lib/functions.sh:104
@@ -163,12 +163,12 @@ msgstr ""
 
 #: lib/functions.sh:107
 #, sh-format
-msgid " --mariadb10.5|--mariadb10.5]"
+msgid " --mariadb10.5|--mariadb105|"
 msgstr ""
 
 #: lib/functions.sh:108
 #, sh-format
-msgid " --mariadb10.6|--mariadb10.6]"
+msgid " --mariadb10.6|--mariadb106]"
 msgstr ""
 
 #: lib/functions.sh:109
@@ -445,12 +445,12 @@ msgstr "同時に指定してください"
 msgid "can not specified in same time."
 msgstr "同時に指定することは出来ません。"
 
-#: lib/wp.sh:80
+#: lib/wp.sh:97
 #, sh-format
 msgid "Waiting MySQL init process"
 msgstr "MYSQLの初期化を待っています"
 
-#: lib/wp.sh:90
+#: lib/wp.sh:107
 #, sh-format
 msgid "Provision WordPress"
 msgstr "WordPressを配置します"

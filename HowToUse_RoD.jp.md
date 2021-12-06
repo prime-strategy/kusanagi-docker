@@ -91,8 +91,8 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
     [--nginx|--httpd]
     [--nginx1.21|--nginx121|--nginx1.20|--nginx120|--nginx=version]
     [--http-port port][--tls-port port]
-    [--php7.4|--php74|--php=version
-     --php7.3|--php73|--php8.0|--php80]
+    [--php7.4|--php74|--php=version|
+     --php8.0|--php80|--php8.1|--php81|]
     [--dbsystem mysql|mariadb|pgsql|postgrsql]
     [--mariadb10.3|--mariadb103|
      --mariadb10.4|--mariadb104|
@@ -178,13 +178,13 @@ provision サブコマンドのオプションは以下のとおりです。
 | --nginx                                   |                                  | nginxを使用します。--httpdと同時に指定できません。無指定時はnginxが使用されます。 |
 | --nginx1.21/--nginx121                    |                                  | nginx使用時に、kusanagi-nginx:1.21.x を使用します。無指定時はkusanagi-nginx:1.21.xを使用します。 |
 | --nginx1.20/--nginx120                    |                                  | nginx使用時に、kusanagi-nginx:1.20.x を使用します。          |
-| --nginx=version                           |                                  | nginx使用時に、Docker Hub に公開されている任意のバージョンを使用します。1.18/1.19も指定できますが、すでに更新していないため、自己責任でご使用ください。           |
+| --nginx=version                           |                                  | nginx使用時に、Docker Hub に公開されている任意のバージョンを使用します。1.18/1.19も指定できますが、すでに更新していないため、自己責任でご使用ください。 |
 | --http-port num                           | HTTP_PORT                        | ホストにポートフォワードするhttpポート番号を指定します。無指定時は80が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
 | --tls-port num                            | HTTP_TLS_PORT                    | ホストにポートフォワードするhttpsポート番号を指定します。無指定時は443が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
+| --php8.1/--php81                          |                                  | kusanagi-php:8.1.xを使用します。無指定時はkusanagi-php:8.1.xが使用されます。 |
 | --php8.0/--php80                          |                                  | kusanagi-php:8.0.xを使用します。                             |
-| --php7.4/--php74                          |                                  | kusanagi-php:7.4.xを使用します。無指定時はkusanagi-php:7.4.xが使用されます。 |
-| --php7.3/--php73                          |                                  | kusanagi-php:7.3.xを使用します。                             |
-| --php=version                             |                                  | DockerHub上にある任意のバージョンのPHPを使用します。                             |
+| --php7.4/--php74                          |                                  | kusanagi-php:7.4.xを使用します。                             |
+| --php=version                             |                                  | DockerHub上にある任意のバージョンのPHPを使用します。         |
 | --dbsystem mysql/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= mysql/pgsql  | 使用するDBシステムを指定します。ただし、WordPressおよびdrupal7/drupal8は必ずMySQLを使用し、このオプションは指定不要です。postgresql は現在実験中です。 |
 | --mariadb10.6/--mariadb106                |                                  | DBとして、mariadb:10.6.x-focal を使用します。                |
 | --mariadb10.5/--mariadb105                |                                  | DBとして、mariadb:10.5.x-focal を使用します。無指定時はmariadb:10.5.x-focalを使用します。 |
