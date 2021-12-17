@@ -23,10 +23,8 @@ class WP_KUSANAGI {
 			'page-cache.php',
 			'theme-switcher.php',
 			'translate-accelerator.php',
-			'performance-viewer.php',
-			'image-optimizer.php',
-			'replacer.php',
 			'automatic-updates.php',
+			'misc.php',
 			'security-checker.php',
 			'cache-clear.php',
 		);

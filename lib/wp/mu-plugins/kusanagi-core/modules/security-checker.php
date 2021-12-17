@@ -12,11 +12,10 @@ class KUSANAGI_Security_Check {
 	}
 
 	public function load_text() {
-		$ROOT_DIR = getenv ( 'ROOT_DIR' );
 		$this->messages = array(
 			'wp_config_locate' => array(
 				0   => __( 'wp-config.php is in the correct directory.', 'wp-kusanagi' ),
-				1   => sprintf( __( "wp-config.php exist in the public folder. Please move wp-config.php to %s and improve security.", 'wp-kusanagi' ), $ROOT_DIR),
+				1   => __( 'wp-config.php exist in the public folder. Please move wp-config.php to DocumentRoot and improve security.', 'wp-kusanagi' ),
 				2   => __( 'WordPress installed the sub-directory. You can improve security by including wp-config.php.', 'wp-kusanagi' ),
 				999 => __( 'wp-config.php not found.', 'wp-kusanagi' ),
 			),

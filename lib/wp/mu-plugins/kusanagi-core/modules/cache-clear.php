@@ -16,6 +16,9 @@ class KUSANAGI_Cache_Clear {
         if ( isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] ) {
             $this->cache_key = $_SERVER['REQUEST_URI'];
         }
+        if ( !is_dir($this->fcache_dir) ) {
+            $this->fcache_dir = '/var/opt/kusanagi/cache/nginx/wordpress';
+        }
     }
 
     public function enqueue() {
@@ -88,6 +91,9 @@ class KUSANAGI_Cache_Clear {
     }
 
     public function clear_fcache ( $key = '' ) {
+        if ( !is_dir($this->fcache_dir) ) {
+            return;
+        }
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator( $this->fcache_dir, FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::SKIP_DOTS )
         );

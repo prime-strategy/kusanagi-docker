@@ -15,10 +15,12 @@
 				<th><?php _e( 'Type', 'wp-kusanagi' ); ?></th>
 				<td>
 					<ul>
-						<li><label for="cache_type_file"><input type="radio" name="cache_type" id="cache_type_file" value="file"<?php echo $s['cache_type'] == 'file' || ( $s['cache_type'] == 'apc' && ! function_exists( 'apc_store' ) ) ? ' checked="checked"' : ''; ?> /> <?php _e( 'Files', 'wp-kusanagi' ); ?></label><br />
+						<li><label for="cache_type_file"><input type="radio" name="cache_type" id="cache_type_file" value="file"<?php echo $s['cache_type'] == 'file' || ( $s['cache_type'] == 'apc' && ! function_exists( 'apc_store' ) && ! function_exists( 'apcu_store' ) ) ? ' checked="checked"' : ''; ?> /> <?php _e( 'Files', 'wp-kusanagi' ); ?></label><br />
 							<?php _e( 'Cache directory :', 'wp-kusanagi' ); ?> <input type="text" size="50" name="file_cache_dir" value="<?php echo esc_html( $s['file_cache_dir'] ); ?>" />
 						</li>
-<?php if ( function_exists( 'apc_store' ) ) : ?>						<li><label for="cache_type_apc"><input type="radio" name="cache_type" id="cache_type_apc" value="apc"<?php echo ( $s['cache_type'] == 'apc' ) && function_exists( 'apc_store' ) ? ' checked="checked"' : ''; ?> /> <?php _e( 'APC', 'wp-kusanagi' ); ?></label></li><?php endif; ?>
+<?php if ( function_exists( 'apc_store' ) || function_exists( 'apcu_store' ) ) : ?>
+						<li><label for="cache_type_apc"><input type="radio" name="cache_type" id="cache_type_apc" value="apc"<?php echo $s['cache_type'] == 'apc' ? ' checked="checked"' : ''; ?> /><?php _e( 'APC', 'wp-kusanagi' ); ?></label></li>
+<?php endif; ?>
 					</ul>
 				</td>
 			</tr>

@@ -6,6 +6,7 @@ class KUSANAGI_Translate_Accelerator {
 	public  $settings;
 	private $default;
 	private $file_cache_dir;
+	private $apc_mode;
 
 	public function __construct() {
 		$this->settings = get_option( 'kusanagi-translate-accelerator-settings', array() );
@@ -19,7 +20,13 @@ class KUSANAGI_Translate_Accelerator {
 			'file_cache_dir' => '',
 			'error_mes'      => false,
 		);
-		
+		if ( function_exists( 'apcu_store' ) ) {
+			$this->apc_mode = 'apcu';
+		} elseif ( function_exists( 'apc_store' ) ) {
+			$this->apc_mode = 'apc';
+		} else {
+			$this->apc_mode = false;
+		}
 
 		$this->settings = array_merge( $this->default, $this->settings );
 	
@@ -43,7 +50,7 @@ class KUSANAGI_Translate_Accelerator {
 		$s =& $this->settings;
 	
 		if ( $s['cache_type'] == 'apc' ) {
-			if ( ! function_exists( 'apc_store' ) ) {
+			if ( false === $this->apc_mode ) {
 				$this->error_mes( 'apc is not enable.' );
 				return false;
 			}
@@ -114,7 +121,16 @@ class KUSANAGI_Translate_Accelerator {
 		$cache = false;
 	
 		if ( $s['cache_type'] == 'apc' ) {
-			$cache = apc_fetch( $mofile, $ret );
+			switch ( $this->apc_mode ) {
+				case 'apcu' :
+					$cache = apcu_fetch( $mofile, $ret );
+					break;
+				case 'apc' :
+					$cache = apc_fetch( $mofile, $ret );
+					break;
+				default :
+					$cache = false;
+			}
 		} elseif ( $s['cache_type'] == 'file' ) {
 			$file = preg_replace( '/^.*?wp-content/', '', $mofile );
 			$file = preg_replace( '/\\\\|\//', '_', $file);
@@ -134,7 +150,15 @@ class KUSANAGI_Translate_Accelerator {
 			$mo->_gettext_select_plural_form = null;
 	
 			if ($s['cache_type'] == 'apc') {
-				apc_store($mofile, $mo);
+				switch ( $this->apc_mode ) {
+					case 'apcu' :
+						apcu_store($mofile, $mo);
+						break;
+					case 'apc' :
+						apc_store($mofile, $mo);
+						break;
+					default :
+				}
 			} elseif ($s['cache_type'] == 'file') {
 				$cache = serialize($mo);
 				file_put_contents( $file, $cache );
@@ -175,8 +199,14 @@ class KUSANAGI_Translate_Accelerator {
 	public function delete_cache() {
 		switch ( $this->settings['cache_type'] ) {
 		case 'apc' :
-			if ( function_exists( 'apc_clear_cache' ) ) {
-				apc_clear_cache( 'user' );
+			switch ( $this->apc_mode ) {
+				case 'apcu' :
+					apcu_clear_cache();
+					break;
+				case 'apc' :
+					apc_clear_cache( 'user' );
+					break;
+				default :
 			}
 			break;
 		case 'file' :
