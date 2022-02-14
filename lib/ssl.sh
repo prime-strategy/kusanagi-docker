@@ -112,8 +112,8 @@ function k_ssl () {
 
 	k_target $PROFILE
 	#k_machine > /dev/null
-	source $TARGETDIR/.kusanagi
-	source $TARGETDIR/.kusanagi.httpd
+	source "$TARGETDIR/.kusanagi"
+	source "$TARGETDIR/.kusanagi.httpd"
 
 	# error check
 	if [ "x$CERT$KEY" != "x" ] && [ "x$CERT" = "x" -o "x$KEY" = "x" ] ; then
@@ -163,18 +163,18 @@ function k_ssl () {
 	fi
 	[ "x$CT" != "x" ] && USE_SSL_CT=${CT}
 	[ "x$OSCP" != "x" ] && USE_SSL_OSCP=${OSCP}
-	cat <<EOF > $TARGETDIR/.kusanagi.httpd
+	cat <<EOF > "$TARGETDIR/.kusanagi.httpd"
 FQDN=$FQDN
 NO_USE_FCACHE=$NO_USE_FCACHE
 USE_SSL_CT=$USE_SSL_CT
 USE_SSL_OSCP=$USE_SSL_OSCP
 EOF
-	[ "SSL_DHPARAM" ] && echo SSL_DHPARAM=\"$SSL_DHPARAM\" >> $TARGETDIR/.kusanagi.httpd
-	[ "$SSL_CERT" ] && echo SSL_CERT=\"$SSL_CERT\" >> $TARGETDIR/.kusanagi.httpd
-	[ "$SSL_KEY" ] && echo SSL_KEY=\"$SSL_KEY\" >> $TARGETDIR/.kusanagi.httpd
-	[ $NO_USE_SSLST -eq 1 ] && echo NO_USE_SSLST=$NO_USE_SSLST >> $TARGETDIR/.kusanagi.httpd
-	[ $NO_SSL_REDIRECT -eq 1 ] && echo NO_SSL_REDIRECT=$NO_SSL_REDIRECT >> $TARGETDIR/.kusanagi.httpd
-	[ $NO_USE_NAXSI -eq 1 ] && echo NO_USE_NAXSI=$NO_USE_NAXSI >> $TARGETDIR/.kusanagi.httpd
+	[ "$SSL_DHPARAM" ] && echo SSL_DHPARAM=\"$SSL_DHPARAM\" >> "$TARGETDIR/.kusanagi.httpd"
+	[ "$SSL_CERT" ] && echo SSL_CERT=\"$SSL_CERT\" >> "$TARGETDIR/.kusanagi.httpd"
+	[ "$SSL_KEY" ] && echo SSL_KEY=\"$SSL_KEY\" >> "$TARGETDIR/.kusanagi.httpd"
+	[ $NO_USE_SSLST -eq 1 ] && echo NO_USE_SSLST=$NO_USE_SSLST >> "$TARGETDIR/.kusanagi.httpd"
+	[ $NO_SSL_REDIRECT -eq 1 ] && echo NO_SSL_REDIRECT=$NO_SSL_REDIRECT >> "$TARGETDIR/.kusanagi.httpd"
+	[ $NO_USE_NAXSI -eq 1 ] && echo NO_USE_NAXSI=$NO_USE_NAXSI >> "$TARGETDIR/.kusanagi.httpd"
 
 	k_compose up -d 
 }

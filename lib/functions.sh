@@ -215,10 +215,10 @@ function k_machine() {
 	if [ $_is_print ] ; then
 		if [ "$_machine" = "localhost" -o "$MACHINE" = "localhost" ] ; then
 			[ "x$TARGETDIR" != "x" ] && \
-			       	(cd $TARGETDIR && k_compose) || docker ps 1>&2
+			       	(cd "$TARGETDIR" && k_compose) || docker ps 1>&2
 		else
 			[ "x$TARGETDIR" != "x" ]  \
-			       	&& (cd $TARGETDIR && \
+			       	&& (cd "$TARGETDIR" && \
 			       		eval $(docker-machine env $_machine) && \
 				       		k_compose ps) 1>&2 \
 				||  (eval $(docker-machine env $_machine) && docker ps 1>&2) 
@@ -258,13 +258,13 @@ function k_startstop() {
 	#k_machine > /dev/null
 	case $_cmd in
 	'start'|'stop'|'ps')
-		cd $TARGETDIR && k_compose $_cmd $_service
+		cd "$TARGETDIR" && k_compose $_cmd $_service
 		;;
 	'restart')
-		cd $TARGETDIR && k_compose down && k_compose up -d
+		cd "$TARGETDIR" && k_compose down && k_compose up -d
 		;;
 	'status')
-		cd $TARGETDIR && k_compose ps $_service
+		cd "$TARGETDIR" && k_compose ps $_service
 		;;
 	*)
 	esac
@@ -276,10 +276,10 @@ function k_remove() {
 	#k_machine > /dev/null
 
 	local _PWD=$(pwd)
-	cd $TARGETDIR \
+	cd "$TARGETDIR" \
 	&& k_compose down -v \
 	&& cd .. \
-	&& rm -rf $TARGETDIR \
+	&& rm -rf "$TARGETDIR" \
 	&& ([ -d $_PWD ] && cd $_PWD || true)
 }
 

@@ -10,7 +10,7 @@ function k_bcache () {
 	local cmd=$1
 	k_target > /dev/null || return 1
 	#k_machine > /dev/null || return 1
-	source $TARGETDIR/.kusanagi
+	source "$TARGETDIR/.kusanagi"
 	if [ $KUSANAGI_PROVISION != "wp" ] ; then
 		k_print_error $(eval_gettext "WordPress is not provision.")
 		return 1
@@ -35,17 +35,17 @@ function k_fcache() {
 	shift
 	k_target  > /dev/null || return 1
 	#k_machine > /dev/null || return 1
-	source $TARGETDIR/.kusanagi
+	source "$TARGETDIR/.kusanagi"
 	case $cmd in
 	on)
-		k_rewrite NO_USE_FCACHE 0 $TARGETDIR/.kusanagi.httpd
+		k_rewrite NO_USE_FCACHE 0 "$TARGETDIR/.kusanagi.httpd"
 		k_compose stop php
 		k_compose rm -f php
 		k_compose up -d
 		k_print_info $(eval_gettext "fcache is on")
 		;;
 	off)
-		k_rewrite NO_USE_FCACHE 1 $TARGETDIR/.kusanagi.httpd
+		k_rewrite NO_USE_FCACHE 1 "$TARGETDIR/.kusanagi.httpd"
 		k_compose stop php
 		k_compose rm -f php
 		k_compose up -d
@@ -61,7 +61,7 @@ function k_fcache() {
 		fi
 		;;
 	*)
-		local _t=$(grep NO_USE_FCACHE= $TARGETDIR/.kusanagi.httpd)
+		local _t=$(grep NO_USE_FCACHE= "$TARGETDIR/.kusanagi.httpd")
 		if [ "${_t##*=}" -eq 0 ]; then
 			k_print_info $(eval_gettext "fcache is on")
 		else
@@ -76,24 +76,24 @@ function k_naxsi() {
 	local cmd=$1
 	k_target  > /dev/null || return 1
 	#k_machine > /dev/null || return 1
-	source $TARGETDIR/.kusanagi
+	source "$TARGETDIR/.kusanagi"
 	case $cmd in
 	on)
-		k_rewrite DONOT_USE_NAXSI 0 $TARGETDIR/.kusanagi.httpd
+		k_rewrite DONOT_USE_NAXSI 0 "$TARGETDIR/.kusanagi.httpd"
 		k_compose stop php
 		k_compose rm -f php
 		k_compose up -d
 		k_print_info $(eval_gettext "naxsi is on")
 		;;
 	off)
-		k_rewrite DONOT_USE_NAXSI 1 $TARGETDIR/.kusanagi.httpd
+		k_rewrite DONOT_USE_NAXSI 1 "$TARGETDIR/.kusanagi.httpd"
 		k_compose stop php
 		k_compose rm -f php
 		k_compose up -d
 		k_print_info $(eval_gettext "naxsi is off")
 		;;
 	*)
-		local _t=$(grep DONOT_USE_NAXSI= $TARGETDIR/.kusanagi.httpd)
+		local _t=$(grep DONOT_USE_NAXSI= "$TARGETDIR/.kusanagi.httpd")
 		if [ "${_t##*=}" -eq 0 ]; then
 			k_print_info $(eval_gettext "naxsi is on")
 		else
@@ -120,11 +120,11 @@ function k_content() {
 	local _opts=($@)
 	k_target  > /dev/null || return 1
 	#k_machine > /dev/null || return 1
-	source $TARGETDIR/.kusanagi
-	CONTENTDIR=$TARGETDIR/contents 
+	source "$TARGETDIR/.kusanagi"
+	CONTENTDIR="$TARGETDIR/contents"
 	
-	if ! [ -d $CONTENTDIR ] ; then
-	       	mkdir -p $CONTENTDIR
+	if ! [ -d "$CONTENTDIR" ] ; then
+	       	mkdir -p "$CONTENTDIR"
 		git init -q
 	fi
 	case $_cmd in
@@ -132,7 +132,7 @@ function k_content() {
 		k_configcmd $BASEDIR tar cf /home/kusanagi/$PROFILE.tar .
 		docker cp ${PROFILE}_config:/home/kusanagi/$PROFILE.tar .
 		k_configcmd $BASEDIR rm /home/kusanagi/$PROFILE.tar
-		tar xf $PROFILE.tar -C $CONTENTDIR
+		tar xf $PROFILE.tar -C "$CONTENTDIR"
 		rm $PROFILE.tar
 		[ $_cmd = "backup" ] && k_dbdump
 		#git commit -a -m "pull at "$(date +%Y%m%dT%H%M%S%z)
@@ -144,7 +144,7 @@ function k_content() {
 			k_configcmd_root '/' mkdir -p $BASEDIR
 			k_configcmd_root '/home/kusanagi' chown -R 1000:1001 /home/kusanagi
 		fi
-		tar cf $PROFILE.tar -C $CONTENTDIR --exclude-from=$TARGETDIR/.gitignore .
+		tar cf $PROFILE.tar -C "$CONTENTDIR" --exclude-from="$TARGETDIR/.gitignore" .
 		docker cp $PROFILE.tar ${PROFILE}_config:/home/kusanagi/
 		rm $PROFILE.tar
 		k_configcmd $BASEDIR tar xf /home/kusanagi/$PROFILE.tar
@@ -153,16 +153,16 @@ function k_content() {
 		[ $_cmd = "restore" ] && k_dbrestore
 		;;
 	commit)
-		(cd $CONTENTDIR; git commit ${_opts[@]})
+		(cd "$CONTENTDIR"; git commit ${_opts[@]})
 		;;
 	checkout)
-		(cd $CONTENTDIR; git checkout ${_opts[@]})
+		(cd "$CONTENTDIR"; git checkout ${_opts[@]})
 		;;
 	tag)
-		(cd $CONTENTDIR; git tag ${_opts[@]})
+		(cd "$CONTENTDIR"; git tag ${_opts[@]})
 		;;
 	log)
-		(cd $CONTENTDIR; git log ${_opts[@]})
+		(cd "$CONTENTDIR"; git log ${_opts[@]})
 		;;
 	*)
 	esac
@@ -173,9 +173,9 @@ function k_dbdump() {
 	local _file=${1:-dbdump}
 	k_target  > /dev/null || return 1
 	#k_machine > /dev/null || return 1
-	source $TARGETDIR/.kusanagi
-	source $TARGETDIR/.kusanagi.db
-	CONTENTDIR=$TARGETDIR/contents 
+	source "$TARGETDIR/.kusanagi"
+	source "$TARGETDIR/.kusanagi.db"
+	CONTENTDIR="$TARGETDIR/contents"
 
 	if [ $KUSANAGI_PROVISION = wp ] ; then
 		k_configcmd $DOCUMENTROOT db export - > $_file 
@@ -199,9 +199,9 @@ function k_dbrestore() {
 	local _file=${1:-dbdump}
 	k_target  > /dev/null || return 1
 	#k_machine > /dev/null || return 1
-	source $TARGETDIR/.kusanagi
-	source $TARGETDIR/.kusanagi.db
-	CONTENTDIR=$TARGETDIR/contents 
+	source "$TARGETDIR/.kusanagi"
+	source "$TARGETDIR/.kusanagi.db"
+	CONTENTDIR="$TARGETDIR/contents"
 
 	k_copy $BASEDIR $_file
 	if [ $KUSANAGI_PROVISION = wp ] ; then
