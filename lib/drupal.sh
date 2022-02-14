@@ -47,18 +47,18 @@ k_compose up -d \
 && k_configcmd_root "/" chown 1000:1001 /home/kusanagi \
 && k_configcmd "/" chmod 751 /home/kusanagi \
 && k_configcmd "/" mkdir -p $DOCUMENTROOT \
-&& tar cf - -C $LIBDIR/drupal drupal.sh | k_configcmd $BASEDIR tar xf - 
+&& k_copy $BASEDIR $LIBDIR/drupal/drupal.sh
 
 k_print_green "$(eval_gettext 'Provision Drupal')"
 
 if [ "x$TARPATH" != "x" ] && [ -f $TARPATH ] ; then
 	mkdir contents
 	tar xf $TARPATH -C contents 
-	tar cf - -C contents . | k_configcmd $DOCUMENTROOT tar xf - 
+	k_copy $DOCUMENTROOT contents/* contents/.[^.]*
 elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then 
 	mkdir contents
 	git clone $GITPATH ./contents
-	tar cf - -C contents . | k_configcmd $DOCUMENTROOT tar xf - 
+	k_copy $DOCUMENTROOT contents/* contents/.[^.]*
 else
 	k_configcmd $BASEDIR sh ./drupal.sh $DRUPAL_VERSION \
 	&& sleep 1 \

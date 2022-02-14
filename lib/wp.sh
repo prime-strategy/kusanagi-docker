@@ -85,11 +85,11 @@ k_compose up -d \
 if [ "x$TARPATH" != "x" ] && [ -f $TARPATH ] ; then
 	mkdir contents && \
 	tar xf $TARPATH -C contents && \
-	tar cf - -C contents . | k_configcmd $DOCUMENTROOT tar xf -
+	k_copy $DOCUMENTROOT contents/* contents/.[^.]*
 elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then
 	mkdir contents && \
 	git clone $GITPATH ./contents && \
-	tar cf - -C contents . | k_configcmd $DOCUMENTROOT tar xf -
+	k_copy $DOCUMENTROOT contents/* contents/.[^.]*
 else
 
 	if ! [ $NO_USE_DB ] ; then
@@ -105,7 +105,7 @@ else
 	fi
 
 	k_print_green "$(eval_gettext 'Provision WordPress')"
-	tar cf - -C $LIBDIR/wp/ tools settings wp-config-sample wp.sh | k_configcmd $BASEDIR tar xf - \
+	k_copy $BASEDIR $LIBDIR/wp/tools $LIBDIR/wp/settings $LIBDIR/wp/wp-config-sample $LIBDIR/wp/wp.sh \
 	&& k_configcmd $DOCUMENTROOT bash ../wp.sh \
 	&& sleep 1 \
 	&& k_configcmd $BASEDIR rm wp.sh \
@@ -116,7 +116,7 @@ else
 	&& k_configcmd $DOCUMENTROOT chmod -R 0770 ./wp-content/uploads \
 	&& k_configcmd $DOCUMENTROOT chmod -R 0750 ./wp-content/languages ./wp-content/plugins \
 	&& k_configcmd $DOCUMENTROOT sed -i "s/fqdn/$FQDN/g" ../tools/bcache.clear.php \
-	&& tar cf - -C $LIBDIR/wp/ mu-plugins | k_configcmd $DOCUMENTROOT/wp-content tar xf - \
+	&& k_copy $DOCUMENTROOT/wp-content $LIBDIR/wp/mu-plugins \
 	|| return 1
 fi
 

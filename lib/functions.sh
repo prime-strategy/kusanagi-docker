@@ -27,7 +27,19 @@ function k_configcmd_root() {
 	k_compose run --rm -u 0 -w $_dir config $@
 }
 
+# copy file to containar
+# path copy_files
+function k_copy() {
+	local _container_name=config
+	local _container_path=$1
+	local _container_id=$(k_compose ps -q $_container_name)
+	shift
 
+	for f in $@ ;
+	do
+		docker cp $f ${_container_id}:${_container_path}
+	done
+}
 
 # make random username
 function k_mkusername() {
@@ -94,8 +106,8 @@ function k_helphelp {
 				echo '        '$(eval_gettext ' --wplang lang(like en_US, ja)]')
 				echo '        '$(eval_gettext ' [--admin-user admin] [--admin-pass pass] [--admin-email email]')
 				echo '        '$(eval_gettext ' [--wp-title title] [--kusanagi-pass pass] [--noftp|--no-ftp] |')
-				echo '    '$(eval_gettext ' --lamp|--c5|--concrete5|')
-				echo '    '$(eval_gettext ' --drupal|--drupal7|--drupal8]')
+				echo '    '$(eval_gettext ' --lamp|--c5|--concrete5|--concrete|')
+				echo '    '$(eval_gettext ' --drupal|--drupal7|--drupal8|--drupal9]')
 				echo '    '$(eval_gettext '[--nginx|--httpd]')
 				echo '    '$(eval_gettext '[--nginx1.21|--nginx121|--nginx1.20|--nginx120|--nginx=version]')
 				echo '    '$(eval_gettext '[--http-port port][--tls-port port]')

@@ -51,12 +51,14 @@ k_compose up -d \
 if [ "x$TARPATH" != "x" ] && [ -f $TARPATH ] ; then
 	mkdir contents
 	tar xf $TARPATH -C contents 
-	tar cf - -C contents . | k_configcmd $DOCUMENTROOT tar xf - 
+	k_copy $DOCUMENTROOT contents/* contents/.[^.]*
 elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then 
 	mkdir contents
 	git clone $GITPATH ./contents
-	tar cf - -C contents . | k_configcmd $DOCUMENTROOT tar xf - 
+	k_copy $DOCUMENTROOT contents/* contents/.[^.]*
 else
-	printf '<?php\n\nprint "hello world!\\n";\n' | k_configcmd $DOCUMENTROOT tee -a index.php > /dev/null
+	printf '<?php\n\nprint "hello world!\\n";\n' > index.php
+    k_copy $DOCUMENTROOT index.php
+    rm index.php
 fi
 

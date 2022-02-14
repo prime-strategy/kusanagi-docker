@@ -52,11 +52,11 @@ k_print_green "$(eval_gettext 'Provision Concrete5')"
 if [ "x$TARPATH" != "x" ] && [ -f $TARPATH ] ; then
 	mkdir contents
 	tar xf $TARPATH -C contents 
-	tar cf - -C contents . | k_configcmd $BASEDIR tar xf - 
+	k_copy $DOCUMENTROOT contents/* contents/.[^.]*
 elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then 
 	mkdir contents
 	git clone $GITPATH ./contents
-	tar cf - -C contents . | k_configcmd $BASEDIR tar xf - 
+	k_copy $DOCUMENTROOT contents/* contents/.[^.]*
 else
 	DOCKER_PHP="k_compose exec -u 1000 php"
 	$DOCKER_COMPOSE exec -u 0 php apk add git patch \

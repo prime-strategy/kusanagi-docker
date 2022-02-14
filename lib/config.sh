@@ -203,7 +203,7 @@ function k_dbrestore() {
 	source $TARGETDIR/.kusanagi.db
 	CONTENTDIR=$TARGETDIR/contents 
 
-	tar cf - $_file | k_configcmd $BASEDIR tar xf - 
+	k_copy $BASEDIR $_file
 	if [ $KUSANAGI_PROVISION = wp ] ; then
 		k_configcmd $DOCUMENTROOT db import $BASEDIR/$_file 
 	else

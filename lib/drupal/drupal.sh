@@ -1,7 +1,7 @@
 
 function deploy_drupal() {
 	local _ver=$1
-	[ $_ver -eq 7 -o $_ver -eq 8 ] || _ver=8
+	[ $_ver -eq 7 -o $_ver -eq 8 -o $_ver -eq 9 ] || _ver=9
 	WORKDIR=$(mktemp -d)
 	cd $WORKDIR
 	local PROJ="project/drupal/releases"

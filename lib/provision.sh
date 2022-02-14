@@ -209,6 +209,7 @@ function k_provision () {
 	local HTTP_PORT=${HTTP_PORT:-80} HTTP_TLS_PORT=${HTTP_TLS_PORT:-443}
 	local KUSANAGI_DB_SYSTEM= USE_INTERNALDB=0
 	local APP=
+    DRUPAL_VERSION=0
 	## perse arguments
 	shift
 	for OPT in "$@"
@@ -295,7 +296,7 @@ function k_provision () {
 				APP='wp'
 				KUSANAGI_DB_SYSTEM=mysql
 				;;
-			'--c5'|'--concrete5')
+			'--c5'|'--concrete5'|'--concrete')
 				if [ "x$APP" != "x" ] ; then
 					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
 				fi
@@ -315,12 +316,20 @@ function k_provision () {
 				DRUPAL_VERSION=7
 				KUSANAGI_DB_SYSTEM=mysql
 				;;
-			'--drupal'|'--drupal8')
+			'--drupal8')
 				if [ "x$APP" != "x" ] ; then
 					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
 				fi
 				APP='drupal'
 				DRUPAL_VERSION=8
+				KUSANAGI_DB_SYSTEM=mysql
+				;;
+			'--drupal'|'--drupal9')
+				if [ "x$APP" != "x" ] ; then
+					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
+				fi
+				APP='drupal'
+				DRUPAL_VERSION=9
 				KUSANAGI_DB_SYSTEM=mysql
 				;;
 			'--wplang')
@@ -527,6 +536,24 @@ function k_provision () {
 		k_print_error $(eval_gettext "Target name requires [a-zA-Z0-9._-] 3-24 characters.")
 		return 1
 	fi
+
+    # concrete can not deproy use php8.1
+    if [ "$APP" == "c5" ] && [ $KUSANAGI_PHP_IMAGE == $KUSANAGI_PHP81_IMAGE ]; then
+		k_print_error $(eval_gettext "Concrete CMS can not deploy use php8.1.")
+		return 1
+    fi
+
+    if [ $APP = "drupal" ] ; then
+        # drupal7/8 can deploy only php7.4
+        if [ $DRUPAL_VERSION -lt 9 ] && [ $KUSANAGI_PHP_IMAGE != $KUSANAGI_PHP74_IMAGE ]; then
+			k_print_error $(eval_gettext "Drupal 7/8 can deploy only php7.4.")
+			return 1
+        # drupal9 can not deploy php8.1
+        elif [ $DRUPAL_VERSION -eq 9 ] && [ $KUSANAGI_PHP_IMAGE == $KUSANAGI_PHP81_IMAGE ]; then
+			k_print_error $(eval_gettext "Drupal 9 can not deploy use php8.1.")
+			return 1
+        fi
+    fi
 	
 	# for config
 	PROFILE=$NEW_PROFILE

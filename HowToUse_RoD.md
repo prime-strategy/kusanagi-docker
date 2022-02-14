@@ -88,8 +88,8 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
          --wplang lang(like en_US, ja)]
          [--admin-user admin] [--admin-pass pass] [--admin-email email]
          [--wp-title title] [--kusanagi-pass pass] a |
-     --lamp|--c5|--concrete5|
-     --drupal|--drupal7|--drupal8]
+     --lamp|--c5|--concrete5|--concrete|
+     --drupal|--drupal7|--drupal8|--drupal9]
     [--nginx|--httpd]
     [--nginx1.21|--nginx121|--nginx1.20|--nginx120|--nginx=version]
     [--http-port port][--tls-port port]
@@ -174,10 +174,11 @@ The options for the provision subcommand are as follows.
 | --wp-title title                          | WP_TITLE                         | Specify the title of WordPress. If not specified, it will be "WordPress". |
 | --kusanagi-pass pass                      | KUSANAGI_PASS                    | Specify the password of the kusanagi user used for updating with WordPress. If not specified, it will be a random string. |
 | --noftp/--no-ftp                          |                                  | Do not use ftp for updating in WordPress.                    |
-| --c5/--concrete5                          | APP=c5                           | Build the Concreate5 environment.                            |
+| --c5/--concrete5/--concrete               | APP=c5                           | Build the Concreate CMS environment. this use only php74 or php80. |
 | --lamp/--LAMP                             | APP=lamp                         | Build a LAMP environment.                                    |
-| --drupal7                                 | APP=drupal<br />DRUPAL_VERSION=7 | Build a drupal7 environment.                                 |
-| --drupal/--drupal8                        | APP=drupal<br />DRUPAL_VERSION=8 | Build a drupal8 environment.                                 |
+| --drupal7                                 | APP=drupal<br />DRUPAL_VERSION=7 | Build a drupal7 environment. this use only php74.            |
+| --drupal8                                 | APP=drupal<br />DRUPAL_VERSION=8 | Build a drupal8 environment. this use only php74.            |
+| --drupal9/--drupal                        | APP=drupal<br />DRUPAL_VERSION=9 | Build a drupal9 environment. this use only php74 or php80.    |
 | --httpd                                   |                                  | Use httpd (Apache 2.4). Cannot be specified at the same time as the --nginx option. |
 | --nginx                                   |                                  | Use nginx. Cannot be specified at the same time as the --httpd option. If not specified, nginx will be used. |
 | --nginx1.21/--nginx121                    |                                  | When nginx is used, kusanagi-nginx:1.21.x is used. When not specified, kusanagi-nginx:1.21.x is used. |

@@ -85,9 +85,9 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
     WPOPTION:
          --wplang lang(like en_US, ja)]
          [--admin-user admin] [--admin-pass pass] [--admin-email email]
-         [--wp-title title] [--kusanagi-pass pass] a |
-     --lamp|--c5|--concrete5|
-     --drupal|--drupal7|--drupal8]
+         [--wp-title title] [--kusanagi-pass pass] |
+     --lamp|--c5|--concrete5|--concreate|
+     --drupal|--drupal7|--drupal8|--drupal9]
     [--nginx|--httpd]
     [--nginx1.21|--nginx121|--nginx1.20|--nginx120|--nginx=version]
     [--http-port port][--tls-port port]
@@ -170,10 +170,11 @@ provision サブコマンドのオプションは以下のとおりです。
 | --wp-title title                          | WP_TITLE                         | WordPressのタイトルを指定します。無指定時は「WordPress」となります。 |
 | --kusanagi-pass pass                      | KUSANAGI_PASS                    | WordPressでの更新で使用するkusanagiユーザのパスワードを指定します。無指定時はランダム文字列となります。 |
 | --noftp/--no-ftp                          |                                  | WordPressでの更新用のftpを使用しません。                     |
-| --c5/--concrete5                          | APP=c5                           | Concreate5の環境を構築します。                               |
+| --c5/--concrete5/--concrete               | APP=c5                           | Concreate CMS の環境を構築します。php74/php80で動作します。  |
 | --lamp/--LAMP                             | APP=lamp                         | LAMPの環境を構築します。                                     |
-| --drupal7                                 | APP=drupal<br />DRUPAL_VERSION=7 | drupal7の環境を構築します。                                  |
-| --drupal/--drupal8                        | APP=drupal<br />DRUPAL_VERSION=8 | drupal8の環境を構築します。                                  |
+| --drupal7                                 | APP=drupal<br />DRUPAL_VERSION=7 | drupal7の環境を構築します。php74でのみ動作します。         |
+| --drupal8                                 | APP=drupal<br />DRUPAL_VERSION=8 | drupal8の環境を構築します。php74でのみ動作します。        |
+| --drupal9/--drupal                        | APP=drupal<br />DRUPAL_VERSION=9 | drupal9の環境を構築します。php74/php80で動作します。         |
 | --httpd                                   |                                  | httpd(Apache 2.4)を使用します。--nginxと同時に指定できません。 |
 | --nginx                                   |                                  | nginxを使用します。--httpdと同時に指定できません。無指定時はnginxが使用されます。 |
 | --nginx1.21/--nginx121                    |                                  | nginx使用時に、kusanagi-nginx:1.21.x を使用します。無指定時はkusanagi-nginx:1.21.xを使用します。 |
