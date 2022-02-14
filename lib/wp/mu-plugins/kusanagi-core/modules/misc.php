@@ -96,7 +96,7 @@ class KUSANAGI_Misc {
 		if ( defined( 'WP_CLI' ) && constant( 'WP_CLI' ) === true ) {
 			return;
 		}
-		if ( ! $this->settings['opt-wp-settings']['enable'] ) {
+		if ( ! isset( $this->settings['opt-wp-settings']['enable'] ) || ! $this->settings['opt-wp-settings']['enable'] ) {
 			return;
 		}
 
