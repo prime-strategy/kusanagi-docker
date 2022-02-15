@@ -280,7 +280,7 @@ function k_remove() {
 	&& k_compose down -v \
 	&& cd .. \
 	&& rm -rf "$TARGETDIR" \
-	&& ([ -d $_PWD ] && cd $_PWD || true)
+	&& ([ -d "$_PWD" ] && cd "$_PWD" || true)
 }
 
 function k_httpd() {
