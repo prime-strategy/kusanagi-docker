@@ -107,7 +107,9 @@ else
 	k_print_green "$(eval_gettext 'Provision WordPress')"
 	k_copy $BASEDIR $LIBDIR/wp/tools $LIBDIR/wp/settings $LIBDIR/wp/wp-config-sample $LIBDIR/wp/wp.sh \
 	&& k_configcmd $DOCUMENTROOT bash ../wp.sh \
+	&& k_copy $DOCUMENTROOT/wp-content $LIBDIR/wp/mu-plugins \
 	&& sleep 1 \
+	&& k_configcmd_root "/" chown -R 1000:1001 /home/kusanagi  \
 	&& k_configcmd $BASEDIR rm wp.sh \
 	&& k_configcmd $DOCUMENTROOT chmod 440 wp-config.php \
 	&& k_configcmd $DOCUMENTROOT mv wp-config.php .. \
@@ -116,7 +118,6 @@ else
 	&& k_configcmd $DOCUMENTROOT chmod -R 0770 ./wp-content/uploads \
 	&& k_configcmd $DOCUMENTROOT chmod -R 0750 ./wp-content/languages ./wp-content/plugins \
 	&& k_configcmd $DOCUMENTROOT sed -i "s/fqdn/$FQDN/g" ../tools/bcache.clear.php \
-	&& k_copy $DOCUMENTROOT/wp-content $LIBDIR/wp/mu-plugins \
 	|| return 1
 fi
 

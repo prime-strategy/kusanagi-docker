@@ -39,15 +39,13 @@ function k_fcache() {
 	case $cmd in
 	on)
 		k_rewrite NO_USE_FCACHE 0 "$TARGETDIR/.kusanagi.httpd"
-		k_compose stop php
-		k_compose rm -f php
+		k_compose down
 		k_compose up -d
 		k_print_info $(eval_gettext "fcache is on")
 		;;
 	off)
 		k_rewrite NO_USE_FCACHE 1 "$TARGETDIR/.kusanagi.httpd"
-		k_compose stop php
-		k_compose rm -f php
+		k_compose down
 		k_compose up -d
 		k_print_info $(eval_gettext "fcache is off")
 		;;
@@ -61,7 +59,7 @@ function k_fcache() {
 		fi
 		;;
 	*)
-		local _t=$(grep NO_USE_FCACHE= "$TARGETDIR/.kusanagi.httpd")
+		local _t="$(grep NO_USE_FCACHE= '$TARGETDIR/.kusanagi.httpd')"
 		if [ "${_t##*=}" -eq 0 ]; then
 			k_print_info $(eval_gettext "fcache is on")
 		else
@@ -80,20 +78,18 @@ function k_naxsi() {
 	case $cmd in
 	on)
 		k_rewrite DONOT_USE_NAXSI 0 "$TARGETDIR/.kusanagi.httpd"
-		k_compose stop php
-		k_compose rm -f php
+		k_compose down
 		k_compose up -d
 		k_print_info $(eval_gettext "naxsi is on")
 		;;
 	off)
 		k_rewrite DONOT_USE_NAXSI 1 "$TARGETDIR/.kusanagi.httpd"
-		k_compose stop php
-		k_compose rm -f php
+		k_compose down
 		k_compose up -d
 		k_print_info $(eval_gettext "naxsi is off")
 		;;
 	*)
-		local _t=$(grep DONOT_USE_NAXSI= "$TARGETDIR/.kusanagi.httpd")
+		local _t="$(grep DONOT_USE_NAXSI= '$TARGETDIR/.kusanagi.httpd')"
 		if [ "${_t##*=}" -eq 0 ]; then
 			k_print_info $(eval_gettext "naxsi is on")
 		else
