@@ -9,8 +9,8 @@ RoDの利用確認済みOSは、以下のとおりです。
 - CentOS7 or later
 - Ubuntu18.04 or later
 - Windows10(WSL+Docker for Windows. 非推奨)
-- Windows10(WSL2+Docker for Windows)
-- Windows10(WSL2+Docker CE)
+- Windows10/Windows11(WSL2+Docker for Windows)
+- Windows10/Windows11(WSL2+Docker CE)
 - Mac(with Docker for mac)
 
 RoDを使用するために必要なソフトウェアは以下のものになります。
@@ -89,14 +89,20 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
      --lamp|--c5|--concrete5|--concreate|
      --drupal|--drupal7|--drupal8|--drupal9]
     [--nginx|--httpd]
-    [--nginx1.21|--nginx121|--nginx1.20|--nginx120|--nginx=version]
+    [--nginx1.22|--nginx122|
+     --nginx1.21|--nginx121|
+     --nginx1.20|--nginx120|--nginx=version]
     [--http-port port][--tls-port port]
-    [--php7.4|--php74|--php=version|
-     --php8.0|--php80|--php8.1|--php81|]
+    [--php7.4|--php74|
+     --php8.0|--php80|
+     --php8.1|--php81|--php=version]
     [--dbsystem mysql|mariadb|pgsql|postgrsql]
     [--mariadb10.3|--mariadb103|
      --mariadb10.4|--mariadb104|
-     --mariadb10.5|--mariadb10.5]
+     --mariadb10.5|--mariadb105|
+     --mariadb10.6|--mariadb106|
+     --mariadb10.7|--mariadb107|
+     --mariadb10.8|--mariadb108]
     [--dbhost host]
     [--dbrootpass pasword
     [--dbname dbname]
@@ -177,18 +183,21 @@ provision サブコマンドのオプションは以下のとおりです。
 | --drupal9/--drupal                        | APP=drupal<br />DRUPAL_VERSION=9 | drupal9の環境を構築します。php74/php80で動作します。         |
 | --httpd                                   |                                  | httpd(Apache 2.4)を使用します。--nginxと同時に指定できません。 |
 | --nginx                                   |                                  | nginxを使用します。--httpdと同時に指定できません。無指定時はnginxが使用されます。 |
+| --nginx1.22/--nginx122                    |                                  | nginx使用時に、kusanagi-nginx:1.22.x を使用します。 |
 | --nginx1.21/--nginx121                    |                                  | nginx使用時に、kusanagi-nginx:1.21.x を使用します。無指定時はkusanagi-nginx:1.21.xを使用します。 |
 | --nginx1.20/--nginx120                    |                                  | nginx使用時に、kusanagi-nginx:1.20.x を使用します。          |
 | --nginx=version                           |                                  | nginx使用時に、Docker Hub に公開されている任意のバージョンを使用します。1.18/1.19も指定できますが、すでに更新していないため、自己責任でご使用ください。 |
 | --http-port num                           | HTTP_PORT                        | ホストにポートフォワードするhttpポート番号を指定します。無指定時は80が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
 | --tls-port num                            | HTTP_TLS_PORT                    | ホストにポートフォワードするhttpsポート番号を指定します。無指定時は443が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
-| --php8.1/--php81                          |                                  | kusanagi-php:8.1.xを使用します。無指定時はkusanagi-php:8.1.xが使用されます。 |
-| --php8.0/--php80                          |                                  | kusanagi-php:8.0.xを使用します。                             |
+| --php8.1/--php81                          |                                  | kusanagi-php:8.1.xを使用します。                             |
+| --php8.0/--php80                          |                                  | kusanagi-php:8.0.xを使用します。無指定時はkusanagi-php:8.0.xが使用されます。 |
 | --php7.4/--php74                          |                                  | kusanagi-php:7.4.xを使用します。                             |
 | --php=version                             |                                  | DockerHub上にある任意のバージョンのPHPを使用します。         |
 | --dbsystem mysql/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= mysql/pgsql  | 使用するDBシステムを指定します。ただし、WordPressおよびdrupal7/drupal8は必ずMySQLを使用し、このオプションは指定不要です。postgresql は現在実験中です。 |
-| --mariadb10.6/--mariadb106                |                                  | DBとして、mariadb:10.6.x-focal を使用します。                |
-| --mariadb10.5/--mariadb105                |                                  | DBとして、mariadb:10.5.x-focal を使用します。無指定時はmariadb:10.5.x-focalを使用します。 |
+| --mariadb10.8/--mariadb108                |                                  | DBとして、mariadb:10.8.x-jammy を使用します。                |
+| --mariadb10.7/--mariadb107                |                                  | DBとして、mariadb:10.7.x-focal を使用します。                |
+| --mariadb10.6/--mariadb106                |                                  | DBとして、mariadb:10.6.x-focal を使用します。無指定時はmariadb:10.6.x-focalを使用します。 |
+| --mariadb10.5/--mariadb105                |                                  | DBとして、mariadb:10.5.x-focal を使用します。                |
 | --mariadb10.4/--mariadb104                |                                  | DBとして、mariadb:10.4.x-focal を使用します。                |
 | --mariadb10.3/--mariadb103                |                                  | DBとして、mariadb:10.3.x-focal を使用します。                |
 | --dbhost host                             | DBHOST                           | 接続するDBホスト名を指定します。無指定時はlocalhostです。    |

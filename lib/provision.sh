@@ -461,6 +461,9 @@ function k_provision () {
 					"${OPT%%=*}" "${OPT#*=}" "$KUSANAGI_DB_SYSTEM")
 				[ -z $KUSANAGI_DB_SYSTEM ] && return 1
 				;;
+			--nginx1.22|--nginx122)
+				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX122_IMAGE
+				;;
 			--nginx1.21|--nginx121)
 				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX121_IMAGE
 				;;
@@ -493,6 +496,12 @@ function k_provision () {
 				;;
 			--mariadb106|--mariadb10.6)
 				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL106_IMAGE
+				;;
+			--mariadb107|--mariadb10.7)
+				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL107_IMAGE
+				;;
+			--mariadb108|--mariadb10.8)
+				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL108_IMAGE
 				;;
 			--mariadb=*)
 				KUSANAGI_MYSQL_IMAGE=mariadb:"${OPT%%=*}"

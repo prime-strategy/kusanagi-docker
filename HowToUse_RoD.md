@@ -9,8 +9,8 @@ The following operating systems have been confirmed for use with RoD.
 - CentOS7 or later
 - Ubuntu18.04 or later
 - Windows10(WSL+Docker for Windows. NOT Recommended)
-- Windows10(WSL2+Docker for Windows.)
-- Windows10(WSL2+Docker CE)
+- Windows10/Windows11(WSL2+Docker for Windows.)
+- Windows10/Windows11(WSL2+Docker CE)
 - Mac(with Docker for mac)
 
 The software required to use RoD will be the following.
@@ -91,14 +91,20 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
      --lamp|--c5|--concrete5|--concrete|
      --drupal|--drupal7|--drupal8|--drupal9]
     [--nginx|--httpd]
-    [--nginx1.21|--nginx121|--nginx1.20|--nginx120|--nginx=version]
+    [--nginx1.22|--nginx122|
+     --nginx1.21|--nginx121|
+ 	 --nginx1.20|--nginx120|--nginx=version]
     [--http-port port][--tls-port port]
-    [--php7.4|--php74|--php=version|
-     --php8.0|--php80|--php8.1|--php81]
+    [--php7.4|--php74|
+     --php8.0|--php80|
+	 --php8.1|--php81|--php=version]
     [--dbsystem mysql|mariadb|pgsql|postgrsql]
     [--mariadb10.3|--mariadb103|
      --mariadb10.4|--mariadb104|
-     --mariadb10.5|--mariadb10.5]
+     --mariadb10.5|--mariadb105|
+     --mariadb10.6|--mariadb106|
+     --mariadb10.7|--mariadb107|
+     --mariadb10.8|--mariadb108]
     [--dbhost host]
     [--dbrootpass pasword
     [--dbname dbname]
@@ -181,20 +187,23 @@ The options for the provision subcommand are as follows.
 | --drupal9/--drupal                        | APP=drupal<br />DRUPAL_VERSION=9 | Build a drupal9 environment. this use only php74 or php80.    |
 | --httpd                                   |                                  | Use httpd (Apache 2.4). Cannot be specified at the same time as the --nginx option. |
 | --nginx                                   |                                  | Use nginx. Cannot be specified at the same time as the --httpd option. If not specified, nginx will be used. |
+| --nginx1.22/--nginx122                    |                                  | When using nginx, kusanagi-nginx:1.22.x is used.             |
 | --nginx1.21/--nginx121                    |                                  | When nginx is used, kusanagi-nginx:1.21.x is used. When not specified, kusanagi-nginx:1.21.x is used. |
 | --nginx1.20/--nginx120                    |                                  | When using nginx, kusanagi-nginx:1.20.x is used.             |
 | --nginx=versions                          |                                  | When using nginx, you can use any version published on Docker Hub. 1.18/1.19 can also be specified, but they have not been updated yet. You can also specify 1.18/1.19, but they are not updated yet, so use them at your own risk. |
 | --http-port num                           | HTTP_PORT                        | Specifies the http port number to be port-forwarded to the host. If not specified, 80 will be specified. If you select a port that is already in use, the build will fail. |
 | --tls-port num                            | HTTP_TLS_PORT                    | Specifies the https port number to be port-forwarded to the host. If not specified, 443 will be specified. If you select a port that is already in use, the build will fail. |
-| --php8.1/--php81                          |                                  | Use kusanagi-php:8.1.x. If not specified, kusanagi-php:8.1.x will be used. |
-| --php8.0/--php80                          |                                  | Use kusanagi-php:8.0.x.                                      |
+| --php8.1/--php81                          |                                  | Use kusanagi-php:8.1.x.                                      |
+| --php8.0/--php80                          |                                  | Use kusanagi-php:8.0.x. If not specified, kusanagi-php:8.1.x will be used. |
 | --php7.4/--php74                          |                                  | Use kusanagi-php:7.4.x.                                      |
 | --php=version                             |                                  | Use any version of PHP that is available on DockerHub.       |
 | --dbsystem mysql/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= mysql/pgsql  | Specify the DB system to use. However, WordPress, drupal7, and drupal8 always use MySQL and do not require this option. postgresql is currently under experimentation. |
-| --mariadb10.6/--mariadb106                |                                  | Use mariadb:10.6.x-focal as the DB                           |
-| --mariadb10.5/--mariadb105                |                                  | Use mariadb:10.5.x-focal as the DB. When not specified, mariadb:10.5.x-focal is used. |
-| --mariadb10.4/--mariadb104                |                                  | Use mariadb:10.4.x-focal as the DB                           |
-| --mariadb10.3/--mariadb103                |                                  | Use mariadb:10.3.x-focal as the DB                           |
+| --mariadb10.8/--mariadb108                |                                  | Use mariadb:10.8.x-jammy as the DB.                          |
+| --mariadb10.6/--mariadb107                |                                  | Use mariadb:10.6.x-focal as the DB.                          |
+| --mariadb10.6/--mariadb106                |                                  | Use mariadb:10.6.x-focal as the DB. When not specified, mariadb:10.6.x-focal is used. |
+| --mariadb10.5/--mariadb105                |                                  | Use mariadb:10.5.x-focal as the DB                           |
+| --mariadb10.4/--mariadb104                |                                  | Use mariadb:10.4.x-focal as the DB.                          |
+| --mariadb10.3/--mariadb103                |                                  | Use mariadb:10.3.x-focal as the DB.                          |
 | --dbhost host                             | DBHOST                           | Specifies the DB host name to connect to. If not specified, localhost is used. |
 | --dbrootpass pass                         | DB_ROOTPASS                      | Specifies the root password of the DB host to connect to. If not specified, it will be a random string. |
 | --dbname name                             | DBNAME                           | Specify the DB name to connect. If not specified, it will be a random string. |
