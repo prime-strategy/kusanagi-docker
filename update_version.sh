@@ -58,7 +58,7 @@ cat <<EOF > ${KUSANAGILIBDIR:-.}/image_versions
 KUSANAGI_NGINX121_IMAGE=${PS}-nginx:$(k_version nginx 1.21)
 KUSANAGI_NGINX122_IMAGE=${PS}-nginx:$(k_version nginx 1.22)
 KUSANAGI_NGINX123_IMAGE=${PS}-nginx:$(k_version nginx 1.23)
-KUSANAGI_NGINX_IMAGE=${PS}-nginx:$(k_version nginx 1.21)
+KUSANAGI_NGINX_IMAGE=${PS}-nginx:$(k_version nginx 1.23)
 KUSANAGI_HTTPD_IMAGE=${PS}-httpd:$(k_version httpd)
 KUSANAGI_PHP74_IMAGE=${PS}-php:$(k_version php 7.4)
 KUSANAGI_PHP80_IMAGE=${PS}-php:$(k_version php 8.0)
