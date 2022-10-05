@@ -15,7 +15,7 @@ for i in input["results"]:
 
 DOCKER_REPO=https://registry.hub.docker.com/v2/repositories
 function docker_repo_tag {
-	curl -s $DOCKER_REPO/${1}/tags | filter_version
+	curl -s $DOCKER_REPO/${1}/tags\?page_size=10000 | filter_version
 }
 
 function k_version {
@@ -36,23 +36,23 @@ function mariadb_version {
 	local _version=$1
 	local _ver
 	if [ -z "$_version" ] ; then
-		_ver=$(docker_repo_tag mariadb | \
+		_ver=$(docker_repo_tag library/mariadb | \
 		fgrep . | sort -Vr | head -1)
     else
-		 _ver=$(docker_repo_tag mariadb | \
+		 _ver=$(docker_repo_tag library/mariadb | \
 		grep "^$_version" | sort -Vr | head -1)
 	fi
 	echo ${_ver:-latest}
 }
 function postgresql_version {
-	local _ver=$(docker_repo_tag postgres | \
+	local _ver=$(docker_repo_tag library/postgres | \
 		fgrep . | grep -v -e latest -e beta | sort -Vr | head -1)
 	echo ${_ver:-latest}
 }
 
 function wpcli_version {
-	local _ver=$(docker_repo_tag wordpress | \
-		grep -Ee '^cli-[0-9].*$' | grep -v -e latest -e beta -e php8 | \
+	local _ver=$(docker_repo_tag library/wordpress | \
+		grep -Ee '^cli-[0-9].*$' | grep -v -e latest -e beta | \
 		sort -r | head -1)
 	echo ${_ver:-latest}
 }
