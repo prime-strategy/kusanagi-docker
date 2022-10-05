@@ -1,10 +1,23 @@
 #!/bin/bash
 
-DOCKER_REPO=https://registry.hub.docker.com/v1/repositories
-function docker_repo_tag {
-	curl -s $DOCKER_REPO/${1}/tags | tr , "\n" | \
-		awk -F\" '/name/ {print $4}'
+function filter_version {
+       local PYTHON=$(type python3 | cut -d' ' -f 3)
+       PYTHON=${PYTHON:-$(type python | cut -d ' ' -f 3)}
+       ${PYTHON} -c 'import sys
+import json
+input = json.load(sys.stdin)
+if "results" not in input.keys():
+	exit(0)
+for i in input["results"]:
+	if "name" in i.keys():
+		print(i["name"])'
 }
+
+DOCKER_REPO=https://registry.hub.docker.com/v2/repositories
+function docker_repo_tag {
+	curl -s $DOCKER_REPO/${1}/tags | filter_version
+}
+
 function k_version {
 	local _kusanagi=kusanagi-$1
 	local _version=$2
