@@ -68,7 +68,6 @@ KUSANAGIDIR=${KUSANGIDIR:-$HOME/.kusanagi}
 KUSANAGILIBDIR=$KUSANAGIDIR/lib
 
 cat <<EOF > ${KUSANAGILIBDIR:-.}/image_versions
-KUSANAGI_NGINX121_IMAGE=${PS}-nginx:$(k_version nginx 1.21)
 KUSANAGI_NGINX122_IMAGE=${PS}-nginx:$(k_version nginx 1.22)
 KUSANAGI_NGINX123_IMAGE=${PS}-nginx:$(k_version nginx 1.23)
 KUSANAGI_NGINX_IMAGE=${PS}-nginx:$(k_version nginx 1.23)
@@ -77,12 +76,11 @@ KUSANAGI_PHP74_IMAGE=${PS}-php:$(k_version php 7.4)
 KUSANAGI_PHP80_IMAGE=${PS}-php:$(k_version php 8.0)
 KUSANAGI_PHP81_IMAGE=${PS}-php:$(k_version php 8.1)
 KUSANAGI_PHP_IMAGE=${PS}-php:$(k_version php 8.0)
-KUSANAGI_MYSQL103_IMAGE=mariadb:$(mariadb_version 10.3)
-KUSANAGI_MYSQL104_IMAGE=mariadb:$(mariadb_version 10.4)
 KUSANAGI_MYSQL105_IMAGE=mariadb:$(mariadb_version 10.5)
 KUSANAGI_MYSQL106_IMAGE=mariadb:$(mariadb_version 10.6)
 KUSANAGI_MYSQL107_IMAGE=mariadb:$(mariadb_version 10.7)
 KUSANAGI_MYSQL108_IMAGE=mariadb:$(mariadb_version 10.8)
+KUSANAGI_MYSQL109_IMAGE=mariadb:$(mariadb_version 10.9)
 KUSANAGI_MYSQL_IMAGE=mariadb:$(mariadb_version 10.6)
 KUSANAGI_CONFIG_IMAGE=${PS}-config:$(k_version config)
 KUSANAGI_FTPD_IMAGE=${PS}-ftpd:$(k_version ftpd)

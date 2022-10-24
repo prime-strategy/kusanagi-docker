@@ -467,9 +467,6 @@ function k_provision () {
 			--nginx1.22|--nginx122)
 				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX122_IMAGE
 				;;
-			--nginx1.21|--nginx121)
-				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX121_IMAGE
-				;;
 			--nginx=*)
 				KUSANAGI_NGINX_IMAGE=primestrategy/kusanagi-nginx:"${OPT%%=*}"
 				;;
@@ -485,12 +482,6 @@ function k_provision () {
 			--php=*)
 				KUSANAGI_PHP_IMAGE=primestrategy/kusanagi-php:"${OPT%%=*}"
 				;;
-			--mariadb103|--mariadb10.3)
-				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL103_IMAGE
-				;;
-			--mariadb104|--mariadb10.4)
-				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL104_IMAGE
-				;;
 			--mariadb105|--mariadb10.5)
 				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL105_IMAGE
 				;;
@@ -502,6 +493,9 @@ function k_provision () {
 				;;
 			--mariadb108|--mariadb10.8)
 				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL108_IMAGE
+				;;
+			--mariadb109|--mariadb10.9)
+				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL109_IMAGE
 				;;
 			--mariadb=*)
 				KUSANAGI_MYSQL_IMAGE=mariadb:"${OPT%%=*}"
