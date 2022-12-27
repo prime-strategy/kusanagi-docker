@@ -30,9 +30,10 @@ if ! [ $NO_USE_DB ] ; then
 		< $LIBDIR/templates/mysql.template >> docker-compose.yml
 		;;
 	pgsql)
-		env PROFILE=$PROFILE POSTGRESQL_IMAGE=$POSTGRESQL_IMAGE \
-		envsubst '$$PROFILE $$POSTGRESQL_IMAGE' \
-		< $LIBDIR/templates/pgsql.template >> docker-compose.yml
+		# not implemented
+		# env PROFILE=$PROFILE POSTGRESQL_IMAGE=$POSTGRESQL_IMAGE \
+		# envsubst '$$PROFILE $$POSTGRESQL_IMAGE' \
+		# < $LIBDIR/templates/pgsql.template >> docker-compose.yml
 		;;
 	esac
 

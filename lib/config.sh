@@ -109,7 +109,7 @@ function k_wp() {
 
 	k_configcmd $DOCUMENTROOT ${_opts[@]}
 }
-	
+
 function k_content() {
 	local _cmd=$1
 	shift
@@ -120,33 +120,39 @@ function k_content() {
 	CONTENTDIR="$TARGETDIR/contents"
 	
 	if ! [ -d "$CONTENTDIR" ] ; then
-	       	mkdir -p "$CONTENTDIR"
+		mkdir -p "$CONTENTDIR"
 		git init -q
 	fi
 	case $_cmd in
 	pull|backup)
-		k_configcmd $BASEDIR tar cf /home/kusanagi/$PROFILE.tar .
-		docker cp ${PROFILE}_config:/home/kusanagi/$PROFILE.tar .
-		k_configcmd $BASEDIR rm /home/kusanagi/$PROFILE.tar
+		k_configcmd $BASEDIR tar cf $PROFILE.tar . 2>&1 > /dev/null
+		docker cp ${PROFILE}_php:$BASEDIR/$PROFILE.tar .
+		k_configcmd $BASEDIR rm $BASEDIR/$PROFILE.tar
 		tar xf $PROFILE.tar -C "$CONTENTDIR"
 		rm $PROFILE.tar
-		[ $_cmd = "backup" ] && k_dbdump
+		[ $_cmd = "backup" ] && k_dbdump || true
 		#git commit -a -m "pull at "$(date +%Y%m%dT%H%M%S%z)
 		;;
 	push|restore)
 		#git commit -a -m "push at "$(date +%Y%m%dT%H%M%S%z)
-		local is_dir=$(k_configcmd '/' test -d $BASEDIR ; echo $?)
+		local is_dir=$(k_config_isdir $BASEDIR)
 		if [ $is_dir = 1 ] ; then
 			k_configcmd_root '/' mkdir -p $BASEDIR
-			k_configcmd_root '/home/kusanagi' chown -R 1000:1001 /home/kusanagi
+			k_configcmd_root '/' chown 1000:1001 $BASEDIR
 		fi
 		tar cf $PROFILE.tar -C "$CONTENTDIR" --exclude-from="$TARGETDIR/.gitignore" .
-		docker cp $PROFILE.tar ${PROFILE}_config:/home/kusanagi/
+		docker cp $PROFILE.tar ${PROFILE}_php:$BASEDIR/
 		rm $PROFILE.tar
-		k_configcmd $BASEDIR tar xf /home/kusanagi/$PROFILE.tar
-		k_configcmd $BASEDIR rm /home/kusanagi/$PROFILE.tar
-		k_configcmd $BASEDIR chown -R kusanagi:www .
-		[ $_cmd = "restore" ] && k_dbrestore
+		k_configcmd $BASEDIR tar xf $BASEDIR/$PROFILE.tar
+		k_configcmd $BASEDIR rm $BASEDIR/$PROFILE.tar
+		local is_dir=$(k_config_isdir $DOCUMENTROOT/wp-content)
+		if [ $is_dir = 0 ] ; then
+			k_configcmd_root $BASEDIR/$PROFILE chown -R 1000:1001 .
+			k_configcmd $DOCUMENTROOT chmod 0750 . ./wp-content
+			k_configcmd $DOCUMENTROOT chmod -R 0770 ./wp-content/uploads
+			k_configcmd $DOCUMENTROOT chmod -R 0750 ./wp-content/languages ./wp-content/plugins
+		fi
+		[ $_cmd = "restore" ] && k_dbrestore || true
 		;;
 	commit)
 		(cd "$CONTENTDIR"; git commit ${_opts[@]})
@@ -174,7 +180,7 @@ function k_dbdump() {
 	CONTENTDIR="$TARGETDIR/contents"
 
 	if [ $KUSANAGI_PROVISION = wp ] ; then
-		k_configcmd $DOCUMENTROOT db export - > $_file 
+		k_configcmd $DOCUMENTROOT db export - > $_file
 	else
 		[[ $DBHOST =~ ^localhost ]] && DBHOST= || DBHOST="-h $DBHOST"
 		case $KUSANAGI_DB_SYSTEM in
@@ -182,7 +188,8 @@ function k_dbdump() {
 			k_configcmd / mysqldump -u$DBUSER $DBHOST -p"$DBPASS" $DBNAME > $_file
 			;;
 		pgsql)
-			k_configcmd / pg_dump $DBHOST $DBNAME > $_file
+			# not implemented
+			# k_configcmd / pg_dump $DBHOST $DBNAME
 			;;
 		*)
 			;;
@@ -201,15 +208,17 @@ function k_dbrestore() {
 
 	k_copy $BASEDIR $_file
 	if [ $KUSANAGI_PROVISION = wp ] ; then
-		k_configcmd $DOCUMENTROOT db import $BASEDIR/$_file 
+		k_configcmd $DOCUMENTROOT db import - < $_file
 	else
-		[[ $DBHOST =~ ^localhost ]] && DBHOST= || DBHOST="-h $DBHOST"
 		case $KUSANAGI_DB_SYSTEM in
 		mysql)
-			k_configcmd $BASEDIR mysqlimport -u$DBUSER $DBHOST -p"$DBPASS" $DBNAME $_file
+			# docker cp $_file ${PROFILE}_php:$BASEDIR
+			k_configcmd $BASEDIR mysql -f -u$DBUSER -p"$DBPASS" $DBNAME < $_file
+			# k_configcmd $BASEDIR rm $_file
 			;;
 		pgsql)
-			k_configcmd $BASEDIR pg_restore $DBHOST -d $DBNAME $_file
+			# not implement
+			# k_configcmd $BASEDIR pg_restore $DBHOST -d $DBNAME $_file
 			;;
 		*)
 			;;

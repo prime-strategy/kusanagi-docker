@@ -1,4 +1,4 @@
-##
+#
 # KUSANAGI provision for kusanagi-docker
 # (C)2019 Prime-Strategy Co,Ltd
 # Licenced by GNU GPL v2
@@ -154,7 +154,8 @@ function k_check_dbsystem() {
 		echo mysql
 		;;
 	'postgresql'|'pgsql')
-		echo pgsql
+		k_print_error $(eval_gettext "not implemented.")
+		# echo pgsql
 		;;
 	'*')
 		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "can not be specified.")
@@ -711,6 +712,7 @@ EOF
 		k_content push
 	else
 		k_content pull
+		k_dbdump
 	fi
 
 	local ENTRY=$(k_compose exec httpd ps | grep 'docker-entrypoint.sh')
@@ -753,7 +755,10 @@ EOF
 	git init -q
 	echo '*~' > .gitignore
 	echo '.gitignore' >> .gitignore
-	git add .kusanagi* contents docker-compose.yml > /dev/null
+	git add .kusanagi* contents docker-compose.yml dbdump > /dev/null
+	if [ -f .wp_mysqli.ini ] ; then
+		git add .wp_mysqli.ini > /dev/null
+	fi
 	git commit -m 'initial commit' > /dev/null
 }
 

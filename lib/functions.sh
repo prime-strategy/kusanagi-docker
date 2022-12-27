@@ -12,7 +12,7 @@ export TEXTDOMAINDIR="$LIBDIR/locale"
 . $(which gettext.sh)
 
 function k_compose() {
-    "$DOCKER_COMPOSE" $@
+	"$DOCKER_COMPOSE" $@
 }
   
 function k_configcmd() {
@@ -25,6 +25,13 @@ function k_configcmd_root() {
 	local _dir=$1
 	shift
 	k_compose run --rm -u 0 -w $_dir config $@
+}
+
+function k_config_isdir() {
+	local _dir=$1
+	shift
+	"$DOCKER_COMPOSE" run -T --rm config sh -c "test -d $_dir" 2> /dev/null
+	echo $?
 }
 
 # copy file to containar
@@ -115,7 +122,7 @@ function k_helphelp {
 				echo '    '$(eval_gettext '[--php7.4|--php74|')
 				echo '    '$(eval_gettext ' --php8.0|--php80|')
 				echo '    '$(eval_gettext ' --php8.1|--php81|--php=version]')
-				echo '    '$(eval_gettext '[--dbsystem mysql|mariadb|pgsql|postgrsql]')
+				echo '    '$(eval_gettext '[--dbsystem mysql|mariadb]')
 				echo '    '$(eval_gettext '[--mariadb10.5|--mariadb105|')
 				echo '    '$(eval_gettext ' --mariadb10.6|--mariadb106|')
 				echo '    '$(eval_gettext ' --mariadb10.7|--mariadb107|')
@@ -147,7 +154,7 @@ function k_helphelp {
 				echo '    '$(eval_gettext '[--oscp  [on|off]]')
 				echo '    '$(eval_gettext '[--ct  [on|off]]')
 				echo '    '$(eval_gettext '[--help|help]')
-                ;;
+				;;
 			remove)
 				echo $(eval_gettext 'remove [-y] [target]')
 				;;
@@ -218,12 +225,11 @@ function k_machine() {
 	if [ $_is_print ] ; then
 		if [ "$_machine" = "localhost" -o "$MACHINE" = "localhost" ] ; then
 			[ "x$TARGETDIR" != "x" ] && \
-			       	(cd "$TARGETDIR" && k_compose) || docker ps 1>&2
+				cd "$TARGETDIR" && k_compose) || docker ps 1>&2
 		else
 			[ "x$TARGETDIR" != "x" ]  \
-			       	&& (cd "$TARGETDIR" && \
-			       		eval $(docker-machine env $_machine) && \
-				       		k_compose ps) 1>&2 \
+			&& (cd "$TARGETDIR" && \
+				eval $(docker-machine env $_machine) && k_compose ps) 1>&2 \
 				||  (eval $(docker-machine env $_machine) && docker ps 1>&2) 
 		fi
 	fi
