@@ -60,7 +60,7 @@ function k_check_fqdn() {
 	local PRE_OPT="$1"
 	local OPT="$2"
 	if [[ "$OPT" =~ ^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]))+\.?$ ]] && \
-	       	[[ "$OPT" =~ ^[a-zA-Z0-9\.\-]{3,253}$ ]] ; then
+		[[ "$OPT" =~ ^[a-zA-Z0-9\.\-]{3,253}$ ]] ; then
 		echo "$OPT"
 	else
 		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input valid hostname.")
@@ -90,7 +90,7 @@ function k_check_host() {
 	local PRE_OPT="$1"
 	local OPT="$2"
 	if [[ "$OPT" =~ ^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]))+\.?$ ]] && \
-	       	[[ "$OPT" =~ ^[a-zA-Z0-9\.\-]{3,253}$ ]] ; then
+		[[ "$OPT" =~ ^[a-zA-Z0-9\.\-]{3,253}$ ]] ; then
 		echo "$OPT"
 	elif [[ "$OPT" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]] ; then
 		echo "$OPT"
@@ -210,7 +210,7 @@ function k_provision () {
 	local HTTP_PORT=${HTTP_PORT:-80} HTTP_TLS_PORT=${HTTP_TLS_PORT:-443}
 	local KUSANAGI_DB_SYSTEM= USE_INTERNALDB=0
 	local APP=
-    DRUPAL_VERSION=0
+	DRUPAL_VERSION=0
 	## perse arguments
 	shift
 	for OPT in "$@"
@@ -524,7 +524,7 @@ function k_provision () {
 		DBLIB=/var/run/mysqld
 	else
 		DBLIB=/var/run/pgsql
-	    SMALL=1
+		SMALL=1
 	fi
 	
 	## option check
@@ -541,23 +541,17 @@ function k_provision () {
 		return 1
 	fi
 
-    # concrete can not deproy use php8.1
-    if [ "$APP" == "c5" ] && [ $KUSANAGI_PHP_IMAGE == $KUSANAGI_PHP81_IMAGE ]; then
-		k_print_error $(eval_gettext "Concrete CMS can not deploy use php8.1.")
-		return 1
-    fi
-
-    if [ $APP = "drupal" ] ; then
-        # drupal7/8 can deploy only php7.4
-        if [ $DRUPAL_VERSION -lt 9 ] && [ $KUSANAGI_PHP_IMAGE != $KUSANAGI_PHP74_IMAGE ]; then
+	if [ $APP = "drupal" ] ; then
+		# drupal7/8 can deploy only php7.4
+		if [ $DRUPAL_VERSION -lt 9 ] && [ $KUSANAGI_PHP_IMAGE != $KUSANAGI_PHP74_IMAGE ]; then
 			k_print_error $(eval_gettext "Drupal 7/8 can deploy only php7.4.")
 			return 1
-        # drupal9 can not deploy php8.1
-        elif [ $DRUPAL_VERSION -eq 9 ] && [ $KUSANAGI_PHP_IMAGE == $KUSANAGI_PHP81_IMAGE ]; then
+		# drupal9 can not deploy php8.1
+		elif [ $DRUPAL_VERSION -eq 9 ] && [ $KUSANAGI_PHP_IMAGE == $KUSANAGI_PHP81_IMAGE ]; then
 			k_print_error $(eval_gettext "Drupal 9 can not deploy use php8.1.")
 			return 1
-        fi
-    fi
+		fi
+	fi
 	
 	# for config
 	PROFILE=$NEW_PROFILE
@@ -736,7 +730,7 @@ EOF
 	# use let's encrypt
 #	if [ "x$MAILADDR" != "x" ] ; then
 #		k_compose run certbot certonly --text \
-#		       	--noninteractive --webroot -w /usr/share/httpd/html/ -d $FQDN -m $MAILADDR --agree-tos
+#			--noninteractive --webroot -w /usr/share/httpd/html/ -d $FQDN -m $MAILADDR --agree-tos
 #		local FULLCHAINPATH=$(ls -1t /etc/letsencrypt/live/$FQDN*/fullchain.pem 2> /dev/null |head -1)
 #		local LETSENCRYPTDIR=${FULLCHAINPATH%/*}  # dirname
 #		if [ -n "$FULLCHAINPATH" ] ; then

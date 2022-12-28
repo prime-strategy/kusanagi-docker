@@ -9,14 +9,14 @@ source .kusanagi
 IMAGE=$([ $OPT_NGINX ] && echo $KUSANAGI_NGINX_IMAGE || ([ $OPT_HTTPD ] && echo $KUSANAGI_HTTPD_IMAGE))
 # create docker-compose.yml
 env FQDN=$FQDN \
-    PROFILE=$PROFILE \
-    HTTPD_IMAGE=$IMAGE \
-    KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP_IMAGE \
-    CONFIG_IMAGE=$KUSANAGI_CONFIG_IMAGE \
-    CERTBOT_IMAGE=$CERTBOT_IMAGE \
-    HTTP_PORT=$HTTP_PORT \
-    HTTP_TLS_PORT=$HTTP_TLS_PORT \
-    DBLIB=$DBLIB \
+	PROFILE=$PROFILE \
+	HTTPD_IMAGE=$IMAGE \
+	KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP_IMAGE \
+	CONFIG_IMAGE=$KUSANAGI_CONFIG_IMAGE \
+	CERTBOT_IMAGE=$CERTBOT_IMAGE \
+	HTTP_PORT=$HTTP_PORT \
+	HTTP_TLS_PORT=$HTTP_TLS_PORT \
+	DBLIB=$DBLIB \
 	envsubst '$$FQDN $$PROFILE $$HTTPD_IMAGE
 	$$KUSANAGI_PHP_IMAGE
 	$$CONFIG_IMAGE $$CERTBOT_IMAGE
@@ -58,13 +58,24 @@ elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then
 	git clone $GITPATH ./contents
 	k_copy $DOCUMENTROOT contents/* contents/.[^.]*
 else
-	DOCKER_PHP="k_compose exec -u 1000 php"
-	$DOCKER_COMPOSE exec -u 0 php apk add git patch \
-	&& $DOCKER_PHP /usr/local/bin/composer create-project -n concrete5/composer /home/kusanagi/$PROFILE \
-	&& k_configcmd_root /home/kusanagi chown -R 1000:1001 $PROFILE  \
+	## doctrine/orm 2.14.0 暫定対応
+	k_compose exec -u 0 php apk add git patch \
+	&& k_php_exec /home/kusanagi /usr/local/bin/composer -n create-project concrete5/composer --no-install $PROFILE \
+	&& k_php_exec $BASEDIR /usr/local/bin/composer config --no-plugins allow-plugins.composer/installers true \
+	&& k_php_exec $BASEDIR /usr/local/bin/composer config --no-plugins allow-plugins.mlocati/composer-patcher true \
+	&& k_php_exec $BASEDIR /usr/local/bin/composer -n install \
+	&& k_configcmd_root $BASEDIR sed -i 's/MappedSuperClass/MappedSuperclass/' \
+			public/concrete/src/Entity/Page/Relation/Relation.php \
+			public/concrete/src/Entity/Search/SavedSearch.php \
+			public/concrete/src/Entity/Attribute/Key/Settings/Settings.php \
+			public/concrete/src/Entity/Attribute/Value/Value/AbstractValue.php \
+			public/concrete/src/Entity/Attribute/Value/AbstractValue.php \
+	&& k_configcmd_root $BASEDIR sed -i "s/AnnotationRegistry::registerFile.*/AnnotationRegistry::registerLoader('class_exists');/" \
+			public/concrete/src/Database/EntityManagerConfigFactory.php \
+	&& k_configcmd_root $BASEDIR chown -R 1000:1001 . \
 	&& k_configcmd /home/kusanagi chmod o-rwx $PROFILE  \
-	&& k_configcmd /home/kusanagi/$PROFILE/public mkdir -p application/languages \
-	&& k_configcmd_root /home/kusanagi/$PROFILE/public chown -R 1001:1001 application/languages application/config application/files packages \
-	&& k_configcmd_root /home/kusanagi/$PROFILE/public chmod -R g+w application/languages application/config application/files packages
+	&& k_configcmd $DOCUMENTROOT mkdir -p application/languages \
+	&& k_configcmd_root $DOCUMENTROOT chown -R 1001:1001 application/languages application/config application/files packages \
+	&& k_configcmd_root $DOCUMENTROOT chmod -R g+w application/languages application/config application/files packages
 fi
 

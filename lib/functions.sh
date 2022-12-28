@@ -7,14 +7,14 @@
 DOCKER_COMPOSE=$(which docker-compose)
 [ "x$DOCKER_COMPOSE" = "x" ] && DOCKER_COMPOSE=$(which docker-compose.exe)
 LOCAL_KUSANAGI_FILE=.kusanagi
-export TEXTDOMAIN="kusanagi-docker" 
+export TEXTDOMAIN="kusanagi-docker"
 export TEXTDOMAINDIR="$LIBDIR/locale"
 . $(which gettext.sh)
 
 function k_compose() {
 	"$DOCKER_COMPOSE" $@
 }
-  
+
 function k_configcmd() {
 	local _dir=$1
 	shift
@@ -27,6 +27,12 @@ function k_configcmd_root() {
 	k_compose run --rm -u 0 -w $_dir config $@
 }
 
+function k_php_exec() {
+	local _dir=$1
+	shift
+	k_compose exec -T --user 1000 -w $_dir php $@
+}
+
 function k_config_isdir() {
 	local _dir=$1
 	shift
@@ -37,7 +43,7 @@ function k_config_isdir() {
 # copy file to containar
 # path copy_files
 function k_copy() {
-	local _container_name=config
+	local _container_name=php
 	local _container_path=$1
 	local _container_id=$(k_compose ps -q $_container_name)
 	shift
@@ -154,7 +160,7 @@ function k_helphelp {
 				echo '    '$(eval_gettext '[--oscp  [on|off]]')
 				echo '    '$(eval_gettext '[--ct  [on|off]]')
 				echo '    '$(eval_gettext '[--help|help]')
-				;;
+                ;;
 			remove)
 				echo $(eval_gettext 'remove [-y] [target]')
 				;;
@@ -225,12 +231,13 @@ function k_machine() {
 	if [ $_is_print ] ; then
 		if [ "$_machine" = "localhost" -o "$MACHINE" = "localhost" ] ; then
 			[ "x$TARGETDIR" != "x" ] && \
-				cd "$TARGETDIR" && k_compose) || docker ps 1>&2
+			cd "$TARGETDIR" && k_compose) || docker ps 1>&2
 		else
 			[ "x$TARGETDIR" != "x" ]  \
-			&& (cd "$TARGETDIR" && \
-				eval $(docker-machine env $_machine) && k_compose ps) 1>&2 \
-				||  (eval $(docker-machine env $_machine) && docker ps 1>&2) 
+			&& (cd "$TARGETDIR" \
+			&& eval $(docker-machine env $_machine) \
+			&& k_compose ps) 1>&2 \
+			|| (eval $(docker-machine env $_machine) && docker ps 1>&2)
 		fi
 	fi
 	echo $MACHINE
@@ -293,7 +300,7 @@ function k_remove() {
 }
 
 function k_httpd() {
-	k_print_error "$1 $(eval_gettext "is not implemented.")" 
+	k_print_error "$1 $(eval_gettext "is not implemented.")"
 }
 function k_nginx() {
 	k_print_error "$1 $(eval_gettext "is not implemented.")"
