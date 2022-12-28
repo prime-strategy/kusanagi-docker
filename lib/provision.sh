@@ -288,10 +288,10 @@ function k_provision () {
 			case "$OPT" in
 			'--woo'|'--WooCommerce')
 				export OPT_WOO=0
-					k_print_notice $(eval_gettext "option:") $OPT: $(eval_gettext "not implimented.")
+					k_print_notice $(eval_gettext "option:") $OPT: $(eval_gettext "not implemented.")
 				;;
 			'--wp'|'--wordpress'|'--WordPress')
-				if [ "x$APP" != "x" ] ; then
+				ef [ "x$APP" != "x" ] ; then
 					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
 				fi
 				APP='wp'
@@ -323,6 +323,14 @@ function k_provision () {
 				fi
 				APP='drupal'
 				DRUPAL_VERSION=8
+				KUSANAGI_DB_SYSTEM=mysql
+				;;
+			'--drupal10')
+				if [ "x$APP" != "x" ] ; then
+					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
+				fi
+				APP='drupal'
+				DRUPAL_VERSION=10
 				KUSANAGI_DB_SYSTEM=mysql
 				;;
 			'--drupal'|'--drupal9')
@@ -517,14 +525,13 @@ function k_provision () {
 		PRE_OPT=$OPT
 	done
 
-
 	APP=${APP:-wp}
 	KUSANAGI_DB_SYSTEM=${KUSANAGI_DB_SYSTEM:-mysql}
 	if [ $KUSANAGI_DB_SYSTEM = "mysql" ] ; then
 		DBLIB=/var/run/mysqld
 	else
 		DBLIB=/var/run/pgsql
-		SMALL=1
+	    SMALL=1
 	fi
 	
 	## option check
@@ -546,11 +553,7 @@ function k_provision () {
 		if [ $DRUPAL_VERSION -lt 9 ] && [ $KUSANAGI_PHP_IMAGE != $KUSANAGI_PHP74_IMAGE ]; then
 			k_print_error $(eval_gettext "Drupal 7/8 can deploy only php7.4.")
 			return 1
-		# drupal9 can not deploy php8.1
-		elif [ $DRUPAL_VERSION -eq 9 ] && [ $KUSANAGI_PHP_IMAGE == $KUSANAGI_PHP81_IMAGE ]; then
-			k_print_error $(eval_gettext "Drupal 9 can not deploy use php8.1.")
-			return 1
-		fi
+ 		fi
 	fi
 	
 	# for config

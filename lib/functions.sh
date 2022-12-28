@@ -120,7 +120,7 @@ function k_helphelp {
 				echo '        '$(eval_gettext ' [--admin-user admin] [--admin-pass pass] [--admin-email email]')
 				echo '        '$(eval_gettext ' [--wp-title title] [--kusanagi-pass pass] [--noftp|--no-ftp] |')
 				echo '    '$(eval_gettext ' --lamp|--c5|--concrete5|--concrete|')
-				echo '    '$(eval_gettext ' --drupal|--drupal7|--drupal8|--drupal9]')
+				echo '    '$(eval_gettext ' --drupal|--drupal7|--drupal8|--drupal9|--drupal10]')
 				echo '    '$(eval_gettext '[--nginx|--httpd]')
 				echo '    '$(eval_gettext '[--nginx1.23|--nginx123|')
 				echo '    '$(eval_gettext '	--nginx1.22|--nginx122|--nginx=version]')
@@ -230,13 +230,14 @@ function k_machine() {
 
 	if [ $_is_print ] ; then
 		if [ "$_machine" = "localhost" -o "$MACHINE" = "localhost" ] ; then
-			[ "x$TARGETDIR" != "x" ] && \
-			cd "$TARGETDIR" && k_compose) || docker ps 1>&2
+			[ "x$TARGETDIR" != "x" ] \
+			&& (cd "$TARGETDIR" && k_compose)
+			|| docker ps 1>&2
 		else
 			[ "x$TARGETDIR" != "x" ]  \
 			&& (cd "$TARGETDIR" \
-			&& eval $(docker-machine env $_machine) \
-			&& k_compose ps) 1>&2 \
+				&& eval $(docker-machine env $_machine) \
+				&& k_compose ps) 1>&2 \
 			|| (eval $(docker-machine env $_machine) && docker ps 1>&2)
 		fi
 	fi

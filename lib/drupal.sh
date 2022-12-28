@@ -53,15 +53,15 @@ k_print_green "$(eval_gettext 'Provision Drupal')"
 
 if [ "x$TARPATH" != "x" ] && [ -f $TARPATH ] ; then
 	mkdir contents
-	tar xf $TARPATH -C contents 
+	tar xf $TARPATH -C contents
 	k_copy $DOCUMENTROOT contents/* contents/.[^.]*
-elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then 
+elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then
 	mkdir contents
 	git clone $GITPATH ./contents
 	k_copy $DOCUMENTROOT contents/* contents/.[^.]*
 else
-	k_configcmd $BASEDIR sh ./drupal.sh $DRUPAL_VERSION \
+	k_php_exec $BASEDIR sh ./drupal.sh $DRUPAL_VERSION \
 	&& sleep 1 \
-	&& k_configcmd $BASEDIR rm ./drupal.sh 
+	&& k_php_exec $BASEDIR rm ./drupal.sh
 fi
 

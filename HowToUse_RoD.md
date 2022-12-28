@@ -90,7 +90,7 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
          [--admin-user admin] [--admin-pass pass] [--admin-email email]
          [--wp-title title] [--kusanagi-pass pass] a |
      --lamp|--c5|--concrete5|--concrete|
-     --drupal|--drupal7|--drupal8|--drupal9]
+     --drupal|--drupal7|--drupal8|--drupal9|--drupal10]
     [--nginx|--httpd]
     [--nginx1.23|--nginx123|
      --nginx1.22|--nginx122|--nginx=version]
@@ -183,7 +183,8 @@ The options for the provision subcommand are as follows.
 | --lamp/--LAMP                             | APP=lamp                         | Build a LAMP environment.                                    |
 | --drupal7                                 | APP=drupal<br />DRUPAL_VERSION=7 | Build a drupal7 environment. this use only php74.            |
 | --drupal8                                 | APP=drupal<br />DRUPAL_VERSION=8 | Build a drupal8 environment. this use only php74.            |
-| --drupal9/--drupal                        | APP=drupal<br />DRUPAL_VERSION=9 | Build a drupal9 environment. this use only php74 or php80.    |
+| --drupal9/--drupal                        | APP=drupal<br />DRUPAL_VERSION=9 | Build a drupal9 environment.                                  |
+| --drupal10                                | APP=drupal<br />DRUPAL_VERSION=10 | Build a drupal10 environment.                                 |
 | --httpd                                   |                                  | Use httpd (Apache 2.4). Cannot be specified at the same time as the --nginx option. |
 | --nginx                                   |                                  | Use nginx. Cannot be specified at the same time as the --httpd option. If not specified, nginx will be used. |
 | --nginx1.23/--nginx123                    |                                  | When nginx is used, kusanagi-nginx:1.23.x is used. When not specified, kusanagi-nginx:1.23.x is used. |

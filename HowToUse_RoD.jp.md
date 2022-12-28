@@ -88,7 +88,7 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
          [--admin-user admin] [--admin-pass pass] [--admin-email email]
          [--wp-title title] [--kusanagi-pass pass] |
      --lamp|--c5|--concrete5|--concreate|
-     --drupal|--drupal7|--drupal8|--drupal9]
+     --drupal|--drupal7|--drupal8|--drupal9--drupal10]
     [--nginx|--httpd]
     [--nginx1.23|--nginx123|
      --nginx1.22|--nginx122|--nginx=version]
@@ -179,7 +179,8 @@ provision サブコマンドのオプションは以下のとおりです。
 | --lamp/--LAMP                             | APP=lamp                         | LAMPの環境を構築します。                                     |
 | --drupal7                                 | APP=drupal<br />DRUPAL_VERSION=7 | drupal7の環境を構築します。php74でのみ動作します。         |
 | --drupal8                                 | APP=drupal<br />DRUPAL_VERSION=8 | drupal8の環境を構築します。php74でのみ動作します。        |
-| --drupal9/--drupal                        | APP=drupal<br />DRUPAL_VERSION=9 | drupal9の環境を構築します。php74/php80で動作します。         |
+| --drupal9/--drupal                        | APP=drupal<br />DRUPAL_VERSION=9 | drupal9の環境を構築します。                           |
+| --drupal10                                | APP=drupal<br />DRUPAL_VERSION=10 | drupal10の環境を構築します。                      |
 | --httpd                                   |                                  | httpd(Apache 2.4)を使用します。--nginxと同時に指定できません。 |
 | --nginx                                   |                                  | nginxを使用します。--httpdと同時に指定できません。無指定時はnginxが使用されます。 |
 | --nginx1.23/--nginx123                    |                                  | nginx使用時に、kusanagi-nginx:1.23.x を使用します。無指定時はkusanagi-nginx:1.23.xを使用します。 |
