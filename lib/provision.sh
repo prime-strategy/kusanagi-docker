@@ -291,7 +291,7 @@ function k_provision () {
 					k_print_notice $(eval_gettext "option:") $OPT: $(eval_gettext "not implemented.")
 				;;
 			'--wp'|'--wordpress'|'--WordPress')
-				ef [ "x$APP" != "x" ] ; then
+				if [ "x$APP" != "x" ] ; then
 					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
 				fi
 				APP='wp'

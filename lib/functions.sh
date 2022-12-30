@@ -231,7 +231,7 @@ function k_machine() {
 	if [ $_is_print ] ; then
 		if [ "$_machine" = "localhost" -o "$MACHINE" = "localhost" ] ; then
 			[ "x$TARGETDIR" != "x" ] \
-			&& (cd "$TARGETDIR" && k_compose)
+			&& (cd "$TARGETDIR" && k_compose) \
 			|| docker ps 1>&2
 		else
 			[ "x$TARGETDIR" != "x" ]  \
