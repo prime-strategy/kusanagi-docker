@@ -15,7 +15,7 @@ for i in input["results"]:
 
 DOCKER_REPO=https://registry.hub.docker.com/v2/repositories
 function docker_repo_tag {
-	curl -s $DOCKER_REPO/${1}/tags\?page_size=10000 | filter_version
+	curl -s $DOCKER_REPO/${1}/tags\?page_size=10000 | filter_version | sort -Vr
 }
 
 function k_version {
@@ -24,10 +24,10 @@ function k_version {
 	local _ver
 	if [ -z "$_version" ] ; then
 		_ver=$(docker_repo_tag primestrategy/${_kusanagi} | \
-			   grep -v latest | sort -Vr | head -1)
+			   grep -v latest | head -1)
 	else
 		_ver=$(docker_repo_tag primestrategy/${_kusanagi} | \
-			   grep "^$_version" | sort -Vr | head -1)
+			   grep "^$_version"  | head -1)
 	fi
 	echo ${_ver:-latest}
 }
@@ -37,29 +37,28 @@ function mariadb_version {
 	local _ver
 	if [ -z "$_version" ] ; then
 		_ver=$(docker_repo_tag library/mariadb | \
-		fgrep . | sort -Vr | head -1)
+		fgrep . | head -1)
     else
 		 _ver=$(docker_repo_tag library/mariadb | \
-		grep "^$_version" | sort -Vr | head -1)
+		grep "^$_version" | head -1)
 	fi
 	echo ${_ver:-latest}
 }
 function postgresql_version {
 	local _ver=$(docker_repo_tag library/postgres | \
-		fgrep . | grep -v -e latest -e beta | sort -Vr | head -1)
+		fgrep . | grep -v -e latest -e beta | head -1)
 	echo ${_ver:-latest}
 }
 
 function wpcli_version {
 	local _ver=$(docker_repo_tag library/wordpress | \
-		grep -Ee '^cli-[0-9].*$' | grep -v -e latest -e beta | \
-		sort -r | head -1)
-	echo ${_ver:-latest}
+		grep -Ee '^cli-[0-9].*$' | grep -v -e latest -e beta | head -1)
+	echo ${_ver:-cli}
 }
 
 function certbot_version {
 	local _ver=$(docker_repo_tag certbot/certbot | \
-		grep -v -e latest -e beta | sort -Vr | head -1)
+		grep -v -e latest -e beta | head -1)
 	echo ${_ver:-latest}
 }
 
