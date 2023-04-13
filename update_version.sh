@@ -67,13 +67,14 @@ KUSANAGIDIR=${KUSANGIDIR:-$HOME/.kusanagi}
 KUSANAGILIBDIR=$KUSANAGIDIR/lib
 
 cat <<EOF > ${KUSANAGILIBDIR:-.}/image_versions
-KUSANAGI_NGINX122_IMAGE=${PS}-nginx:$(k_version nginx 1.22)
 KUSANAGI_NGINX123_IMAGE=${PS}-nginx:$(k_version nginx 1.23)
+KUSANAGI_NGINX124_IMAGE=${PS}-nginx:$(k_version nginx 1.24)
 KUSANAGI_NGINX_IMAGE=${PS}-nginx:$(k_version nginx 1.23)
 KUSANAGI_HTTPD_IMAGE=${PS}-httpd:$(k_version httpd)
 KUSANAGI_PHP74_IMAGE=${PS}-php:$(k_version php 7.4)
 KUSANAGI_PHP80_IMAGE=${PS}-php:$(k_version php 8.0)
 KUSANAGI_PHP81_IMAGE=${PS}-php:$(k_version php 8.1)
+KUSANAGI_PHP82_IMAGE=${PS}-php:$(k_version php 8.2)
 KUSANAGI_PHP_IMAGE=${PS}-php:$(k_version php 8.0)
 KUSANAGI_MYSQL105_IMAGE=mariadb:$(mariadb_version 10.5)
 KUSANAGI_MYSQL106_IMAGE=mariadb:$(mariadb_version 10.6)

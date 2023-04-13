@@ -473,8 +473,8 @@ function k_provision () {
 			--nginx1.23|--nginx123)
 				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX123_IMAGE
 				;;
-			--nginx1.22|--nginx122)
-				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX122_IMAGE
+			--nginx1.24|--nginx124)
+				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX124_IMAGE
 				;;
 			--nginx=*)
 				KUSANAGI_NGINX_IMAGE=primestrategy/kusanagi-nginx:"${OPT%%=*}"
@@ -487,6 +487,9 @@ function k_provision () {
 				;;
 			--php8.1|--php81)
 				KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP81_IMAGE
+				;;
+			--php8.2|--php82)
+				KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP82_IMAGE
 				;;
 			--php=*)
 				KUSANAGI_PHP_IMAGE=primestrategy/kusanagi-php:"${OPT%%=*}"
