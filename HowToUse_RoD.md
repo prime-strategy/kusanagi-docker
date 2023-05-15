@@ -102,9 +102,10 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
     [--dbsystem mysql|mariadb|pgsql|postgrsql]
     [--mariadb10.5|--mariadb105|
      --mariadb10.6|--mariadb106|
-     --mariadb10.7|--mariadb107|
      --mariadb10.8|--mariadb108|
-     --mariadb10.9|--mariadb109]
+     --mariadb10.9|--mariadb109|
+     --mariadb10.10|--mariadb1010|
+     --mariadb10.11|--mariadb1011]
     [--dbhost host]
     [--dbrootpass pasword
     [--dbname dbname]
@@ -199,6 +200,8 @@ The options for the provision subcommand are as follows.
 | --php7.4/--php74                          |                                  | Use kusanagi-php:7.4.x.                                      |
 | --php=version                             |                                  | Use any version of PHP that is available on DockerHub.       |
 | --dbsystem mysql/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= mysql/pgsql  | Specify the DB system to use. However, WordPress, drupal7, and drupal8 always use MySQL and do not require this option. postgresql is currently under experimentation. |
+| --mariadb10.11/--mariadb1011              |                                  | Use mariadb:10.11.x-jammy as the DB.                         |
+| --mariadb10.10/--mariadb1010              |                                  | Use mariadb:10.10.x-jammy as the DB.                         |
 | --mariadb10.9/--mariadb109                |                                  | Use mariadb:10.9.x-jammy as the DB.                          |
 | --mariadb10.8/--mariadb108                |                                  | Use mariadb:10.8.x-jammy as the DB.                          |
 | --mariadb10.6/--mariadb107                |                                  | Use mariadb:10.6.x-focal as the DB.                          |

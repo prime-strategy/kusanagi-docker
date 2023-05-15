@@ -100,9 +100,10 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
     [--dbsystem mysql|mariadb|pgsql|postgrsql]
     [--mariadb10.5|--mariadb105|
      --mariadb10.6|--mariadb106|
-     --mariadb10.7|--mariadb107|
      --mariadb10.8|--mariadb108|
-     --mariadb10.9|--mariadb109]
+     --mariadb10.9|--mariadb109|
+     --mariadb10.10|--mariadb1010|
+     --mariadb10.11|--mariadb1011]
     [--dbhost host]
     [--dbrootpass pasword
     [--dbname dbname]
@@ -195,9 +196,10 @@ provision サブコマンドのオプションは以下のとおりです。
 | --php7.4/--php74                          |                                  | kusanagi-php:7.4.xを使用します。                             |
 | --php=version                             |                                  | DockerHub上にある任意のバージョンのPHPを使用します。         |
 | --dbsystem mysql/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= mysql/pgsql  | 使用するDBシステムを指定します。ただし、WordPressおよびdrupal7/drupal8は必ずMySQLを使用し、このオプションは指定不要です。postgresql は現在実験中です。 |
+| --mariadb10.11/--mariadb1011                |                                  | DBとして、mariadb:10.11.x-jammy を使用します。                |
+| --mariadb10.10/--mariadb1010                |                                  | DBとして、mariadb:10.10.x-jammy を使用します。                |
 | --mariadb10.9/--mariadb109                |                                  | DBとして、mariadb:10.9.x-jammy を使用します。                |
 | --mariadb10.8/--mariadb108                |                                  | DBとして、mariadb:10.8.x-jammy を使用します。                |
-| --mariadb10.7/--mariadb107                |                                  | DBとして、mariadb:10.7.x-focal を使用します。                |
 | --mariadb10.6/--mariadb106                |                                  | DBとして、mariadb:10.6.x-focal を使用します。無指定時はmariadb:10.6.x-focalを使用します。 |
 | --mariadb10.5/--mariadb105                |                                  | DBとして、mariadb:10.5.x-focal を使用します。                |
 | --dbhost host                             | DBHOST                           | 接続するDBホスト名を指定します。無指定時はlocalhostです。    |
