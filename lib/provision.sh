@@ -59,8 +59,7 @@ function k_check_wplang() {
 function k_check_fqdn() {
 	local PRE_OPT="$1"
 	local OPT="$2"
-	if [[ "$OPT" =~ ^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]))+\.?$ ]] && \
-		[[ "$OPT" =~ ^[a-zA-Z0-9\.\-]{3,253}$ ]] ; then
+	if [[ $OPT =~ ^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]))+\.?$ ]] && [[ $OPT =~ ^[a-zA-Z0-9\.\-]{3,253}$ ]] ; then
 		echo "$OPT"
 	else
 		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input valid hostname.")
@@ -470,17 +469,16 @@ function k_provision () {
 					"${OPT%%=*}" "${OPT#*=}" "$KUSANAGI_DB_SYSTEM")
 				[ -z $KUSANAGI_DB_SYSTEM ] && return 1
 				;;
-			--nginx1.23|--nginx123)
-				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX123_IMAGE
-				;;
 			--nginx1.24|--nginx124)
 				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX124_IMAGE
+				OPT_NGINX=1
+				;;
+			--nginx1.25|--nginx125)
+				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX125_IMAGE
+				OPT_NGINX=1
 				;;
 			--nginx=*)
 				KUSANAGI_NGINX_IMAGE=primestrategy/kusanagi-nginx:"${OPT%%=*}"
-				;;
-			--php7.4|--php74)
-				KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP74_IMAGE
 				;;
 			--php8.0|--php80)
 				KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP80_IMAGE
@@ -532,14 +530,7 @@ function k_provision () {
 	done
 
 	APP=${APP:-wp}
-	KUSANAGI_DB_SYSTEM=${KUSANAGI_DB_SYSTEM:-mysql}
-	if [ $KUSANAGI_DB_SYSTEM = "mysql" ] ; then
-		DBLIB=/var/run/mysqld
-	else
-		DBLIB=/var/run/pgsql
-	    SMALL=1
-	fi
-	
+
 	## option check
 	if [ "x$OPT_NGINX" = "x" -a "x$OPT_HTTPD" = "x" ] ; then
 		OPT_NGINX=1
@@ -588,15 +579,24 @@ function k_provision () {
 	fi
 	
 	## db configuration
+	KUSANAGI_DB_SYSTEM=${KUSANAGI_DB_SYSTEM:-mysql}
+	if [ $KUSANAGI_DB_SYSTEM = "mysql" ] ; then
+		DBLIB=/var/run/mysqld
+	else
+		DBLIB=/var/run/pgsql
+	    SMALL=1
+	fi
 	DBHOST=${DBHOST:-localhost}
-	if [ "$DBHOST" = 'localhost' ] ; then
+	if [[ "$DBHOST" == 'localhost' ]] ; then
 		DBROOTPASS=${DBROOTPASS:-$(k_mkpasswd)}
 		#if [ "$KUSANAGI_DB_SYSTEM" = "mysql" ]; then
 		#	DBHOST="localhost:/var/run/mysqld/mysqld.sock";
 		#fi
 	else
 		export NO_USE_DB=1
+		DBLIB=
 	fi
+
 	DBNAME=${DBNAME:-$(k_mkusername $SMALL)}
 	DBUSER=${DBUSER:-$(k_mkusername $SMALL)}
 	DBPASS=${DBPASS:-$(k_mkpasswd)}
@@ -631,7 +631,7 @@ NO_USE_NAXSI=${NO_USE_NAXSI:-1}
 NO_USE_SSLST=${NO_USE_SSLST:-1}
 NO_SSL_REDIRECT=${NO_SSL_REDIRECT:-1}
 EOF
-	k_add_profile EXPIRE_DAYS "$EXPIRE_DAYS" 90 $OUTFILE
+	k_add_profile EXPIRE_DAYS "$EXPIRE_DAYS" 90d $OUTFILE
 	k_add_profile OSCP_RESOLV "$OSCP_RESOLV" 8.8.8.8 $OUTFILE
 
 	# add .kusanagi.php
@@ -652,7 +652,7 @@ EOF
 	k_add_profile MAILPASS "$MAILPASS" '' $OUTFILE
 	k_add_profile MAILAUTH "$MAILAUTH" '' $OUTFILE
 
-	[ "x$APP" = "xwp" ] && cat <<EOF > $PROFILE/.kusanagi.wp
+	[[ "x$APP" == "wp" ]] && cat <<EOF > $PROFILE/.kusanagi.wp
 KUSANAGIPASS=$KUSANAGI_PASS
 WP_TITLE="$WP_TITLE"
 WP_LANG=$WP_LANG
@@ -698,6 +698,10 @@ EOF
 			k_add_profile PGDATA "$PGDATA" '' $OUTFILE
 			k_add_profile POSTGRES_INITDB_WALDIR "$POSTGRES_INITDB_WALDIR" '' $OUTFILE
 		fi
+	else
+		if [[ "$KUSANAGI_DB_SYSTEM" == "mysql" ]] && ! [[ mysql -h$DBHOST -u$DBUSER -p$DBPASS $DBNAME > /dev/null ]] ; then
+			 (k_print_error "$DBHOST $(eval_gettext "is cannot connect.")" && return 1)
+		fi
 	fi
 
 	k_target $PROFILE
@@ -707,10 +711,10 @@ EOF
 	source "$LIBDIR/$APP.sh" || return 1
 	source "$LIBDIR/config.sh" || return 1
 	mkdir -p contents/$_rootdir
-	if [ "x$TARPATH" != "x" ] && [ -f $TARPATH ] ; then
+	if [[ "$TARPATH" != "" ] && [[ -f $TARPATH ]] ; then
 		tar xf $TARFILE -C contents/$_rootdir
 		k_content push
-	elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then
+	elif [[  "$GITPATH" != "" ]] && [[ -f $GITPATH ]] ; then
 		git clone $GITPATH contents/$_rootdir
 		k_content push
 	else
