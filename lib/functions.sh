@@ -27,6 +27,15 @@ function k_configcmd_root() {
 	k_compose run --rm -u 0 -w $_dir config $@
 }
 
+function k_mariadb_check() {
+	local OPT="-h$DBUSER -P$DBPORT"
+	if [[ $DBHOST != "localhost" ]]; then
+		OPT="-h$DBUSER -P$DBPORT"
+	fi
+	k_configcmd / mysqladmin status $OPT -u$DBUSER -p"$DBPASS" 2>&1 > /dev/null
+	return $?
+}
+
 function k_php_exec() {
 	local _dir=$1
 	shift
@@ -137,6 +146,7 @@ function k_helphelp {
 				echo '    '$(eval_gettext ' --mariadb10.10|--mariadb1010|')
 				echo '    '$(eval_gettext ' --mariadb10.11|--mariadb1011]')
 				echo '    '$(eval_gettext '[--dbhost host]')
+				echo '    '$(eval_gettext '[--dbport port]')
 				echo '    '$(eval_gettext '[--dbrootpass pasword')
 				echo '    '$(eval_gettext '[--dbname dbname]')
 				echo '    '$(eval_gettext '[--dbuser username]')

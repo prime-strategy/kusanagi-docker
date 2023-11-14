@@ -41,7 +41,7 @@ fi
 echo >> docker-compose.yml
 echo 'volumes:' >> docker-compose.yml
 echo '  kusanagi:' >>  docker-compose.yml
-[[ $DBHOST =~ ^localhost ]] && echo '  database:' >> docker-compose.yml
+[[ $NO_USE_DB ]] || echo '  database:' >> docker-compose.yml
 
 k_compose up -d \
 && k_configcmd_root "/" chown 1000:1001 /home/kusanagi \

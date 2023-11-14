@@ -200,10 +200,10 @@ function k_provision () {
 
 	local OPT_WOO=	# use WooCommerce option(1 = use/other no use)
 	local OPT_WPLANG OPT_FQDN OPT_EMAIL OPT_DBHOST OPT_DBROOTPASS
-	local OPT_DBNAME OPT_DBUSER OPT_DBPASS OPT_KUSANAGI_PASS OPT_DBSYSTEM
+	local OPT_DBNAME OPT_DBPORT OPT_DBUSER OPT_DBPASS OPT_KUSANAGI_PASS OPT_DBSYSTEM
 	local OPT_NGINX OPT_HTTPD OPT_HTTP_PORT OPT_TLS_PORT
 	local OPT PRE_OPT
-	local WP_LANG=en_US FQDN= MAILADDR= DBHOST= DBROOTPASS= DBNAME= DBUSER= DBPASS=
+	local WP_LANG=en_US FQDN= MAILADDR= DBHOST= DBPORT= DBROOTPASS= DBNAME= DBUSER= DBPASS=
 	local ADMIN_USER= ADMIN_PASS= KUSANAGI_PASS= WP_TITLE= GITPATH= TARPATH=
 	local OPT_NO_FTP= OPT_NO_EMAIL=1
 	local HTTP_PORT=${HTTP_PORT:-80} HTTP_TLS_PORT=${HTTP_TLS_PORT:-443}
@@ -235,6 +235,10 @@ function k_provision () {
 			DBHOST=$(k_check_host "$PRE_OPT" "$OPT")
 			[ -z $DBHOST ] && return 1
 			OPT_DBHOST=
+		elif [ $OPT_DBPORT ] ; then
+			DBPORT=$(k_check_host "$PRE_OPT" "$OPT")
+			[ -z $DBPORT ] && return 1
+			OPT_DBPORT=
 		elif [ $OPT_DBNAME ] ; then
 			DBNAME=$(k_check_dbname "$PRE_OPT" "$OPT")
 			[ -z $DBNAME ] && return 1
@@ -374,6 +378,13 @@ function k_provision () {
 			--dbhost=*)
 				DBHOST=$(k_check_host "${OPT%%=*}" "${OPT#*=}")
 				[ -z $DBHOST ] && return 1
+				;;
+			'--dbport')
+				OPT_DBPORT=1
+				;;
+			--dbport=*)
+				DBPORT=$(k_check_port "${OPT%%=*}" "${OPT#*=}")
+				[ -z $DBPORT ] && return 1
 				;;
 			'--dbrootpass')
 				OPT_DBROOTPASS=1
@@ -582,9 +593,11 @@ function k_provision () {
 	KUSANAGI_DB_SYSTEM=${KUSANAGI_DB_SYSTEM:-mysql}
 	if [ $KUSANAGI_DB_SYSTEM = "mysql" ] ; then
 		DBLIB=/var/run/mysqld
-	else
+		DBPORT=${DBPORT:-3306}
+		else
 		DBLIB=/var/run/pgsql
-	    SMALL=1
+		DBPORT=${DBPORT:-5423}
+		SMALL=1
 	fi
 	DBHOST=${DBHOST:-localhost}
 	if [[ "$DBHOST" == 'localhost' ]] ; then
@@ -594,7 +607,7 @@ function k_provision () {
 		#fi
 	else
 		export NO_USE_DB=1
-		DBLIB=
+		DBLIB="${DBHOST}:${DBPORT}"
 	fi
 
 	DBNAME=${DBNAME:-$(k_mkusername $SMALL)}
@@ -652,7 +665,7 @@ EOF
 	k_add_profile MAILPASS "$MAILPASS" '' $OUTFILE
 	k_add_profile MAILAUTH "$MAILAUTH" '' $OUTFILE
 
-	[[ "x$APP" == "wp" ]] && cat <<EOF > $PROFILE/.kusanagi.wp
+	[[ "$APP" == "wp" ]] && cat <<EOF > $PROFILE/.kusanagi.wp
 KUSANAGIPASS=$KUSANAGI_PASS
 WP_TITLE="$WP_TITLE"
 WP_LANG=$WP_LANG
@@ -698,23 +711,20 @@ EOF
 			k_add_profile PGDATA "$PGDATA" '' $OUTFILE
 			k_add_profile POSTGRES_INITDB_WALDIR "$POSTGRES_INITDB_WALDIR" '' $OUTFILE
 		fi
-	else
-		if [[ "$KUSANAGI_DB_SYSTEM" == "mysql" ]] && ! [[ mysql -h$DBHOST -u$DBUSER -p$DBPASS $DBNAME > /dev/null ]] ; then
-			 (k_print_error "$DBHOST $(eval_gettext "is cannot connect.")" && return 1)
-		fi
+#	elif [[ "$KUSANAGI_DB_SYSTEM" == "mysql" ]] && ! [[ mysql -h$DBHOST -P$DBPORT -u$DBUSER -p$DBPASS $DBNAME > /dev/null ]] ; then
+#		 (k_print_error "$DBHOST $(eval_gettext "is cannot connect.")" && return 1)
 	fi
 
 	k_target $PROFILE
 	cd $PROFILE
-	#[ "$MACHINE" != "localhost" ] && eval $(docker-machine $MACHINE env)
-	[ -f "$LIBDIR/$APP.sh" ] || (k_print_error "$APP $(eval_gettext "is not implemented.")" && return 1)
+	[[ -f "$LIBDIR/$APP.sh" ]] || (k_print_error "$APP $(eval_gettext "is not implemented.")" && return 1)
 	source "$LIBDIR/$APP.sh" || return 1
 	source "$LIBDIR/config.sh" || return 1
 	mkdir -p contents/$_rootdir
-	if [[ "$TARPATH" != "" ] && [[ -f $TARPATH ]] ; then
+	if [[ -n $TARPATH && -f $TARPATH ]] ; then
 		tar xf $TARFILE -C contents/$_rootdir
 		k_content push
-	elif [[  "$GITPATH" != "" ]] && [[ -f $GITPATH ]] ; then
+	elif [[ -n $GITPATH && -f $GITPATH ]] ; then
 		git clone $GITPATH contents/$_rootdir
 		k_content push
 	else
@@ -722,14 +732,14 @@ EOF
 		k_dbdump
 	fi
 
+	# waiting httpd start
 	local ENTRY=$(k_compose exec httpd ps | grep 'docker-entrypoint.sh')
 	local FIRST=1
-	while [ "x$ENTRY" != "x" ] ; do
+	while [[ "$ENTRY" != "" ]] ; do
 		[ $FIRST ] && FIRST= && \
-			echo -n -e "\e[32m" $(eval_gettext "Waiting HTTPD init process")
 		echo -n "."
 		ENTRY=$(k_compose exec httpd ps | grep 'openssl')
-		[ "x$ENTRY" = "x" ] && break
+		[[ -z "$ENTRY" ]] && break
 		sleep 5
 	done
 	echo -e "\e[m"
@@ -740,7 +750,7 @@ EOF
 	SSL_DHPARAM=$(echo $DHPARAM | tr "\r\n" " " | sed 's/  / /g')
 	echo "SSL_DHPARAM=\"$SSL_DHPARAM\"" >> .kusanagi.httpd
 
-	# use let's encrypt
+# use let\'s encrypt
 #	if [ "x$MAILADDR" != "x" ] ; then
 #		k_compose run certbot certonly --text \
 #			--noninteractive --webroot -w /usr/share/httpd/html/ -d $FQDN -m $MAILADDR --agree-tos

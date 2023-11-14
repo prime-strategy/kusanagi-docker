@@ -7,66 +7,75 @@
 source .kusanagi
 source .kusanagi.wp
 
+_wpini=".wp_mysqli.ini"
+if [[ $NO_USE_DB ]] ; then
+	echo "mysqli.default_host = $DBHOST" >  $_wpini
+	echo "mysqli.default_port = $DBPORT" >> $_wpini
+	echo "mysqli.default_name = $DBNAME" >> $_wpini
+	echo "mysqli.default_user = $DBUSER" >> $_wpini
+	echo "mysqli.default_pw   = $DBPASS" >> $_wpini
+else
+	echo 'mysqli.default_socket = /var/run/mysqld/mysqld.sock' > $_wpini
+fi
+
 WSL1_BUILD=
 WSL1_CONTEXTS=
 WSL_INI=
+mysqli_ini
 if (df . | awk 'END { print $1}' | grep / > /dev/null) ; then
-    # WSL1以外
-    WSL1_BUILD="    image: $WPCLI_IMAGE"
-    WSL_INI="- ./.wp_mysqli.ini:/usr/local/etc/php/conf.d/wp_mysqli.ini"
-    echo 'mysqli.default_socket = /var/run/mysqld/mysqld.sock' > .wp_mysqli.ini
+	# WSL1以外
+	WSL1_BUILD="    image: $WPCLI_IMAGE"
+	WSL_INI="- ./.wp_mysqli.ini:/usr/local/etc/php/conf.d/wp_mysqli.ini"
 else
-    # WSL1
-    WSL1_BUILD="    build:"
-    WSL1_CONTEXTS="        context: ./wpcli"
-    mkdir -p wpcli
+	# WSL1
+	WSL1_BUILD="    build:"
+	WSL1_CONTEXTS="        context: ./wpcli"
+	mkdir -p wpcli
 cat <<EOT > wpcli/Dockerfile
 FROM $WPCLI_IMAGE
 MAINTAINER kusanagi@prime-strategy.co.jp
 
-COPY wp_mysqli.ini /usr/local/etc/php/conf.d/wp_mysql.ini
+COPY .wp_mysqli.ini /usr/local/etc/php/conf.d/wp_mysql.ini
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["wp", "shell"]
 EOT
-    echo 'mysqli.default_socket = /var/run/mysqld/mysqld.sock' > wpcli/wp_mysqli.ini
 fi
 
 IMAGE=$([ $OPT_NGINX ] && echo $KUSANAGI_NGINX_IMAGE || ([ $OPT_HTTPD ] && echo $KUSANAGI_HTTPD_IMAGE))
 # create docker-compose.yml
 env FQDN=$FQDN \
-    PROFILE=$PROFILE \
-    HTTPD_IMAGE=$IMAGE \
-    KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP_IMAGE \
-    CONFIG_IMAGE=$WPCLI_IMAGE \
-    CERTBOT_IMAGE=$CERTBOT_IMAGE \
-    HTTP_PORT=$HTTP_PORT \
-    HTTP_TLS_PORT=$HTTP_TLS_PORT \
-    DBLIB=$DBLIB \
-    WSL1_BUILD="$WSL1_BUILD" \
-    WSL1_CONTEXT="$WSL1_CONTEXTS" \
-    WSL_INI="$WSL_INI" \
+	PROFILE=$PROFILE \
+	HTTPD_IMAGE=$IMAGE \
+	KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP_IMAGE \
+	CONFIG_IMAGE=$WPCLI_IMAGE \
+	CERTBOT_IMAGE=$CERTBOT_IMAGE \
+	HTTP_PORT=$HTTP_PORT \
+	HTTP_TLS_PORT=$HTTP_TLS_PORT \
+	DBLIB=$DBLIB \
+	WSL1_BUILD="$WSL1_BUILD" \
+	WSL1_CONTEXT="$WSL1_CONTEXTS" \
+	WSL_INI="$WSL_INI" \
 	envsubst '$$FQDN $$PROFILE $$HTTPD_IMAGE
 	$$KUSANAGI_PHP_IMAGE $$KUSANAGI_FTPD_IMAGE
 	$$CONFIG_IMAGE $$CERTBOT_IMAGE
 	$$HTTP_PORT $$HTTP_TLS_PORT $$DBLIB
-    $$WSL1_BUILD $$WSL1_CONTEXTS $$WSL_INI' \
+	$$WSL1_BUILD $$WSL1_CONTEXTS $$WSL_INI' \
 	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/wpcli.template $LIBDIR/templates/php.template) > docker-compose.yml
-if ! [ $NO_USE_DB ] ; then
+if [[ $NO_USE_DB -eq 0 ]] ; then
 	env PROFILE=$PROFILE KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL_IMAGE \
 	envsubst '$$PROFILE $$KUSANAGI_MYSQL_IMAGE' \
 	< $LIBDIR/templates/mysql.template >> docker-compose.yml
 fi
-if ! [ $NO_USE_FTP ] ; then
-    env PROFILE=$PROFILE KUSANAGI_FTPD_IMAGE=$KUSANAGI_FTPD_IMAGE  \
+if [[ $NO_USE_FTP -eq 0 ]] ; then
+	env PROFILE=$PROFILE KUSANAGI_FTPD_IMAGE=$KUSANAGI_FTPD_IMAGE  \
 	envsubst '$$PROFILE $$KUSANAGI_FTPD_IMAGE' \
 	< $LIBDIR/templates/ftpd.template >> docker-compose.yml
 fi
 echo >> docker-compose.yml
 echo 'volumes:' >> docker-compose.yml
 echo '  kusanagi:' >>  docker-compose.yml
-
-[[ $DBHOST =~ ^localhost ]] && echo '  database:' >> docker-compose.yml
+[[ $NO_USE_DB ]] || echo '  database:' >> docker-compose.yml
 
 function wp_lang() {
 	if [ ${1} != "en_US" ] ; then
@@ -92,14 +101,15 @@ elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then
 	k_copy $DOCUMENTROOT contents/* contents/.[^.]*
 else
 
-	if ! [ $NO_USE_DB ] ; then
-		local ENTRY=1
+	if [[ $NO_USE_DB ]] ; then
+		if ! k_mariadb_check; then
+			k_print_error "$DBHOST $(eval_gettext "is cannot connect.")" && exit 1
+		fi
+	else
 		echo -n -e "\e[32m" $(eval_gettext "Waiting MySQL init process")
-		while [ $ENTRY -eq 1 ] ; do
+		while k_mariadb_check ; do
 			echo -n "."
 			sleep 5
-			k_configcmd / mysqladmin status -u$DBUSER -p"$DBPASS" 2>&1 > /dev/null
-			ENTRY=$?
 		done
 		echo -e "\e[m"
 	fi
