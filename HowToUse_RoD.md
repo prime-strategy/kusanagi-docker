@@ -23,7 +23,7 @@ The software required to use RoD will be the following.
 - gettext
 - envsubst
 - curl
-- python(2 or 3)
+- python3
 - docker(18.0x and above)
 - docker-compose
 - docker-machine (optional)
@@ -88,30 +88,26 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
     WPOPTION:
          --wplang lang(like en_US, ja)]
          [--admin-user admin] [--admin-pass pass] [--admin-email email]
-         [--wp-title title] [--kusanagi-pass pass] a |
+         [--wp-title title] [--kusanagi-pass pass] [--noftp|--no-ftp] |
      --lamp|--c5|--concrete5|--concrete|
-     --drupal|--drupal7|--drupal8|--drupal9|--drupal10]
+     --drupal|--drupal9|--drupal10]
     [--nginx|--httpd]
-    [--nginx1.23|--nginx123|
-     --nginx1.24|--nginx124|--nginx=version]
+    [--nginx1.24|--nginx124|
+     --nginx1.25|--nginx125|--nginx=version]
     [--http-port port][--tls-port port]
-    [--php7.4|--php74|
-     --php8.0|--php80|
-     --php8.1|--php81|
+    [--php8.1|--php81|
      --php8.2|--php82|--php=version]
-    [--dbsystem mysql|mariadb|pgsql|postgrsql]
+    [--dbsystem mysql|mariadb]
     [--mariadb10.5|--mariadb105|
      --mariadb10.6|--mariadb106|
-     --mariadb10.8|--mariadb108|
-     --mariadb10.9|--mariadb109|
-     --mariadb10.10|--mariadb1010|
      --mariadb10.11|--mariadb1011]
     [--dbhost host]
+    [--dbport port]
     [--dbrootpass pasword
     [--dbname dbname]
     [--dbuser username]
     [--dbpass password]
-remove [-y] a
+remove [-y] [target]
 - configuration (runs on target dir) -
 ssl [options]
     [--cert file --key file]
@@ -136,7 +132,6 @@ import/export
 - status (runs on target dir) -
 start|stop|restart|status
 ----------------------
-INFO: Done.
 ```
 
 The main subcommands are as follows.
@@ -183,31 +178,24 @@ The options for the provision subcommand are as follows.
 | --noftp/--no-ftp                          |                                  | Do not use ftp for updating in WordPress.                    |
 | --c5/--concrete5/--concrete               | APP=c5                           | Build the Concreate CMS environment. this use only php74 or php80. |
 | --lamp/--LAMP                             | APP=lamp                         | Build a LAMP environment.                                    |
-| --drupal7                                 | APP=drupal<br />DRUPAL_VERSION=7 | Build a drupal7 environment. this use only php74.            |
-| --drupal8                                 | APP=drupal<br />DRUPAL_VERSION=8 | Build a drupal8 environment. this use only php74.            |
-| --drupal9/--drupal                        | APP=drupal<br />DRUPAL_VERSION=9 | Build a drupal9 environment.                                  |
-| --drupal10                                | APP=drupal<br />DRUPAL_VERSION=10 | Build a drupal10 environment.                                 |
+| --drupal9                               | APP=drupal<br />DRUPAL_VERSION=9 | Build a drupal9 environment.                                  |
+| --drupal10/--drupal                         | APP=drupal<br />DRUPAL_VERSION=10 | Build a drupal10 environment.                                 |
 | --httpd                                   |                                  | Use httpd (Apache 2.4). Cannot be specified at the same time as the --nginx option. |
 | --nginx                                   |                                  | Use nginx. Cannot be specified at the same time as the --httpd option. If not specified, nginx will be used. |
-| --nginx1.23/--nginx123                    |                                  | When nginx is used, kusanagi-nginx:1.23.x is used. When not specified, kusanagi-nginx:1.23.x is used. |
-| --nginx1.24/--nginx124                    |                                  | When using nginx, kusanagi-nginx:1.24.x is used.             |
-| --nginx=versions                          |                                  | When using nginx, you can use any version published on Docker Hub. 1.18/1.19 can also be specified, but they have not been updated yet. You can also specify 1.18/1.19, but they are not updated yet, so use them at your own risk. |
+| --nginx1.24/--nginx124                    |                                  | When nginx is used, kusanagi-nginx:1.24.x is used. When not specified, kusanagi-nginx:1.23.x is used. |
+| --nginx1.25/--nginx125                    |                                  | When using nginx, kusanagi-nginx:1.25.x is used.             |
+| --nginx=versions                          |                                  | When using nginx, you can use any version published on Docker Hub. 1.18/1.19 can also be specified, but they have not been updated yet. You can old versions, but they are not updated yet, so use them at your own risk. |
 | --http-port num                           | HTTP_PORT                        | Specifies the http port number to be port-forwarded to the host. If not specified, 80 will be specified. If you select a port that is already in use, the build will fail. |
 | --tls-port num                            | HTTP_TLS_PORT                    | Specifies the https port number to be port-forwarded to the host. If not specified, 443 will be specified. If you select a port that is already in use, the build will fail. |
 | --php8.2/--php81                          |                                  | Use kusanagi-php:8.2.x.                                      |
-| --php8.1/--php81                          |                                  | Use kusanagi-php:8.1.x.                                      |
-| --php8.0/--php80                          |                                  | Use kusanagi-php:8.0.x. If not specified, kusanagi-php:8.1.x will be used. |
-| --php7.4/--php74                          |                                  | Use kusanagi-php:7.4.x.                                      |
+| --php8.1/--php81                          |                                  | Use kusanagi-php:8.1. x. If not specified, kusanagi-php:8.1.x will be used. |
 | --php=version                             |                                  | Use any version of PHP that is available on DockerHub.       |
-| --dbsystem mysql/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= mysql/pgsql  | Specify the DB system to use. However, WordPress, drupal7, and drupal8 always use MySQL and do not require this option. postgresql is currently under experimentation. |
+| --dbsystem mariadb/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= MariaDB/PostgreSQL  | Specify the DB system to use. However, WordPress and drupal always use MariaDB and do not require this option. postgresql is currently under experimentation. |
 | --mariadb10.11/--mariadb1011              |                                  | Use mariadb:10.11.x-jammy as the DB.                         |
-| --mariadb10.10/--mariadb1010              |                                  | Use mariadb:10.10.x-jammy as the DB.                         |
-| --mariadb10.9/--mariadb109                |                                  | Use mariadb:10.9.x-jammy as the DB.                          |
-| --mariadb10.8/--mariadb108                |                                  | Use mariadb:10.8.x-jammy as the DB.                          |
-| --mariadb10.6/--mariadb107                |                                  | Use mariadb:10.6.x-focal as the DB.                          |
 | --mariadb10.6/--mariadb106                |                                  | Use mariadb:10.6.x-focal as the DB. When not specified, mariadb:10.6.x-focal is used. |
 | --mariadb10.5/--mariadb105                |                                  | Use mariadb:10.5.x-focal as the DB                           |
 | --dbhost host                             | DBHOST                           | Specifies the DB host name to connect to. If not specified, localhost is used. |
+| --dbport port                             | DBPORT                           | Specifies the DB port nnumber to connect to. If not specified, 3306 is used. |
 | --dbrootpass pass                         | DB_ROOTPASS                      | Specifies the root password of the DB host to connect to. If not specified, it will be a random string. |
 | --dbname name                             | DBNAME                           | Specify the DB name to connect. If not specified, it will be a random string. |
 | --dbuser user                             | DBUSER                           | Specifies the DB user name to connect to. If not specified, it will be a random string. |
@@ -241,7 +229,7 @@ After provisioning, the following Docker container will be launched.
 | ------- | ------------------------------------------------------------ |
 | httpd   | The httpd container performs web services by port-forwarding HTTP/TLS ports from the host's network through the httpd bridge. httpd runs in the application directory in the kusanagi volume as the root directory as the root directory. |
 | php     | It runs PHP-FPM and communicates with the httpd container by sharing the httpd network. The application is placed on the kusanagi volume, and the DB is connected to using a socket file on the DB volume. <br />The php container is equipped with the ssmtp command, which enables SMTP forwarding to external servers. |
-| db      | MySQL or Postgresql can be used. It is not created when using an external DB server. db uses a DB volume to place DB tables, etc., and communicates with php via a socket file. |
+| db      | MariaDB or PostgreSQL can be used. It is not created when using an external DB server. db uses a DB volume to place DB tables, etc., and communicates with php via a socket file. |
 | config  | It is usually stopped, but it is started when kusanagi-docker config is used. <br />The kusanagi-docker config command manipulates the kusanagi and db volumes for application deployment, backup and restore. <br />When building WordPress, wpcli images are used to install and uninstall WorPress plugins, themes, languages, etc. |
 | ftp     | Runs only when provisioned by WordPress. ftp communication from the php container to update WordPress core, plugins, and themes via the WordPress web page. |
 | certbot | Obtain an SSL certificate from let's encrypt (we are currently experimenting with this and have not released instructions for use). |
@@ -375,7 +363,7 @@ To use the recommended version (the current latest version), please run $HOME/.k
 | [kusanagi-config](https://hub.docker.com/r/primestrategy/kusanagi-config) | Image for kusanagi config command                            |
 | [wordpress:cli](https://hub.docker.com/_/wordpress)          | Config command image for building WordPress                  |
 | [kusanagi-ftpd](https://hub.docker.com/r/primestrategy/kusanagi-ftpd) | Container image to run vsftpd, used only when building WordPress. |
-| [mariadb](https://hub.docker.com/_/mariadb)                  | MySQL image                                                  |
+| [mariadb](https://hub.docker.com/_/mariadb)                  | MariaDB image                                                  |
 | [postgresql](https://hub.docker.com/_/postgres)              | Postgresql image                                             |
 | [certbot](https://hub.docker.com/r/certbot/certbot)          | Certbot image                                                |
 

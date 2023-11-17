@@ -10,8 +10,8 @@ ${WSL1_CONTEXTS}
       - .kusanagi.wp
       - .kusanagi.db
     volumes:
-      - database:/var/run/mysqld
       - kusanagi:/home/kusanagi
       ${WSL_INI}
+      ${WSL_VOL}
     command: wp --version
 

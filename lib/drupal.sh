@@ -21,15 +21,17 @@ env FQDN=$FQDN \
 	$$KUSANAGI_PHP_IMAGE
 	$$CONFIG_IMAGE $$CERTBOT_IMAGE
 	$$HTTP_PORT $$HTTP_TLS_PORT $$DBLIB' \
-	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/config.template $LIBDIR/templates/php.template) > docker-compose.yml
-if ! [ $NO_USE_DB ] ; then
-	case "$KUSANAGI_DB_SYSTEM" in
-	mysql)
+	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/config.template $LIBDIR/templates/php.template) | \
+	egrep -v '^\s*$' > docker-compose.yml
+
+if ! [[ $NO_USE_DB ]] ; then
+	case "${KUSANAGI_DB_SYSTEM,,}" in
+	mariadb)
 		env PROFILE=$PROFILE KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL_IMAGE \
 		envsubst '$$PROFILE $$KUSANAGI_MYSQL_IMAGE' \
 		< $LIBDIR/templates/mysql.template >> docker-compose.yml
 		;;
-	pgsql)
+	postgresql)
 		env PROFILE=$PROFILE POSTGRESQL_IMAGE=$POSTGRESQL_IMAGE \
 		envsubst '$$PROFILE $$POSTGRESQL_IMAGE' \
 		< $LIBDIR/templates/pgsql.template >> docker-compose.yml
@@ -49,7 +51,12 @@ k_compose up -d \
 && k_configcmd "/" mkdir -p $DOCUMENTROOT \
 && k_copy $BASEDIR $LIBDIR/drupal/drupal.sh
 
-k_print_green "$(eval_gettext 'Provision Drupal')"
+if [[ $NO_USE_DB ]] && ! k_db_check; then
+	# error exit
+	k_print_error "$KUSANAGI_DB_SYSTEM($DBHOST) $(eval_gettext "could not connect to.")"
+	k_remove $PROFILE
+	exit 1
+fi
 
 if [ "x$TARPATH" != "x" ] && [ -f $TARPATH ] ; then
 	mkdir contents
@@ -65,3 +72,4 @@ else
 	&& k_php_exec $BASEDIR rm ./drupal.sh
 fi
 
+k_print_green "$(eval_gettext 'Provision Drupal')"

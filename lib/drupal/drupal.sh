@@ -1,3 +1,5 @@
+#!
+set -e
 
 function deploy_drupal() {
 	local _ver=$1
@@ -6,7 +8,7 @@ function deploy_drupal() {
 	cd $WORKDIR
 	local PROJ="project/drupal/releases"
 	local REL=$(wget -O - https://www.drupal.org/$PROJ/ 2> /dev/null | egrep '<h2><a href="/'$PROJ'/'$_ver'\.[0-9]+\.[0-9]+">' | awk -F\" 'NR==1 {print $2}')
-	[ "x$REL" = "x" ] && REL=$(wget -O - https://www.drupal.org/$PROJ/ 2> /dev/null | egrep '<h2><a href="/'$PROJ'/'$_ver'\.[0-9]+">' | awk -F\" 'NR==1 {print $2}')
+	[ "x$REL" = "x" ] && REL=$(wget -O - https://www.drupal.org/$PROJ/ 2> /dev/null | egrep '<a href="/'$PROJ'/'$_ver'\.[0-9]+">' | awk -F\" 'NR==1 {print $2}')
 	local VER=$(basename $REL)
 
 	wget https://ftp.drupal.org/files/projects/drupal-${VER}.tar.gz

@@ -150,11 +150,11 @@ function k_check_dbsystem() {
 	fi
 	case "$OPT" in
 	'mysql'|'mariadb')
-		echo mysql
+		echo MariaDB
 		;;
 	'postgresql'|'pgsql')
 		k_print_error $(eval_gettext "not implemented.")
-		# echo pgsql
+		# echo PostgreSQL
 		;;
 	'*')
 		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "can not be specified.")
@@ -298,7 +298,7 @@ function k_provision () {
 					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
 				fi
 				APP='wp'
-				KUSANAGI_DB_SYSTEM=mysql
+				KUSANAGI_DB_SYSTEM=MariaDB
 				;;
 			'--c5'|'--concrete5'|'--concrete')
 				if [ "x$APP" != "x" ] ; then
@@ -312,37 +312,21 @@ function k_provision () {
 				fi
 				APP='lamp'
 				;;
-			'--drupal7')
-				if [ "x$APP" != "x" ] ; then
-					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
-				fi
-				APP='drupal'
-				DRUPAL_VERSION=7
-				KUSANAGI_DB_SYSTEM=mysql
-				;;
-			'--drupal8')
-				if [ "x$APP" != "x" ] ; then
-					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
-				fi
-				APP='drupal'
-				DRUPAL_VERSION=8
-				KUSANAGI_DB_SYSTEM=mysql
-				;;
-			'--drupal10')
-				if [ "x$APP" != "x" ] ; then
-					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
-				fi
-				APP='drupal'
-				DRUPAL_VERSION=10
-				KUSANAGI_DB_SYSTEM=mysql
-				;;
-			'--drupal'|'--drupal9')
+			'--drupal9')
 				if [ "x$APP" != "x" ] ; then
 					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
 				fi
 				APP='drupal'
 				DRUPAL_VERSION=9
-				KUSANAGI_DB_SYSTEM=mysql
+				KUSANAGI_DB_SYSTEM=MariaDB
+				;;
+			'--drupal'|'--drupal10')
+				if [ "x$APP" != "x" ] ; then
+					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
+				fi
+				APP='drupal'
+				DRUPAL_VERSION=10
+				KUSANAGI_DB_SYSTEM=MariaDB
 				;;
 			'--wplang')
 				OPT_WPLANG=1
@@ -491,9 +475,6 @@ function k_provision () {
 			--nginx=*)
 				KUSANAGI_NGINX_IMAGE=primestrategy/kusanagi-nginx:"${OPT%%=*}"
 				;;
-			--php8.0|--php80)
-				KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP80_IMAGE
-				;;
 			--php8.1|--php81)
 				KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP81_IMAGE
 				;;
@@ -508,15 +489,6 @@ function k_provision () {
 				;;
 			--mariadb106|--mariadb10.6)
 				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL106_IMAGE
-				;;
-			--mariadb108|--mariadb10.8)
-				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL108_IMAGE
-				;;
-			--mariadb109|--mariadb10.9)
-				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL109_IMAGE
-				;;
-			--mariadb1010|--mariadb10.10)
-				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL1010_IMAGE
 				;;
 			--mariadb1011|--mariadb10.11)
 				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL1011_IMAGE
@@ -556,14 +528,6 @@ function k_provision () {
 		return 1
 	fi
 
-	if [ $APP = "drupal" ] ; then
-		# drupal7/8 can deploy only php7.4
-		if [ $DRUPAL_VERSION -lt 9 ] && [ $KUSANAGI_PHP_IMAGE != $KUSANAGI_PHP74_IMAGE ]; then
-			k_print_error $(eval_gettext "Drupal 7/8 can deploy only php7.4.")
-			return 1
- 		fi
-	fi
-	
 	# for config
 	PROFILE=$NEW_PROFILE
 	KUSANAGI_TYPE=$APP
@@ -590,24 +554,24 @@ function k_provision () {
 	fi
 	
 	## db configuration
-	KUSANAGI_DB_SYSTEM=${KUSANAGI_DB_SYSTEM:-mysql}
-	if [ $KUSANAGI_DB_SYSTEM = "mysql" ] ; then
-		DBLIB=/var/run/mysqld
+	KUSANAGI_DB_SYSTEM=${KUSANAGI_DB_SYSTEM:-MariaDB}
+	if [[ ${KUSANAGI_DB_SYSTEM,,} == "mariadb" ]] ; then
+		DBLIB="- database:/var/run/mysqld"
 		DBPORT=${DBPORT:-3306}
-		else
-		DBLIB=/var/run/pgsql
+	else
+		DBLIB="- database:/var/run/pgsql"
 		DBPORT=${DBPORT:-5423}
 		SMALL=1
 	fi
 	DBHOST=${DBHOST:-localhost}
 	if [[ "$DBHOST" == 'localhost' ]] ; then
 		DBROOTPASS=${DBROOTPASS:-$(k_mkpasswd)}
-		#if [ "$KUSANAGI_DB_SYSTEM" = "mysql" ]; then
+		#if [[ "${KUSANAGI_DB_SYSTEM,,}" == "mariadb" ]]; then
 		#	DBHOST="localhost:/var/run/mysqld/mysqld.sock";
 		#fi
 	else
 		export NO_USE_DB=1
-		DBLIB="${DBHOST}:${DBPORT}"
+		DBLIB=""
 	fi
 
 	DBNAME=${DBNAME:-$(k_mkusername $SMALL)}
@@ -684,8 +648,8 @@ DBUSER=$DBUSER
 DBPASS=$DBPASS
 EOF
 	if ! [ $NO_USE_DB ] ; then
-		if [ "$KUSANAGI_DB_SYSTEM" = "mysql" ] ; then
-			OUTFILE=$PROFILE/.kusanagi.mysql
+		if [ "${KUSANAGI_DB_SYSTEM,,}" = "mariadb" ] ; then
+			OUTFILE=$PROFILE/.kusanagi.mariadb
 			cat <<EOF > $OUTFILE
 MYSQL_ROOT_PASSWORD=$DBROOTPASS
 MYSQL_DATABASE=$DBNAME
@@ -698,7 +662,7 @@ EOF
 			k_add_profile SOCKET "$SOCKET" '' $OUTFILE
 			k_add_profile MYSQL_INITDB_SKIP_TZINFO "$MYSQL_INITDB_SKIP_TZINFO" '' $OUTFILE
 			k_add_profile MYSQL_ROOT_HOST "$MYSQL_ROOT_HOST" '' $OUTFILE
-		elif [ "$KUSANAGI_DB_SYSTEM" = "pgsql" ] ; then
+		elif [ "${KUSANAGI_DB_SYSTEM,,}" = "postgresql" ] ; then
 			OUTFILE=$PROFILE/.kusanagi.pgsql
 			cat <<EOF > $OUTFILE
 POSTGRES_DB=$DBNAME
@@ -711,7 +675,7 @@ EOF
 			k_add_profile PGDATA "$PGDATA" '' $OUTFILE
 			k_add_profile POSTGRES_INITDB_WALDIR "$POSTGRES_INITDB_WALDIR" '' $OUTFILE
 		fi
-#	elif [[ "$KUSANAGI_DB_SYSTEM" == "mysql" ]] && ! [[ mysql -h$DBHOST -P$DBPORT -u$DBUSER -p$DBPASS $DBNAME > /dev/null ]] ; then
+#	elif [[ "$KUSANAGI_DB_SYSTEM" == "MariaDB" ]] && ! [[ mysql -h$DBHOST -P$DBPORT -u$DBUSER -p$DBPASS $DBNAME > /dev/null ]] ; then
 #		 (k_print_error "$DBHOST $(eval_gettext "is cannot connect.")" && return 1)
 	fi
 

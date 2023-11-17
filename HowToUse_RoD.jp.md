@@ -23,7 +23,7 @@ RoDを使用するために必要なソフトウェアは以下のものにな�
 - gettext
 - envsubst
 - curl
-- python(2 もしくは 3)
+- python3
 - docker(18.0x以上)
 - docker-compose
 - docker-machine(オプショナル)
@@ -86,30 +86,26 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
     WPOPTION:
          --wplang lang(like en_US, ja)]
          [--admin-user admin] [--admin-pass pass] [--admin-email email]
-         [--wp-title title] [--kusanagi-pass pass] |
-     --lamp|--c5|--concrete5|--concreate|
-     --drupal|--drupal7|--drupal8|--drupal9--drupal10]
+         [--wp-title title] [--kusanagi-pass pass] [--noftp|--no-ftp] |
+     --lamp|--c5|--concrete5|--concrete|
+     --drupal|--drupal9|--drupal10]
     [--nginx|--httpd]
-    [--nginx1.23|--nginx123|
-     --nginx1.24|--nginx124|--nginx=version]
+    [--nginx1.24|--nginx124|
+     --nginx1.25|--nginx125|--nginx=version]
     [--http-port port][--tls-port port]
-    [--php7.4|--php74|
-     --php8.0|--php80|
-     --php8.1|--php81|
+    [--php8.1|--php81|
      --php8.2|--php82|--php=version]
-    [--dbsystem mysql|mariadb|pgsql|postgrsql]
+    [--dbsystem mysql|mariadb]
     [--mariadb10.5|--mariadb105|
      --mariadb10.6|--mariadb106|
-     --mariadb10.8|--mariadb108|
-     --mariadb10.9|--mariadb109|
-     --mariadb10.10|--mariadb1010|
      --mariadb10.11|--mariadb1011]
     [--dbhost host]
+    [--dbport port]
     [--dbrootpass pasword
     [--dbname dbname]
     [--dbuser username]
     [--dbpass password]
-remove [-y] a
+remove [-y] [target]
 - configuration (runs on target dir) -
 ssl [options]
     [--cert file --key file]
@@ -134,7 +130,6 @@ import/export
 - status (runs on target dir) -
 start|stop|restart|status
 ----------------------
-INFO: 完了しました。
 ```
 
 主なサブコマンドは以下になります。
@@ -179,30 +174,24 @@ provision サブコマンドのオプションは以下のとおりです。
 | --noftp/--no-ftp                          |                                  | WordPressでの更新用のftpを使用しません。                     |
 | --c5/--concrete5/--concrete               | APP=c5                           | Concreate CMS の環境を構築します。php74/php80で動作します。  |
 | --lamp/--LAMP                             | APP=lamp                         | LAMPの環境を構築します。                                     |
-| --drupal7                                 | APP=drupal<br />DRUPAL_VERSION=7 | drupal7の環境を構築します。php74でのみ動作します。         |
-| --drupal8                                 | APP=drupal<br />DRUPAL_VERSION=8 | drupal8の環境を構築します。php74でのみ動作します。        |
-| --drupal9/--drupal                        | APP=drupal<br />DRUPAL_VERSION=9 | drupal9の環境を構築します。                           |
-| --drupal10                                | APP=drupal<br />DRUPAL_VERSION=10 | drupal10の環境を構築します。                      |
+| --drupal9                       | APP=drupal<br />DRUPAL_VERSION=9 | drupal9の環境を構築します。                           |
+| --drupal10/--drupal                                | APP=drupal<br />DRUPAL_VERSION=10 | drupal10の環境を構築します。                      |
 | --httpd                                   |                                  | httpd(Apache 2.4)を使用します。--nginxと同時に指定できません。 |
 | --nginx                                   |                                  | nginxを使用します。--httpdと同時に指定できません。無指定時はnginxが使用されます。 |
-| --nginx1.23/--nginx123                    |                                  | nginx使用時に、kusanagi-nginx:1.23.x を使用します。無指定時はkusanagi-nginx:1.23.xを使用します。 |
-| --nginx1.24/--nginx124                    |                                  | nginx使用時に、kusanagi-nginx:1.22.x を使用します。 |
-| --nginx=version                           |                                  | nginx使用時に、Docker Hub に公開されている任意のバージョンを使用します。1.18/1.19も指定できますが、すでに更新していないため、自己責任でご使用ください。 |
+| --nginx1.24/--nginx124                    |                                  | nginx使用時に、kusanagi-nginx:1.24.x を使用します。無指定時はkusanagi-nginx:1.23.xを使用します。 |
+| --nginx1.25/--nginx125                    |                                  | nginx使用時に、kusanagi-nginx:1.25.x を使用します。 |
+| --nginx=version                           |                                  | nginx使用時に、Docker Hub に公開されている任意のバージョンを使用します。1.23以前のバージョンを指定できますが、すでに更新していないため、自己責任でご使用ください。 |
 | --http-port num                           | HTTP_PORT                        | ホストにポートフォワードするhttpポート番号を指定します。無指定時は80が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
 | --tls-port num                            | HTTP_TLS_PORT                    | ホストにポートフォワードするhttpsポート番号を指定します。無指定時は443が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
 | --php8.2/--php81                          |                                  | kusanagi-php:8.2.xを使用します。                             |
 | --php8.1/--php81                          |                                  | kusanagi-php:8.1.xを使用します。                             |
-| --php8.0/--php80                          |                                  | kusanagi-php:8.0.xを使用します。無指定時はkusanagi-php:8.0.xが使用されます。 |
-| --php7.4/--php74                          |                                  | kusanagi-php:7.4.xを使用します。                             |
 | --php=version                             |                                  | DockerHub上にある任意のバージョンのPHPを使用します。         |
-| --dbsystem mysql/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= mysql/pgsql  | 使用するDBシステムを指定します。ただし、WordPressおよびdrupal7/drupal8は必ずMySQLを使用し、このオプションは指定不要です。postgresql は現在実験中です。 |
-| --mariadb10.11/--mariadb1011                |                                  | DBとして、mariadb:10.11.x-jammy を使用します。                |
-| --mariadb10.10/--mariadb1010                |                                  | DBとして、mariadb:10.10.x-jammy を使用します。                |
-| --mariadb10.9/--mariadb109                |                                  | DBとして、mariadb:10.9.x-jammy を使用します。                |
-| --mariadb10.8/--mariadb108                |                                  | DBとして、mariadb:10.8.x-jammy を使用します。                |
-| --mariadb10.6/--mariadb106                |                                  | DBとして、mariadb:10.6.x-focal を使用します。無指定時はmariadb:10.6.x-focalを使用します。 |
+| --dbsystem mysql/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM=MariaDB/PostgreSQL  | 使用するDBシステムを指定します。ただし、WordPressおよびdrupalは必ずMariaDBを使用し、このオプションは指定不要です。PostgreSQL は現在実験中です。 |
+| --mariadb10.11/--mariadb1011                |                                  | DBとして、mariadb:10.11.x-focal を使用します。                |
+| --mariadb10.6/--mariadb106                |                                  | DBとして、mariadb:10.6.x-focal を使用します。mariadbのバージョンを指定しない場合、mariadb:10.6.x-focalを使用します。 |
 | --mariadb10.5/--mariadb105                |                                  | DBとして、mariadb:10.5.x-focal を使用します。                |
 | --dbhost host                             | DBHOST                           | 接続するDBホスト名を指定します。無指定時はlocalhostです。    |
+| --dbport port                             | DBHOST                           | 接続するDBホストのポート番号を指定します。無指定時は3306です。    |
 | --dbrootpass pass                         | DB_ROOTPASS                      | 接続するDBホストのrootパスワードを指定します。無指定時はランダム文字列となります。 |
 | --dbname name                             | DBNAME                           | 接続するDB名を指定します。無指定時はランダム文字列となります。 |
 | --dbuser user                             | DBUSER                           | 接続するDBユーザ名を指定します。無指定時はランダム文字列となります。 |
@@ -210,8 +199,7 @@ provision サブコマンドのオプションは以下のとおりです。
 
 - オプションは、--option value もしくは、--option=value の形で指定できます。
 - オプション指定の優先順位は、オプション指定、環境変数指定、デフォルト値となります。
-- DBHOSTにlocalhost以外を指定し、使用するDBが作成されていない場合、DB_ROOTPASSを正しく指定する必要があります。
-- DBHOSTにlocalhost以外を指定し、使用するDBが作成している場合、DBNAME/DBUSER/DBPASSを正しく指定する必要があります。
+- DBHOSTにlocalhost以外を指定する場合、使用するDBがあらかじめ作成され、DBNAME/DBUSER/DBPASSでアクセス可能であることが必要です。
 
 ### ターゲットディレクトリ
 
@@ -236,18 +224,16 @@ provision後、以下のDockerコンテナが起動されます。
 | ------- | ------------------------------------------------------------ |
 | httpd   | nginxもしくはhttpdが動作します。httpdコンテナは、httpdブリッジを通じてホスト側のネットワークからHTTP/TLSポートをポートフォワードして、Webサービスを行います。kusanagiボリューム内のアプリケーションディレクトリをrootディレクトリとして動作します。 |
 | php     | PHP-FPMが動作します。httpd コンテナとの通信はhttpdのネットワークを共有して行います。アプリケーションはkusanagiボリュームに配置します。DBとはDBボリューム上のソケットファイルを使用して接続します。<br />phpコンテナには、ssmtpコマンドが搭載されており、外部サーバへのSMTP転送が可能です。 |
-| db      | MySQLもしくは、Postgresqlが動作します。外部のDBサーバ使用時には作成されません。dbはDBボリュームを使用しDBテーブルなどを配置し、socketファイル経由でphpと通信します。 |
+| db      | MariaDBもしくは、PostgreSQLが動作します。外部のDBサーバ使用時には作成されません。dbはDBボリュームを使用しDBテーブルなどを配置し、socketファイル経由でphpと通信します。 |
 | config  | 通常停止していますが、kusanagi-docker config での操作時に起動します。<br />kusanagi-docker configコマンドは、kusanagiおよびdbボリュームを操作し、アプリケーション配置・バックアップ・リストアなどを行います。<br />WordPress構築時はwpcli のイメージが使用され、WorPressのプラグイン・テーマ・言語などのインストール、アンインストールなどの操作できます。 |
 | ftp     | WordPressでprovisionしたときのみ起動します。phpコンテナからftp通信し、WordPress core・プラグイン・テーマの更新を、WordPressのWeb画面経由で行います。 |
-| certbot | let's encryptからSSL証明書を取得します(現在実験中で使用方法を公開していません)。 |
-
 
 
 ![KUSANAGI RoD イメージ](RoD.png)
 
 
 
-provision実行後に作成されるdocker-compose.yml は、最低限の記述しかしていません。
+provision実行後に作成されるdocker-compose.yml は、最低限の設定を記述しています。
 logging方式の変更、共有ストレージの使用、swarm化などは、docker-compose.yml を修正して対応してください。また、docker-composeを使用して、start/stop/ps/run/exec などの操作が可能です。
 
 
@@ -365,8 +351,8 @@ KUSANAGI RoD向けのイメージは[DockerHub](https://hub.docker.com)で公開
 | [kusanagi-config](https://hub.docker.com/r/primestrategy/kusanagi-config) | kusanagi config コマンド用イメージ                          |
 | [wordpress:cli](https://hub.docker.com/_/wordpress)          | WordPress構築時用のconfig コマンドイメージ                  |
 | [kusanagi-ftpd](https://hub.docker.com/r/primestrategy/kusanagi-ftpd) | WordPress構築時のみ使用するvsftpdを起動するコンテナイメージ |
-| [mariadb](https://hub.docker.com/_/mariadb)                  | MySQLイメージ                                               |
-| [postgresql](https://hub.docker.com/_/postgres)              | Postgresqlイメージ                                          |
+| [mariadb](https://hub.docker.com/_/mariadb)                  | MariaDBイメージ                                               |
+| [postgresql](https://hub.docker.com/_/postgres)              | PostgreSQLイメージ                                          |
 | [certbot](https://hub.docker.com/r/certbot/certbot)          | Certbotイメージ                                             |
 
 

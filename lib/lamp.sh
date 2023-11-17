@@ -21,20 +21,24 @@ env FQDN=$FQDN \
 	$$KUSANAGI_PHP_IMAGE $$KUSANAGI_FTPD_IMAGE
 	$$CONFIG_IMAGE $$CERTBOT_IMAGE
 	$$HTTP_PORT $$HTTP_TLS_PORT $$DBLIB' \
-	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/config.template $LIBDIR/templates/php.template) > docker-compose.yml
-if ! [ $NO_USE_DB ] ; then
-	case "$KUSANAGI_DB_SYSTEM" in
-	mysql)
+	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/config.template $LIBDIR/templates/php.template) | \
+	egrep -v '^\s*$' > docker-compose.yml
+
+if ! [[ $NO_USE_DB ]] ; then
+	case "${KUSANAGI_DB_SYSTEM,,}" in
+	mariadb)
 		env PROFILE=$PROFILE KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL_IMAGE \
 		envsubst '$$PROFILE $$KUSANAGI_MYSQL_IMAGE' \
 		< $LIBDIR/templates/mysql.template >> docker-compose.yml
 		;;
-	pgsql)
+	postgresql)
 		# not implemented
-		# env PROFILE=$PROFILE POSTGRESQL_IMAGE=$POSTGRESQL_IMAGE \
-		# envsubst '$$PROFILE $$POSTGRESQL_IMAGE' \
-		# < $LIBDIR/templates/pgsql.template >> docker-compose.yml
+		env PROFILE=$PROFILE POSTGRESQL_IMAGE=$POSTGRESQL_IMAGE \
+		envsubst '$$PROFILE $$POSTGRESQL_IMAGE' \
+		< $LIBDIR/templates/pgsql.template >> docker-compose.yml
 		;;
+	*)
+		exit 1
 	esac
 
 fi
@@ -44,11 +48,25 @@ echo 'volumes:' >> docker-compose.yml
 echo '  kusanagi:' >>  docker-compose.yml
 [[ $NO_USE_DB ]] || echo '  database:' >> docker-compose.yml
 
-k_print_green "$(eval_gettext 'Provision LAMP')"
+if [[ $NO_USE_DB ]] && ! k_db_check; then
+	# error exit
+	k_print_error "$KUSANAGI_DB_SYSTEM($DBHOST) $(eval_gettext "could not connect to.")"
+	k_remove $PROFILE
+	exit 1
+fi
+
 k_compose up -d \
 && k_configcmd_root "/" chown 1000:1001 /home/kusanagi  \
 && k_configcmd "/" chmod 751 /home/kusanagi \
 && k_configcmd "/" mkdir -p $DOCUMENTROOT || return 1
+
+if [[ $NO_USE_DB ]] && ! k_db_check; then
+	# error exit
+	k_print_error "$KUSANAGI_DB_SYSTEM($DBHOST) $(eval_gettext "could not connect to.")"
+	k_remove $PROFILE
+	exit 1
+fi
+
 if [ "x$TARPATH" != "x" ] && [ -f $TARPATH ] ; then
 	mkdir contents
 	tar xf $TARPATH -C contents 
@@ -63,3 +81,4 @@ else
     rm index.php
 fi
 
+k_print_green "$(eval_gettext 'Provision LAMP')"

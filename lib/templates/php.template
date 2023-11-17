@@ -8,6 +8,6 @@
       - .kusanagi.mail
     network_mode: "service:httpd"
     volumes:
-      - database:${DBLIB}
+      ${DBLIB}
       - kusanagi:/home/kusanagi
 

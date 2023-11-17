@@ -27,12 +27,30 @@ function k_configcmd_root() {
 	k_compose run --rm -u 0 -w $_dir config $@
 }
 
-function k_mariadb_check() {
-	local OPT="-h$DBUSER -P$DBPORT"
-	if [[ $DBHOST != "localhost" ]]; then
-		OPT="-h$DBUSER -P$DBPORT"
+function k_db_check() {
+	if [[ ${KUSANAGI_DB_SYSTEM,,} == "mariadb" ]] ; then
+		k_mariadb_check
+	elif [[ ${KUSANAGI_DB_SYSTEM,,} == "postgresql" ]]; then
+		k_postgresql_check
 	fi
-	k_configcmd / mysqladmin status $OPT -u$DBUSER -p"$DBPASS" 2>&1 > /dev/null
+	return $?
+}
+
+function k_mariadb_check() {
+	local OPT=
+	if [[ $NO_USE_DB ]]; then
+		OPT="-h$DBHOST -P$DBPORT"
+	fi
+	k_configcmd "/" mysqladmin status $OPT -u$DBUSER -p"$DBPASS" 2>&1 > /dev/null
+	return $?
+}
+
+function k_postgresql_check() {
+	local OPT
+	if [[ $NO_USE_DB ]] ; then
+		OPT="--dbhost=$DBHOST --port=$DBPORT"
+	fi
+	k_configcmd "/" pg_isready $OPT --username=$DBUSER --dbname=$DBNAME
 	return $?
 }
 
@@ -129,21 +147,16 @@ function k_helphelp {
 				echo '        '$(eval_gettext ' [--admin-user admin] [--admin-pass pass] [--admin-email email]')
 				echo '        '$(eval_gettext ' [--wp-title title] [--kusanagi-pass pass] [--noftp|--no-ftp] |')
 				echo '    '$(eval_gettext ' --lamp|--c5|--concrete5|--concrete|')
-				echo '    '$(eval_gettext ' --drupal|--drupal7|--drupal8|--drupal9|--drupal10]')
+				echo '    '$(eval_gettext ' --drupal|--drupal9|--drupal10]')
 				echo '    '$(eval_gettext '[--nginx|--httpd]')
 				echo '    '$(eval_gettext '[--nginx1.24|--nginx124|')
 				echo '    '$(eval_gettext ' --nginx1.25|--nginx125|--nginx=version]')
 				echo '    '$(eval_gettext '[--http-port port][--tls-port port]')
-				echo '    '$(eval_gettext '[--php7.4|--php74|')
-				echo '    '$(eval_gettext ' --php8.0|--php80|')
-				echo '    '$(eval_gettext ' --php8.1|--php81|')
+				echo '    '$(eval_gettext '[--php8.1|--php81|')
 				echo '    '$(eval_gettext ' --php8.2|--php82|--php=version]')
 				echo '    '$(eval_gettext '[--dbsystem mysql|mariadb]')
 				echo '    '$(eval_gettext '[--mariadb10.5|--mariadb105|')
 				echo '    '$(eval_gettext ' --mariadb10.6|--mariadb106|')
-				echo '    '$(eval_gettext ' --mariadb10.8|--mariadb108|')
-				echo '    '$(eval_gettext ' --mariadb10.9|--mariadb109|')
-				echo '    '$(eval_gettext ' --mariadb10.10|--mariadb1010|')
 				echo '    '$(eval_gettext ' --mariadb10.11|--mariadb1011]')
 				echo '    '$(eval_gettext '[--dbhost host]')
 				echo '    '$(eval_gettext '[--dbport port]')

@@ -21,7 +21,10 @@ fi
 WSL1_BUILD=
 WSL1_CONTEXTS=
 WSL_INI=
-mysqli_ini
+WSL_VOL=
+if [[ ! $NO_USE_DB ]] ; then
+	WSL_VOL="- database:/var/run/mysqld"
+fi
 if (df . | awk 'END { print $1}' | grep / > /dev/null) ; then
 	# WSL1以外
 	WSL1_BUILD="    image: $WPCLI_IMAGE"
@@ -56,12 +59,15 @@ env FQDN=$FQDN \
 	WSL1_BUILD="$WSL1_BUILD" \
 	WSL1_CONTEXT="$WSL1_CONTEXTS" \
 	WSL_INI="$WSL_INI" \
+	WSL_VOL="$WSL_VOL" \
 	envsubst '$$FQDN $$PROFILE $$HTTPD_IMAGE
 	$$KUSANAGI_PHP_IMAGE $$KUSANAGI_FTPD_IMAGE
 	$$CONFIG_IMAGE $$CERTBOT_IMAGE
 	$$HTTP_PORT $$HTTP_TLS_PORT $$DBLIB
-	$$WSL1_BUILD $$WSL1_CONTEXTS $$WSL_INI' \
-	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/wpcli.template $LIBDIR/templates/php.template) > docker-compose.yml
+	$$PROFILE $$WSL1_BUILD $$WSL1_CONTEXTS $$WSL_INI $$WSL_VOL' \
+	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/wpcli.template $LIBDIR/templates/php.template) | \
+	egrep -v '^\s*$' > docker-compose.yml
+
 if [[ $NO_USE_DB -eq 0 ]] ; then
 	env PROFILE=$PROFILE KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL_IMAGE \
 	envsubst '$$PROFILE $$KUSANAGI_MYSQL_IMAGE' \
@@ -100,21 +106,22 @@ elif [  "x$GITPATH" != "x" ] && [ -f $GITPATH ] ; then
 	git clone $GITPATH ./contents && \
 	k_copy $DOCUMENTROOT contents/* contents/.[^.]*
 else
-
 	if [[ $NO_USE_DB ]] ; then
 		if ! k_mariadb_check; then
-			k_print_error "$DBHOST $(eval_gettext "is cannot connect.")" && exit 1
+			# error exit
+			k_print_error "MariaDB($DBHOST) $(eval_gettext "could not connect to.")"
+			k_remove $PROFILE
+			exit 1
 		fi
 	else
 		echo -n -e "\e[32m" $(eval_gettext "Waiting MySQL init process")
-		while k_mariadb_check ; do
+		while ! k_mariadb_check; do
 			echo -n "."
 			sleep 5
 		done
 		echo -e "\e[m"
 	fi
 
-	k_print_green "$(eval_gettext 'Provision WordPress')"
 	k_copy $BASEDIR $LIBDIR/wp/tools $LIBDIR/wp/settings $LIBDIR/wp/wp-config-sample $LIBDIR/wp/wp.sh \
 	&& k_configcmd $DOCUMENTROOT bash ../wp.sh \
 	&& k_copy $DOCUMENTROOT/wp-content $LIBDIR/wp/mu-plugins \
@@ -131,6 +138,7 @@ else
 	|| return 1
 fi
 
+k_print_green "$(eval_gettext 'Provision WordPress')"
 #if [ $OPT_WOO ] ; then
 #	k_configcmd "" theme install storefront
 #	docker cp $PROFILE_httpd $KUSANAGILIBDIR/wp/wc4jp-gmo-pg.1.2.0.zip $PROFILE_httpd:$DOCUMENTROOT

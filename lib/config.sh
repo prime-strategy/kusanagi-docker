@@ -183,11 +183,11 @@ function k_dbdump() {
 		k_configcmd $DOCUMENTROOT db export - > $_file
 	else
 		[[ $DBHOST =~ ^localhost ]] && DBHOST= || DBHOST="-h $DBHOST"
-		case $KUSANAGI_DB_SYSTEM in
-		mysql)
+		case ${KUSANAGI_DB_SYSTEM,,} in
+		mariadb)
 			k_configcmd / mysqldump -u$DBUSER $DBHOST -p"$DBPASS" $DBNAME > $_file
 			;;
-		pgsql)
+		postgresql)
 			# not implemented
 			# k_configcmd / pg_dump $DBHOST $DBNAME
 			;;
@@ -210,13 +210,13 @@ function k_dbrestore() {
 	if [ $KUSANAGI_PROVISION = wp ] ; then
 		k_configcmd $DOCUMENTROOT db import - < $_file
 	else
-		case $KUSANAGI_DB_SYSTEM in
-		mysql)
+		case ${KUSANAGI_DB_SYSTEM,,} in
+		mariadb)
 			# docker cp $_file ${PROFILE}_php:$BASEDIR
 			k_configcmd $BASEDIR mysql -f -u$DBUSER -p"$DBPASS" $DBNAME < $_file
 			# k_configcmd $BASEDIR rm $_file
 			;;
-		pgsql)
+		postgresql)
 			# not implement
 			# k_configcmd $BASEDIR pg_restore $DBHOST -d $DBNAME $_file
 			;;

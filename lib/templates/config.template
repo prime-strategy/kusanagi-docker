@@ -8,7 +8,7 @@
       - .kusanagi
       - .kusanagi.db
     volumes:
-      - database:${DBLIB}
+      ${DBLIB}
       - kusanagi:/home/kusanagi
 
 
