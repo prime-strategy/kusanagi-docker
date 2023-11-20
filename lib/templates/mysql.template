@@ -5,7 +5,7 @@
     restart: always
     user: "999:999"
     env_file:
-      - .kusanagi.mysql
+      - .kusanagi.mariadb
     network_mode: "service:httpd"
     volumes:
       - database:/var/run/mysqld
