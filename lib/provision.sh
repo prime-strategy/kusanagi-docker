@@ -401,12 +401,6 @@ function k_provision () {
 			'--noftp'|'--no-ftp')
 				OPT_NO_FTP=1
 				;;
-			'--nginx')
-				OPT_NGINX=1
-				;;
-			'--httpd')
-				OPT_HTTPD=1
-				;;
 			'--admin-user')
 				OPT_ADMIN_USER=1
 				;;
@@ -472,8 +466,18 @@ function k_provision () {
 				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX125_IMAGE
 				OPT_NGINX=1
 				;;
+			'--nginx')
+				OPT_NGINX=1
+				;;
 			--nginx=*)
-				KUSANAGI_NGINX_IMAGE=primestrategy/kusanagi-nginx:"${OPT%%=*}"
+				KUSANAGI_NGINX_IMAGE=primestrategy/kusanagi-nginx:"${OPT#*=}"
+				;;
+			'--httpd')
+				OPT_HTTPD=1
+				;;
+			--httpd=*)
+				OPT_HTTPD=1
+				KUSANAGI_HTTPD_IMAGE=primestrategy/kusanagi-httpd:"${OPT#*=}"
 				;;
 			--php8.1|--php81)
 				KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP81_IMAGE
@@ -481,8 +485,11 @@ function k_provision () {
 			--php8.2|--php82)
 				KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP82_IMAGE
 				;;
+			--php8.3|--php83)
+				KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP83_IMAGE
+				;;
 			--php=*)
-				KUSANAGI_PHP_IMAGE=primestrategy/kusanagi-php:"${OPT%%=*}"
+				KUSANAGI_PHP_IMAGE=primestrategy/kusanagi-php:"${OPT#*=}"
 				;;
 			--mariadb105|--mariadb10.5)
 				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL105_IMAGE
@@ -494,7 +501,7 @@ function k_provision () {
 				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL1011_IMAGE
 				;;
 			--mariadb=*)
-				KUSANAGI_MYSQL_IMAGE=mariadb:"${OPT%%=*}"
+				KUSANAGI_MYSQL_IMAGE=mariadb:"${OPT#*=}"
 				;;
 			--help|help)
 				k_helphelp provision help
@@ -641,7 +648,6 @@ ADMIN_PASSWORD=$ADMIN_PASS
 ADMIN_EMAIL=$ADMIN_EMAIL
 EOF
 	cat <<EOF > $PROFILE/.kusanagi.db
-DBLIB=$DBLIB
 DBHOST=$DBHOST
 DBNAME=$DBNAME
 DBUSER=$DBUSER

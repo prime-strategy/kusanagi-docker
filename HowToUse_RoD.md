@@ -96,7 +96,8 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
      --nginx1.25|--nginx125|--nginx=version]
     [--http-port port][--tls-port port]
     [--php8.1|--php81|
-     --php8.2|--php82|--php=version]
+     --php8.2|--php82|
+     --php8.3|--php83|--php=version]
     [--dbsystem mysql|mariadb]
     [--mariadb10.5|--mariadb105|
      --mariadb10.6|--mariadb106|
@@ -187,7 +188,8 @@ The options for the provision subcommand are as follows.
 | --nginx=versions                          |                                  | When using nginx, you can use any version published on Docker Hub. 1.18/1.19 can also be specified, but they have not been updated yet. You can old versions, but they are not updated yet, so use them at your own risk. |
 | --http-port num                           | HTTP_PORT                        | Specifies the http port number to be port-forwarded to the host. If not specified, 80 will be specified. If you select a port that is already in use, the build will fail. |
 | --tls-port num                            | HTTP_TLS_PORT                    | Specifies the https port number to be port-forwarded to the host. If not specified, 443 will be specified. If you select a port that is already in use, the build will fail. |
-| --php8.2/--php81                          |                                  | Use kusanagi-php:8.2.x.                                      |
+| --php8.3/--php83                          |                                  | Use kusanagi-php:8.3.x.                                      |
+| --php8.2/--php82                          |                                  | Use kusanagi-php:8.2.x.                                      |
 | --php8.1/--php81                          |                                  | Use kusanagi-php:8.1. x. If not specified, kusanagi-php:8.1.x will be used. |
 | --php=version                             |                                  | Use any version of PHP that is available on DockerHub.       |
 | --dbsystem mariadb/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= MariaDB/PostgreSQL  | Specify the DB system to use. However, WordPress and drupal always use MariaDB and do not require this option. postgresql is currently under experimentation. |
