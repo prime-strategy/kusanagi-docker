@@ -1,7 +1,7 @@
 ## CONFIG
   config:
     container_name: ${PROFILE}_config
-    restart: always
+    restart: "no"
 ${WSL1_BUILD}
 ${WSL1_CONTEXTS}
     user: "1000:1001"

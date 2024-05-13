@@ -458,12 +458,12 @@ function k_provision () {
 					"${OPT%%=*}" "${OPT#*=}" "$KUSANAGI_DB_SYSTEM")
 				[ -z $KUSANAGI_DB_SYSTEM ] && return 1
 				;;
-			--nginx1.24|--nginx124)
-				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX124_IMAGE
-				OPT_NGINX=1
-				;;
 			--nginx1.25|--nginx125)
 				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX125_IMAGE
+				OPT_NGINX=1
+				;;
+			--nginx1.26|--nginx126)
+				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX126_IMAGE
 				OPT_NGINX=1
 				;;
 			'--nginx')
