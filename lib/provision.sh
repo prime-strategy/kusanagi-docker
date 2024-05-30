@@ -458,12 +458,12 @@ function k_provision () {
 					"${OPT%%=*}" "${OPT#*=}" "$KUSANAGI_DB_SYSTEM")
 				[ -z $KUSANAGI_DB_SYSTEM ] && return 1
 				;;
-			--nginx1.25|--nginx125)
-				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX125_IMAGE
-				OPT_NGINX=1
-				;;
 			--nginx1.26|--nginx126)
 				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX126_IMAGE
+				OPT_NGINX=1
+				;;
+			--nginx1.27|--nginx127)
+				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX127_IMAGE
 				OPT_NGINX=1
 				;;
 			'--nginx')
@@ -715,8 +715,10 @@ EOF
 	echo -e "\e[m"
 
 	# save SSL_DHPARAM
-	DHPARAM=$(k_compose exec httpd cat /etc/nginx/dhparam.key)
-	[ $? -ne 0 ] && DHPARAM=$(k_compose exec httpd cat /etc/httpd/dhparam.key)
+	until k_compose exec httpd test -f /etc/ssl/httpd/dhparam.key
+		do sleep 5
+	done
+	DHPARAM=$(k_compose exec httpd cat /etc/ssl/httpd/dhparam.key)
 	SSL_DHPARAM=$(echo $DHPARAM | tr "\r\n" " " | sed 's/  / /g')
 	echo "SSL_DHPARAM=\"$SSL_DHPARAM\"" >> .kusanagi.httpd
 
