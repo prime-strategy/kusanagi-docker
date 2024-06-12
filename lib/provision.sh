@@ -259,10 +259,6 @@ function k_provision () {
 			ADMIN_USER=$(k_check_adminuser "$PRE_OPT" "$OPT")
 			[ -z $ADMIN_USER ] && return 1
 			OPT_ADMIN_USER=
-		elif [ $OPT_DBSYSTEM ] ; then
-			KUSANAGI_DB_SYSTEM=$(k_check_dbsystem "$PRE_OPT" "$OPT" "$KUSANAGI_DB_SYSTEM")
-			[ -z $KUSANAGI_DB_SYSTEM ] && return 1
-			OPT_DBSYSTEM=
 		elif [ $OPT_ADMIN_PASS ] ; then
 			ADMIN_PASS=$(k_check_passwd "$PRE_OPT" "$OPT" admin)
 			[ -z $ADMIN_PASS ] && return 1
@@ -453,11 +449,6 @@ function k_provision () {
 			'--dbsystem')
 				OPT_DBSYSTEM=1
 				;;
-			--dbsystem=*)
-				KUSANAGI_DB_SYSTEM=$(k_check_dbsystem \
-					"${OPT%%=*}" "${OPT#*=}" "$KUSANAGI_DB_SYSTEM")
-				[ -z $KUSANAGI_DB_SYSTEM ] && return 1
-				;;
 			--nginx1.26|--nginx126)
 				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX126_IMAGE
 				OPT_NGINX=1
@@ -499,6 +490,9 @@ function k_provision () {
 				;;
 			--mariadb1011|--mariadb10.11)
 				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL1011_IMAGE
+				;;
+			--mariadb114|--mariadb11.4)
+				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL114_IMAGE
 				;;
 			--mariadb=*)
 				KUSANAGI_MYSQL_IMAGE=mariadb:"${OPT#*=}"
@@ -585,8 +579,6 @@ function k_provision () {
 	DBUSER=${DBUSER:-$(k_mkusername $SMALL)}
 	DBPASS=${DBPASS:-$(k_mkpasswd)}
 
-	#MACHINE=$(k_machine)
-	
 	mkdir $PROFILE
 	local _rootdir=$([ "c5" = $APP ] && echo public || echo DocumentRoot)
 	ROOT_DIR="${ROOT_DIR:-$_rootdir}"

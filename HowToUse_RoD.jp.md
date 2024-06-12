@@ -26,7 +26,6 @@ RoDを使用するために必要なソフトウェアは以下のものにな�
 - python3
 - docker(18.0x以上)
 - docker-compose
-- docker-machine(オプショナル)
 
 
 ## KUSANAGI RoDのインストール
@@ -96,10 +95,10 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
     [--php8.1|--php81|
      --php8.2|--php82|
      --php8.3|--php83|--php=version]
-    [--dbsystem mysql|mariadb]
     [--mariadb10.5|--mariadb105|
      --mariadb10.6|--mariadb106|
-     --mariadb10.11|--mariadb1011]
+     --mariadb10.11|--mariadb1011|
+     --mariadb11.4|--mariadb114]
     [--dbhost host]
     [--dbport port]
     [--dbrootpass pasword
@@ -188,8 +187,8 @@ provision サブコマンドのオプションは以下のとおりです。
 | --php8.2/--php81                          |                                  | kusanagi-php:8.2.xを使用します。                             |
 | --php8.1/--php81                          |                                  | kusanagi-php:8.1.xを使用します。                             |
 | --php=version                             |                                  | DockerHub上にある任意のバージョンのPHPを使用します。         |
-| --dbsystem mysql/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM=MariaDB/PostgreSQL  | 使用するDBシステムを指定します。ただし、WordPressおよびdrupalは必ずMariaDBを使用し、このオプションは指定不要です。PostgreSQL は現在実験中です。 |
-| --mariadb10.11/--mariadb1011                |                                  | DBとして、mariadb:10.11.x-focal を使用します。                |
+| --mariadb11.4/--mariadb114                |                                  | DBとして、mariadb:11.4.x-noble を使用します。                 |
+| --mariadb10.11/--mariadb1011              |                                  | DBとして、mariadb:10.11.x-jammy を使用します。                |
 | --mariadb10.6/--mariadb106                |                                  | DBとして、mariadb:10.6.x-focal を使用します。mariadbのバージョンを指定しない場合、mariadb:10.6.x-focalを使用します。 |
 | --mariadb10.5/--mariadb105                |                                  | DBとして、mariadb:10.5.x-focal を使用します。                |
 | --dbhost host                             | DBHOST                           | 接続するDBホスト名を指定します。無指定時はlocalhostです。    |
@@ -357,29 +356,4 @@ KUSANAGI RoD向けのイメージは[DockerHub](https://hub.docker.com)で公開
 | [postgresql](https://hub.docker.com/_/postgres)              | PostgreSQLイメージ                                          |
 | [certbot](https://hub.docker.com/r/certbot/certbot)          | Certbotイメージ                                             |
 
-
-
-## docker-machineとの併用
-
-KUSANAGI RoDは、docker-machineと併用できます。通常通りdocker-machineを作成し、```eval $(docker-machine env ホスト名```を実行して、kusanagi-docker provisionを行ってください。
-
-また以下の手順で、既存コンテナを別docker-machineへ移行できます。
-
-1. ```kusanagi-docker import```を実施して、現状のコンテナ情報をimportする
-
-2. ```kusanagi-docker stop```でコンテナを停止
-
-3. ```eval $(docker-machine env ホスト名```を実行
-
-4. ```docker-compose up -d```を実行
-
-5. DBがlocalhostの場合、DB初期化まで待つ。
-   初期化が終わったかどうかは、以下のコマンドで確認可能。
-
-   ```
-   $ source .kusanagi.db
-   $ docker-compose run --rm config  mysqladmin status -u$DBUSER -p"$DBPASS" 2>&1 > /dev/null && echo ok || echo ng
-   ```
-
-6. ```kusanagi-docker export```を実行し、コンテナ情報をexportする.
 

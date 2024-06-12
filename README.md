@@ -30,5 +30,4 @@ And simple help is run kusanagi-docker help.
 - curl
 - docker(over 18.0x)
 - docker-compose
-- docker-machine
 

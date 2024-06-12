@@ -111,7 +111,6 @@ function k_ssl () {
 	done
 
 	k_target $PROFILE
-	#k_machine > /dev/null
 	source "$TARGETDIR/.kusanagi"
 	source "$TARGETDIR/.kusanagi.httpd"
 

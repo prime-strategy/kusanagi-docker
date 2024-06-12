@@ -40,7 +40,7 @@ function mariadb_version {
 		fgrep . | head -1)
     else
 		 _ver=$(docker_repo_tag library/mariadb | \
-		grep "^$_version" | head -1)
+		grep "^$_version" | grep -v -e latest -e ubi | head -1)
 	fi
 	echo ${_ver:-latest}
 }
@@ -78,6 +78,7 @@ KUSANAGI_PHP_IMAGE=${PS}-php:$(k_version php 8.1)
 KUSANAGI_MYSQL105_IMAGE=mariadb:$(mariadb_version 10.5)
 KUSANAGI_MYSQL106_IMAGE=mariadb:$(mariadb_version 10.6)
 KUSANAGI_MYSQL1011_IMAGE=mariadb:$(mariadb_version 10.11)
+KUSANAGI_MYSQL114_IMAGE=mariadb:$(mariadb_version 11.4)
 KUSANAGI_MYSQL_IMAGE=mariadb:$(mariadb_version 10.6)
 KUSANAGI_CONFIG_IMAGE=${PS}-config:$(k_version config)
 KUSANAGI_FTPD_IMAGE=${PS}-ftpd:$(k_version ftpd)

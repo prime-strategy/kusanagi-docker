@@ -26,7 +26,6 @@ The software required to use RoD will be the following.
 - python3
 - docker(18.0x and above)
 - docker-compose
-- docker-machine (optional)
 
 
 ## Installing the KUSANAGI RoD
@@ -98,10 +97,10 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
     [--php8.1|--php81|
      --php8.2|--php82|
      --php8.3|--php83|--php=version]
-    [--dbsystem mysql|mariadb]
     [--mariadb10.5|--mariadb105|
      --mariadb10.6|--mariadb106|
-     --mariadb10.11|--mariadb1011]
+     --mariadb10.11|--mariadb1011|
+     --mariadb11.4|--mariadb114]
     [--dbhost host]
     [--dbport port]
     [--dbrootpass pasword
@@ -192,7 +191,7 @@ The options for the provision subcommand are as follows.
 | --php8.2/--php82                          |                                  | Use kusanagi-php:8.2.x.                                      |
 | --php8.1/--php81                          |                                  | Use kusanagi-php:8.1. x. If not specified, kusanagi-php:8.1.x will be used. |
 | --php=version                             |                                  | Use any version of PHP that is available on DockerHub.       |
-| --dbsystem mariadb/mariadb/ pgsql/postgreql | KUSANAGI_DB_SYSTEM= MariaDB/PostgreSQL  | Specify the DB system to use. However, WordPress and drupal always use MariaDB and do not require this option. postgresql is currently under experimentation. |
+| --mariadb11.4/--mariadb114                |                                  | Use mariadb:11.4.x-noble as the DB.                         |
 | --mariadb10.11/--mariadb1011              |                                  | Use mariadb:10.11.x-jammy as the DB.                         |
 | --mariadb10.6/--mariadb106                |                                  | Use mariadb:10.6.x-focal as the DB. When not specified, mariadb:10.6.x-focal is used. |
 | --mariadb10.5/--mariadb105                |                                  | Use mariadb:10.5.x-focal as the DB                           |
@@ -370,28 +369,3 @@ To use the recommended version (the current latest version), please run $HOME/.k
 | [certbot](https://hub.docker.com/r/certbot/certbot)          | Certbot image                                                |
 
 
-
-## For use with docker-machine
-
-KUSANAGI RoD can be used in conjunction with docker-machine.
-Create a docker-machine as usual and execute ``eval $(docker-machine env hostname`` to perform kusanagi-docker provision.
-
-You can also migrate an existing container to another docker-machine by following the steps below.
-
-1. Execute `kusanagi-docker import` to import the current container information.
-
-2. Stop the container with `kusanagi-docker stop`.
-
-3. Execute `eval $(docker-machine env hostname`)
-
-4. Execute `docker-compose up -d`
-
-5. If the DB is on localhost, wait until the DB is initialized.
-   The following command can be used to check if the initialization is finished.
-
-   ```
-   $ source .kusanagi.db
-   $ docker-compose run --rm config  mysqladmin status -u$DBUSER -p"$DBPASS" 2>&1 > /dev/null && echo ok || echo ng
-   ```
-
-6. Execute `kusanagi-docker export` to export container information.

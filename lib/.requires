@@ -8,4 +8,3 @@ envsubst
 curl
 docker
 docker-compose
-docker-machine

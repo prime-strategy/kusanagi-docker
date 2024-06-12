@@ -158,7 +158,8 @@ function k_helphelp {
 				echo '    '$(eval_gettext '[--dbsystem mysql|mariadb]')
 				echo '    '$(eval_gettext '[--mariadb10.5|--mariadb105|')
 				echo '    '$(eval_gettext ' --mariadb10.6|--mariadb106|')
-				echo '    '$(eval_gettext ' --mariadb10.11|--mariadb1011]')
+				echo '    '$(eval_gettext ' --mariadb10.11|--mariadb1011|')
+				echo '    '$(eval_gettext ' --mariadb11.4|--mariadb114]')
 				echo '    '$(eval_gettext '[--dbhost host]')
 				echo '    '$(eval_gettext '[--dbport port]')
 				echo '    '$(eval_gettext '[--dbrootpass pasword')
@@ -233,41 +234,6 @@ function k_init {
 	local _init=$2
 	return
 	k_target
-	#export MACHINE=$(k_machine "$_init" 1)
-}
-
-function k_machine() {
-	local _machine=$1
-	local _is_print=$2
-	return
-	if [ "x$_machine" = "x" ] ; then
-		if [ -f "$TARGETDIR/$LOCAL_KUSANAGI_FILE" ] ; then
-			eval $(grep ^MACHINE= "$TARGETDIR/$LOCAL_KUSANAGI_FILE")
-		fi
-		MACHINE=${MACHINE:-localhost}
-	elif [ "$_machine" != "localhost" ] ; then
-		docker-machine ls | grep $_machine 2>&1 > /dev/null
-		if [ $? -eq 1 ] ; then
-			k_print_error "$_machine $(eval_gettext 'is not found.')"
-			return 1
-		fi
-		MACHINE=$_machine
-	fi
-
-	if [ $_is_print ] ; then
-		if [ "$_machine" = "localhost" -o "$MACHINE" = "localhost" ] ; then
-			[ "x$TARGETDIR" != "x" ] \
-			&& (cd "$TARGETDIR" && k_compose) \
-			|| docker ps 1>&2
-		else
-			[ "x$TARGETDIR" != "x" ]  \
-			&& (cd "$TARGETDIR" \
-				&& eval $(docker-machine env $_machine) \
-				&& k_compose ps) 1>&2 \
-			|| (eval $(docker-machine env $_machine) && docker ps 1>&2)
-		fi
-	fi
-	echo $MACHINE
 }
 
 function k_wpconfig() {
@@ -298,7 +264,6 @@ function k_startstop() {
 			return 1
 	esac
 	k_target > /dev/null
-	#k_machine > /dev/null
 	case $_cmd in
 	'start'|'stop'|'ps')
 		cd "$TARGETDIR" && k_compose $_cmd $_service
@@ -316,7 +281,6 @@ function k_startstop() {
 
 function k_remove() {
 	k_target $2
-	#k_machine > /dev/null
 
 	local _PWD=$(pwd)
 	cd "$TARGETDIR" \
