@@ -151,6 +151,18 @@
 	padding-right: 20px;
 	line-height: 26px;
 }
+#updates-table span.not-supported {
+	color: #6c757d;
+}
+#updates-table span.enable {
+	color: #007bff;
+}
+#updates-table span.disable {
+	color: #dc3545;
+}
+#updates-table tbody tr:nth-of-type(odd) {
+	background-color: rgba(0,0,0,.05);
+}
 @media screen and (max-width: 782px) {
 .tab-menu li {
 	float: none;

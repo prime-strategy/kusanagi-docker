@@ -1,9 +1,11 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) { exit; }
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 $this->device_regexes = array(
 ### DEVICE REGEX ###
 );
-
 $this->allowed_query_keys = array(
 ### QUERY KEYS ###
 );

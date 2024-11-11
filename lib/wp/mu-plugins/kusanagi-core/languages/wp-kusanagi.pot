@@ -1,674 +1,687 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-29 12:00+0900\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-02-20T05:56:19+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.9.0\n"
+"X-Domain: wp-kusanagi\n"
 
-#: modules/automatic-updates.php:151 templates/tab-automatic-updates.php:16
+#: modules/automatic-updates.php:166
+#: templates/tab-automatic-updates.php:37
+#: templates/tab-automatic-updates.php:133
 msgid "Automatic Updates"
 msgstr ""
 
-#: modules/automatic-updates.php:186 modules/image-optimizer.php:119
-#: modules/page-cache.php:169 modules/performance-viewer.php:69
-#: modules/replacer.php:48 modules/theme-switcher.php:47
-#: modules/theme-switcher.php:84 modules/translate-accelerator.php:170
-#: modules/misc.php:430
+#: modules/automatic-updates.php:202
+#: modules/misc.php:522
+#: modules/page-cache.php:199
+#: modules/theme-switcher.php:61
+#: modules/theme-switcher.php:121
+#: modules/translate-accelerator.php:218
 msgid "Update settings successfully."
 msgstr ""
 
-#: modules/automatic-updates.php:218
-msgid ""
-"Background updates are disabled. Change to define "
-"<code>('DISALLOW_FILE_MODS', false);</code> or comment out the definition."
-msgstr ""
-
-#: modules/automatic-updates.php:222
-msgid "WP is installing"
+#. translators: 1: the definition.
+#: modules/automatic-updates.php:232
+msgid "Background updates are disabled. Change to define %1$s or comment out the definition."
 msgstr ""
 
 #: modules/automatic-updates.php:236
-#, php-format
-msgid "Add <code>define('FS_METHOD', '%1s');</code> to the wp-config.php file."
+msgid "WP is installing"
 msgstr ""
 
 #: modules/automatic-updates.php:240
-msgid ""
-"Add <code>define('FTP_HOST', 'Localhost');</code> to the wp-config.php file."
+msgid "Automatic update is disabled. The constant AUTOMATIC_UPDATER_DISABLED is set."
 msgstr ""
 
 #: modules/automatic-updates.php:244
-msgid ""
-"Add <code>define('FTP_USER', 'kusanagi');</code> to the wp-config.php file."
+msgid "Automatic update is disabled. The \"automatic_updater_disabled\" filter is set."
 msgstr ""
 
-#: modules/automatic-updates.php:248
-msgid ""
-"Add <code>define('FTP_PASS', '*****');</code> to the wp-config.php file and "
-"change <code>*****</code> part to login password."
+#: modules/automatic-updates.php:249
+msgid "Automatic updates are disabled. The \"DISABLE_WP_CRON\" constant is set."
 msgstr ""
 
-#: modules/automatic-updates.php:268
-#, php-format
-msgid ""
-"Failed to connect to FTP Server %s. If you do not remember your credentials, "
-"you should contact your web host."
+#. translators: %s: defined constant.
+#: modules/automatic-updates.php:262
+#: modules/automatic-updates.php:267
+#: modules/automatic-updates.php:272
+msgid "Add %s to the wp-config.php file."
 msgstr ""
 
-#: modules/image-optimizer.php:66 templates/tab-image-optimizer.php:3
-#: templates/tab-misc.php:8
-msgid "Image Optimizer"
+#. translators: 1: defined constant, 2: login password.
+#: modules/automatic-updates.php:277
+msgid "Add %1$s to the wp-config.php file and change %2$s part to login password."
 msgstr ""
 
-#: modules/page-cache.php:64 templates/tab-home.php:15
-#: templates/tab-page-cache.php:9
+#. translators: %s: credential hostname.
+#: modules/automatic-updates.php:295
+msgid "Failed to connect to FTP Server %s. If you do not remember your credentials, you should contact your web host."
+msgstr ""
+
+#: modules/misc.php:66
+msgid "Misc."
+msgstr ""
+
+#: modules/page-cache.php:73
+#: templates/tab-home.php:17
+#: templates/tab-page-cache.php:23
 msgid "Page Cache"
 msgstr ""
 
-#: modules/performance-viewer.php:23 templates/tab-performance-viewer.php:3
-#: templates/tab-misc.php:92
-msgid "Performance Viewer"
-msgstr ""
-
-#: modules/replacer.php:19 templates/tab-replacer.php:6
-#: templates/tab-misc.php:34
-msgid "Replacing"
-msgstr ""
-
-#: modules/security-checker.php:17
+#: modules/security-checker.php:21
 msgid "wp-config.php is in the correct directory."
 msgstr ""
 
-#: modules/security-checker.php:18
-msgid ""
-"wp-config.php exist in the public folder. Please move wp-config.php to "
-"DocumentRoot and improve security."
-msgstr ""
-
-#: modules/security-checker.php:19
-msgid ""
-"WordPress installed the sub-directory. You can improve security by including "
-"wp-config.php."
-msgstr ""
-
-#: modules/security-checker.php:20 modules/security-checker.php:27
-msgid "wp-config.php not found."
+#: modules/security-checker.php:22
+msgid "wp-config.php exist in the public folder. Please move wp-config.php to DocumentRoot and improve security."
 msgstr ""
 
 #: modules/security-checker.php:23
-#, php-format
-msgid "wp-config.php permission is %1s."
+msgid "WordPress installed the sub-directory. You can improve security by including wp-config.php."
 msgstr ""
 
 #: modules/security-checker.php:24
-#, php-format
+#: modules/security-checker.php:31
+msgid "wp-config.php not found."
+msgstr ""
+
+#: modules/security-checker.php:27
+msgid "wp-config.php permission is %1s."
+msgstr ""
+
+#: modules/security-checker.php:28
 msgid "wp-config.php permission is %1s. Recommend permission is 440."
 msgstr ""
 
-#: modules/security-checker.php:25
-#, php-format
-msgid "Administrator of wp-config.php is %1s.%2s."
-msgstr ""
-
-#: modules/security-checker.php:26
-#, php-format
-msgid ""
-"Administrator of wp-config.php is %1s.%2s. Recommend administrator is "
-"kusanagi.www."
+#: modules/security-checker.php:29
+msgid "Administrator of wp-config.php is %1$1s.%2$2s."
 msgstr ""
 
 #: modules/security-checker.php:30
-#, php-format
-msgid "%1s.htaccess permission is %2s."
-msgstr ""
-
-#: modules/security-checker.php:31
-#, php-format
-msgid "%1s.htaccess permission is %2s. Recommend permission is 644."
-msgstr ""
-
-#: modules/security-checker.php:32
-#, php-format
-msgid "Administrator of %1s.htaccess is %2s.%3s."
-msgstr ""
-
-#: modules/security-checker.php:33
-#, php-format
-msgid ""
-"Administrator of %1s.htaccess is %2s.%3s. Recommend administrator is "
-"kusanagi.kusanagi."
+msgid "Administrator of wp-config.php is %1$1s.%2$2s. Recommend administrator is kusanagi.www."
 msgstr ""
 
 #: modules/security-checker.php:34
-#, php-format
-msgid "Move configuration file .htaccess to %1s."
+msgid "%1$1s.htaccess permission is %2$2s."
+msgstr ""
+
+#: modules/security-checker.php:35
+msgid "%1$1s.htaccess permission is %2$2s. Recommend permission is 644."
+msgstr ""
+
+#: modules/security-checker.php:36
+msgid "Administrator of %1$1s.htaccess is %2$2s.%3$3s."
 msgstr ""
 
 #: modules/security-checker.php:37
-#, php-format
-msgid "wp-content/ permission is %1s."
+msgid "Administrator of %1$1s.htaccess is %2$2s.%3$3s. Recommend administrator is kusanagi.www."
 msgstr ""
 
 #: modules/security-checker.php:38
-#, php-format
-msgid "wp-content/ permission is %1s. Recommend permission is 755."
-msgstr ""
-
-#: modules/security-checker.php:39
-#, php-format
-msgid "Administrator of wp-content/ is %1s.%2s."
-msgstr ""
-
-#: modules/security-checker.php:40
-#, php-format
-msgid ""
-"Administrator of wp-content/ is %1s.%2s. Recommend administrator is kusanagi."
-"kusanagi."
+msgid "Move configuration file .htaccess to %1s."
 msgstr ""
 
 #: modules/security-checker.php:41
-msgid "wp-content/ not found."
+msgid "wp-content/ permission is %1s."
+msgstr ""
+
+#: modules/security-checker.php:42
+msgid "wp-content/ permission is %1s. Recommend permission is 775."
+msgstr ""
+
+#: modules/security-checker.php:43
+msgid "Administrator of wp-content/ is %1$1s.%2$2s."
 msgstr ""
 
 #: modules/security-checker.php:44
-#, php-format
-msgid "HHVM/%1s"
+msgid "Administrator of wp-content/ is %1$1s.%2$2s. Recommend administrator is kusanagi.www."
 msgstr ""
 
 #: modules/security-checker.php:45
-#, php-format
-msgid "PHP/%1s"
+msgid "wp-content/ not found."
 msgstr ""
 
 #: modules/security-checker.php:48
-#, php-format
-msgid "Nginx/%1s"
+msgid "HHVM/%1s"
 msgstr ""
 
 #: modules/security-checker.php:49
-#, php-format
+msgid "PHP/%1s"
+msgstr ""
+
+#: modules/security-checker.php:52
+msgid "Nginx/%1s"
+msgstr ""
+
+#: modules/security-checker.php:53
 msgid "Apache/%1s"
 msgstr ""
 
-#: modules/security-checker.php:50
+#: modules/security-checker.php:54
 msgid "Web server information not found."
 msgstr ""
 
-#: modules/security-checker.php:56
+#: modules/security-checker.php:63
 msgid "Current security setting"
 msgstr ""
 
-#: modules/security-checker.php:79
-#, php-format
+#: modules/security-checker.php:92
 msgid "PHP status : %1s"
 msgstr ""
 
-#: modules/security-checker.php:80
-#, php-format
+#: modules/security-checker.php:93
 msgid "Web server : %1s"
 msgstr ""
 
-#: modules/security-checker.php:215
+#: modules/security-checker.php:229
 msgid "Failed to get version information."
 msgstr ""
 
-#: modules/theme-switcher.php:40 templates/tab-home.php:27
-#: templates/tab-theme-switcher.php:2
+#: modules/theme-switcher.php:45
+#: templates/tab-home.php:32
+#: templates/tab-theme-switcher.php:7
 msgid "Device Theme Switcher"
 msgstr ""
 
-#: modules/theme-switcher.php:318
+#: modules/theme-switcher.php:376
 msgid "Tablet"
 msgstr ""
 
-#: modules/theme-switcher.php:319
+#: modules/theme-switcher.php:377
 msgid "Smart Phone"
 msgstr ""
 
-#: modules/theme-switcher.php:615 templates/theme-switcher-content-group.php:16
+#: modules/theme-switcher.php:693
+#: templates/theme-switcher-content-group.php:20
 msgid "Group Name"
 msgstr ""
 
-#: modules/theme-switcher.php:616 templates/theme-switcher-content-group.php:20
+#: modules/theme-switcher.php:694
+#: templates/theme-switcher-content-group.php:24
 msgid "Theme"
 msgstr ""
 
-#: modules/theme-switcher.php:617 templates/theme-switcher-content-group.php:43
+#: modules/theme-switcher.php:695
+#: templates/theme-switcher-content-group.php:48
 msgid "Slug"
 msgstr ""
 
-#: modules/theme-switcher.php:618 templates/theme-switcher-content-group.php:47
+#: modules/theme-switcher.php:696
+#: templates/theme-switcher-content-group.php:52
 msgid "Priority"
 msgstr ""
 
-#: modules/theme-switcher.php:619
+#: modules/theme-switcher.php:697
 msgid "Devices"
 msgstr ""
 
-#: modules/theme-switcher.php:730
-#: templates/theme-switcher-content-device.php:20
+#: modules/theme-switcher.php:817
+#: templates/theme-switcher-content-device.php:24
 msgid "Device Name"
 msgstr ""
 
-#: modules/theme-switcher.php:731
+#: modules/theme-switcher.php:818
 msgid "Keywords"
 msgstr ""
 
-#: modules/theme-switcher.php:732
-#: templates/theme-switcher-content-device.php:28
-#: templates/theme-switcher-content-list.php:22
+#: modules/theme-switcher.php:819
+#: templates/theme-switcher-content-device.php:32
+#: templates/theme-switcher-content-list.php:24
 msgid "Group"
 msgstr ""
 
-#: modules/translate-accelerator.php:38 templates/tab-home.php:39
-#: templates/tab-translate-accelerator.php:3
+#: modules/translate-accelerator.php:50
+#: templates/tab-home.php:47
+#: templates/tab-translate-accelerator.php:14
 msgid "Translate Accelerator"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:17
+#: templates/tab-automatic-updates.php:22
+msgid "You don't have permission to update."
+msgstr ""
+
+#: templates/tab-automatic-updates.php:40
 msgctxt "automatic updates"
 msgid "Translations"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:20
+#: templates/tab-automatic-updates.php:43
 msgctxt "automatic updates"
 msgid "Disable"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:21
+#: templates/tab-automatic-updates.php:44
 msgctxt "automatic updates"
 msgid "Enable - Default"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:26
+#: templates/tab-automatic-updates.php:49
 msgctxt "automatic updates"
 msgid "Plugins"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:29
-#: kusanagi-core/templates/tab-automatic-updates.php:38
+#: templates/tab-automatic-updates.php:52
+#: templates/tab-automatic-updates.php:62
 msgctxt "automatic updates"
-msgid "Disable - Default"
+msgid "Disable all - KUSANAGI Default"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:30
-#: kusanagi-core/templates/tab-automatic-updates.php:39
+#: templates/tab-automatic-updates.php:53
+#: templates/tab-automatic-updates.php:63
 msgctxt "automatic updates"
-msgid "Enable"
+msgid "Set individually - WordPress Default"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:35
+#: templates/tab-automatic-updates.php:54
+#: templates/tab-automatic-updates.php:64
+msgctxt "automatic updates"
+msgid "Enable all"
+msgstr ""
+
+#: templates/tab-automatic-updates.php:59
 msgctxt "automatic updates"
 msgid "Themes"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:44
+#: templates/tab-automatic-updates.php:69
 msgctxt "automatic updates"
 msgid "WordPress core"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:47
+#: templates/tab-automatic-updates.php:72
 msgctxt "automatic updates"
-msgid "Disable all core updates"
+msgid "Disable all"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:48
+#: templates/tab-automatic-updates.php:73
 msgctxt "automatic updates"
-msgid "Enable only core minor updates - Default"
+msgid "Enable minor updates - KUSANAGI Default"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:49
+#: templates/tab-automatic-updates.php:74
 msgctxt "automatic updates"
-msgid "Enable all core updates"
+msgid "Enable major updates - WordPress Default"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:54
+#: templates/tab-automatic-updates.php:79
 msgctxt "automatic updates"
 msgid "Automatic update schedule"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:56
+#: templates/tab-automatic-updates.php:81
 msgctxt "automatic updates"
 msgid "Enable schedule settings"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:57
+#: templates/tab-automatic-updates.php:82
 msgctxt "automatic updates"
-msgid ""
-"* If this field is unchecked, Automatic updates will be performed with the "
-"default schedule."
+msgid "* If this field is unchecked, Automatic updates will be performed with the default schedule."
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:63
+#: templates/tab-automatic-updates.php:88
 msgctxt "automatic updates"
 msgid "Sunday"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:64
+#: templates/tab-automatic-updates.php:89
 msgctxt "automatic updates"
 msgid "Monday"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:65
+#: templates/tab-automatic-updates.php:90
 msgctxt "automatic updates"
 msgid "Tuesday"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:66
+#: templates/tab-automatic-updates.php:91
 msgctxt "automatic updates"
-msgid "wednesday"
+msgid "Wednesday"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:67
+#: templates/tab-automatic-updates.php:92
 msgctxt "automatic updates"
 msgid "Thursday"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:68
+#: templates/tab-automatic-updates.php:93
 msgctxt "automatic updates"
 msgid "Friday"
 msgstr ""
 
-#: kusanagi-core/templates/tab-automatic-updates.php:69
+#: templates/tab-automatic-updates.php:94
 msgctxt "automatic updates"
 msgid "Saturday"
 msgstr ""
 
-#: modules/misc.php:50
-msgid "Misc."
+#: templates/tab-automatic-updates.php:115
+msgid "Automatic updates status of themes and plugins in use"
 msgstr ""
 
-#: templates/tab-automatic-updates.php:81
-msgid "Hour"
+#: templates/tab-automatic-updates.php:119
+msgid "To set up individual plugin updates, please go to the %1$s."
 msgstr ""
 
-#: templates/tab-automatic-updates.php:86
-msgid "Minute"
+#: templates/tab-automatic-updates.php:119
+msgid "Plugins page"
 msgstr ""
 
-#: templates/tab-home.php:5
-msgid "http://en.kusanagi.tokyo/feed/"
+#: templates/tab-automatic-updates.php:125
+msgid "To set up individual theme updates, please go to the %1$s."
 msgstr ""
 
-#: templates/tab-home.php:12
-msgid "Modules"
+#: templates/tab-automatic-updates.php:125
+msgid "Themes page"
 msgstr ""
 
-#: templates/tab-home.php:18
-msgid ""
-"<p>Page cache is a function for saving an HTML to display as a temporary "
-"data and reusing it in order to improve the WordPress performance.</p>"
+#: templates/tab-automatic-updates.php:131
+msgid "Name"
 msgstr ""
 
-#: templates/tab-home.php:23 templates/tab-home.php:35
-#: templates/tab-home.php:47
-msgid "Settings"
-msgstr ""
-
-#: templates/tab-home.php:30
-msgid ""
-"<p>Device switching is a function to change and optimize a theme to display "
-"for mobile terminals such as a smartphone.</p>"
-msgstr ""
-
-#: templates/tab-home.php:42
-msgid ""
-"<p>Translate Accelerator makes the translation cache files, and shortens the "
-"execution time to display your WordPress site.</p>"
-msgstr ""
-
-#: templates/tab-home.php:52
-msgid "Information"
-msgstr ""
-
-#: templates/tab-image-optimizer.php:6 templates/tab-misc.php:11
-msgid "Enable Image Optimize"
-msgstr ""
-
-#: templates/tab-image-optimizer.php:11 templates/tab-performance-viewer.php:11
-#: templates/tab-translate-accelerator.php:10 templates/tab-misc.php:16
-#: templates/tab-misc.php:100 templates/tab-misc.php:124
-msgid "Enable"
-msgstr ""
-
-#: templates/tab-image-optimizer.php:16 templates/tab-misc.php:21
-msgid "Jpeg quality"
-msgstr ""
-
-#: templates/tab-image-optimizer.php:22 templates/tab-misc.php:27
-msgid "Max full image widh"
-msgstr ""
-
-#: templates/tab-image-optimizer.php:24 templates/tab-misc.php:29
-msgid "* larger than 320px"
-msgstr ""
-
-#: templates/tab-page-cache.php:12
-msgid ""
-"The page cache system is not enabled. If you want to enable it, please input "
-"<code>kusanagi bcache on</code> on virtual machine console."
-msgstr ""
-
-#: templates/tab-page-cache.php:22
-msgid "Front page"
-msgstr ""
-
-#: templates/tab-page-cache.php:24 templates/tab-page-cache.php:30
-#: templates/tab-page-cache.php:36
-msgid "minutes"
-msgstr ""
-
-#: templates/tab-page-cache.php:28
-msgid "Archives"
-msgstr ""
-
-#: templates/tab-page-cache.php:34
-msgid "Article"
-msgstr ""
-
-#: templates/tab-page-cache.php:40
-msgid "Cache excluded URL"
-msgstr ""
-
-#: templates/tab-page-cache.php:43
-msgid ""
-"You can specify a URL pattern (regular expression is available) that you "
-"want to exclude the cache. If you specify multiple patterns, please insert "
-"line feeds."
-msgstr ""
-
-#: templates/tab-page-cache.php:47
-msgid "Query string to cache"
-msgstr ""
-
-#: templates/tab-page-cache.php:50
-msgid "Please enter a key of valid query string as a cache data."
-msgstr ""
-
-#: templates/tab-page-cache.php:55
-msgid "Range of cache to delete when disclosing article"
-msgstr ""
-
-#: templates/tab-page-cache.php:57
-msgid "Do not delete"
-msgstr ""
-
-#: templates/tab-page-cache.php:58
-msgid "Article only"
-msgstr ""
-
-#: templates/tab-page-cache.php:59
-msgid "Article and front page"
-msgstr ""
-
-#: templates/tab-page-cache.php:60
-msgid "All"
-msgstr ""
-
-#: templates/tab-page-cache.php:64
-msgid "Clear Cache"
-msgstr ""
-
-#: templates/tab-page-cache.php:65
-msgid "Clear all caches"
-msgstr ""
-
-#: templates/tab-page-cache.php:69
-msgid "Regeneration of advanced-cache.php"
-msgstr ""
-
-#: templates/tab-page-cache.php:71
-msgid "Regenerate advanced-cache.php"
-msgstr ""
-
-#: templates/tab-page-cache.php:73
-#, php-format
-msgid ""
-"You do not have a write permission to write in advanced-cache.php or %1s. To "
-"regenerate advanced-cache.php, please set the write permission."
-msgstr ""
-
-#: templates/tab-performance-viewer.php:6 templates/tab-misc.php:95
-msgid "Display performance on admin-bar."
-msgstr ""
-
-#: templates/tab-performance-viewer.php:16 templates/tab-misc.php:105
-msgid "Requierd capability to display performance"
-msgstr ""
-
-#: templates/tab-replacer.php:10 templates/tab-misc.php:38
-msgid "Replacing at login/signup page"
-msgstr ""
-
-#: templates/tab-replacer.php:14 templates/tab-misc.php:42
-msgid "Yes"
-msgstr ""
-
-#: templates/tab-replacer.php:18 templates/tab-misc.php:46
-msgid "No"
-msgstr ""
-
-#: templates/tab-replacer.php:23 templates/tab-replacer.php:28
-#: templates/tab-misc.php:51 templates/tab-misc.php:56
-msgid "Replacement string"
-msgstr ""
-
-#: templates/tab-replacer.php:27 templates/tab-misc.php:55
-msgid "Target string"
-msgstr ""
-
-#: templates/tab-replacer.php:41 templates/tab-replacer.php:55
-#: templates/tab-misc.php:69 templates/tab-misc.php:83
-msgid "Delete Rule"
-msgstr ""
-
-#: templates/tab-replacer.php:59 templates/tab-misc.php:87
-msgid "Add New Rule"
-msgstr ""
-
-#: templates/tab-theme-switcher.php:2
-msgid "Back"
-msgstr ""
-
-#: templates/tab-translate-accelerator.php:6
-msgid "Enable to accleration."
-msgstr ""
-
-#: templates/tab-translate-accelerator.php:15
+#: templates/tab-automatic-updates.php:132
+#: templates/tab-translate-accelerator.php:26
 msgid "Type"
 msgstr ""
 
-#: templates/tab-translate-accelerator.php:18
-msgid "Files"
+#: templates/tab-automatic-updates.php:145
+msgctxt "automatic updates"
+msgid "Enabled"
 msgstr ""
 
-#: templates/tab-translate-accelerator.php:19
-msgid "Cache directory :"
+#: templates/tab-automatic-updates.php:147
+msgctxt "automatic updates"
+msgid "Disabled"
 msgstr ""
 
+#: templates/tab-automatic-updates.php:150
+msgctxt "automatic updates"
+msgid "Not supported"
+msgstr ""
+
+#: templates/tab-home.php:7
+msgid "https://kusanagi.tokyo/en/feed/"
+msgstr ""
+
+#: templates/tab-home.php:14
+msgid "Modules"
+msgstr ""
+
+#: templates/tab-home.php:22
+msgid "<p>Page cache is a function for saving an HTML to display as a temporary data and reusing it in order to improve the WordPress performance.</p>"
+msgstr ""
+
+#: templates/tab-home.php:28
+#: templates/tab-home.php:43
+#: templates/tab-home.php:58
+msgid "Settings"
+msgstr ""
+
+#: templates/tab-home.php:37
+msgid "<p>Device switching is a function to change and optimize a theme to display for mobile terminals such as a smartphone.</p>"
+msgstr ""
+
+#: templates/tab-home.php:52
+msgid "<p>Translate Accelerator makes the translation cache files, and shortens the execution time to display your WordPress site.</p>"
+msgstr ""
+
+#: templates/tab-home.php:63
+msgid "Information"
+msgstr ""
+
+#: templates/tab-misc.php:22
+msgid "Image Optimizer"
+msgstr ""
+
+#: templates/tab-misc.php:25
+msgid "Enable Image Optimizer"
+msgstr ""
+
+#: templates/tab-misc.php:30
+#: templates/tab-misc.php:117
+#: templates/tab-misc.php:141
+#: templates/tab-misc.php:155
 #: templates/tab-translate-accelerator.php:21
-msgid "APC"
+msgid "Enable"
 msgstr ""
 
-#: templates/tab-translate-accelerator.php:26
-msgid "Translated text displayed in your site"
+#: templates/tab-misc.php:35
+msgid "Jpeg quality"
+msgstr ""
+
+#: templates/tab-misc.php:41
+msgid "Max full image width"
+msgstr ""
+
+#: templates/tab-misc.php:43
+msgid "* larger than 320px"
+msgstr ""
+
+#: templates/tab-misc.php:48
+msgid "Replacing"
+msgstr ""
+
+#: templates/tab-misc.php:52
+msgid "Replacing at login/signup page"
+msgstr ""
+
+#: templates/tab-misc.php:56
+msgid "Yes"
+msgstr ""
+
+#: templates/tab-misc.php:60
+msgid "No"
+msgstr ""
+
+#: templates/tab-misc.php:65
+#: templates/tab-misc.php:70
+msgid "Replacement string"
+msgstr ""
+
+#: templates/tab-misc.php:69
+msgid "Target string"
+msgstr ""
+
+#: templates/tab-misc.php:85
+#: templates/tab-misc.php:100
+msgid "Delete Rule"
+msgstr ""
+
+#: templates/tab-misc.php:104
+msgid "Add New Rule"
+msgstr ""
+
+#: templates/tab-misc.php:109
+msgid "Performance Viewer"
+msgstr ""
+
+#: templates/tab-misc.php:112
+msgid "Display performance on admin-bar."
+msgstr ""
+
+#: templates/tab-misc.php:122
+msgid "Required capability to display performance"
+msgstr ""
+
+#: templates/tab-misc.php:133
+#: templates/tab-misc.php:136
+msgid "Optimize wp-settings.php"
+msgstr ""
+
+#: templates/tab-misc.php:147
+msgid "Theme Accelerator"
+msgstr ""
+
+#: templates/tab-misc.php:150
+msgid "Enable Theme Accelerator"
+msgstr ""
+
+#: templates/tab-misc.php:158
+msgid "Theme Accelerator caches functions that need to be accelerated. At the same time, it will speed up themes that supports FSE."
+msgstr ""
+
+#: templates/tab-page-cache.php:29
+msgid "The page cache system is not enabled. If you want to enable it, please input <code>kusanagi bcache on</code> on virtual machine console."
+msgstr ""
+
+#: templates/tab-page-cache.php:41
+msgid "Front page"
+msgstr ""
+
+#: templates/tab-page-cache.php:43
+#: templates/tab-page-cache.php:49
+#: templates/tab-page-cache.php:55
+msgid "minutes"
+msgstr ""
+
+#: templates/tab-page-cache.php:47
+msgid "Archives"
+msgstr ""
+
+#: templates/tab-page-cache.php:53
+msgid "Article"
+msgstr ""
+
+#: templates/tab-page-cache.php:59
+msgid "Cache excluded URL"
+msgstr ""
+
+#: templates/tab-page-cache.php:62
+msgid "You can specify a URL pattern (regular expression is available) that you want to exclude the cache. If you specify multiple patterns, please insert line feeds."
+msgstr ""
+
+#: templates/tab-page-cache.php:66
+msgid "Query string to cache"
+msgstr ""
+
+#: templates/tab-page-cache.php:69
+msgid "Please enter a key of valid query string as a cache data."
+msgstr ""
+
+#: templates/tab-page-cache.php:74
+msgid "Range of cache to delete when publishing articles"
+msgstr ""
+
+#: templates/tab-page-cache.php:76
+msgid "Do not delete"
+msgstr ""
+
+#: templates/tab-page-cache.php:77
+msgid "Article only"
+msgstr ""
+
+#: templates/tab-page-cache.php:78
+msgid "Article and front page"
+msgstr ""
+
+#: templates/tab-page-cache.php:79
+msgid "All"
+msgstr ""
+
+#: templates/tab-page-cache.php:83
+msgid "Clear Cache"
+msgstr ""
+
+#: templates/tab-page-cache.php:84
+msgid "Clear all caches"
+msgstr ""
+
+#: templates/tab-page-cache.php:88
+msgid "Regeneration of advanced-cache.php"
+msgstr ""
+
+#: templates/tab-page-cache.php:90
+msgid "Regenerate advanced-cache.php"
+msgstr ""
+
+#: templates/tab-page-cache.php:95
+msgid "You do not have a write permission to write in advanced-cache.php or %1s. To regenerate advanced-cache.php, please set the write permission."
+msgstr ""
+
+#: templates/tab-theme-switcher.php:9
+msgid "Back"
+msgstr ""
+
+#: templates/tab-translate-accelerator.php:17
+msgid "Enable Translate Accelerator"
 msgstr ""
 
 #: templates/tab-translate-accelerator.php:29
-#: templates/tab-translate-accelerator.php:39
-#: templates/tab-translate-accelerator.php:49
-msgid "Enable cache"
+msgid "Files"
 msgstr ""
 
 #: templates/tab-translate-accelerator.php:30
-#: templates/tab-translate-accelerator.php:40
-#: templates/tab-translate-accelerator.php:50
+msgid "Cache directory :"
+msgstr ""
+
+#: templates/tab-translate-accelerator.php:33
+msgid "APC"
+msgstr ""
+
+#: templates/tab-translate-accelerator.php:39
+msgid "Translated text displayed in your site"
+msgstr ""
+
+#: templates/tab-translate-accelerator.php:42
+#: templates/tab-translate-accelerator.php:52
+#: templates/tab-translate-accelerator.php:62
+msgid "Enable cache"
+msgstr ""
+
+#: templates/tab-translate-accelerator.php:43
+#: templates/tab-translate-accelerator.php:53
+#: templates/tab-translate-accelerator.php:63
 msgid "Disable translation"
 msgstr ""
 
-#: templates/tab-translate-accelerator.php:31
-#: templates/tab-translate-accelerator.php:41
-#: templates/tab-translate-accelerator.php:51
+#: templates/tab-translate-accelerator.php:44
+#: templates/tab-translate-accelerator.php:54
+#: templates/tab-translate-accelerator.php:64
 msgid "Use language file's for translation"
 msgstr ""
 
-#: templates/tab-translate-accelerator.php:36
+#: templates/tab-translate-accelerator.php:49
 msgid "Login/signup page translation"
 msgstr ""
 
-#: templates/tab-translate-accelerator.php:46
+#: templates/tab-translate-accelerator.php:59
 msgid "Admin pages translation"
 msgstr ""
 
-#: templates/tab-translate-accelerator.php:56
+#: templates/tab-translate-accelerator.php:70
 msgid "Delete cache"
 msgstr ""
 
-#: templates/tab-translate-accelerator.php:60
+#: templates/tab-translate-accelerator.php:71
 msgid "Force deletion of all cache"
 msgstr ""
 
-#: templates/theme-switcher-content-device.php:24
+#: templates/theme-switcher-content-device.php:28
 msgid "Keyword"
 msgstr ""
 
-#: templates/theme-switcher-content-group.php:23
+#: templates/theme-switcher-content-group.php:27
 msgid "Use current theme"
 msgstr ""
 
-#: templates/theme-switcher-content-list.php:18
+#: templates/theme-switcher-content-list.php:20
 msgid "Disable switch theme"
 msgstr ""
 
-#: templates/theme-switcher-content-list.php:20
+#: templates/theme-switcher-content-list.php:22
 msgid "Save Changes"
 msgstr ""
 
-#: templates/theme-switcher-content-list.php:22
 #: templates/theme-switcher-content-list.php:24
+#: templates/theme-switcher-content-list.php:26
 msgid "Add New"
 msgstr ""
 
-#: templates/theme-switcher-content-list.php:24
+#: templates/theme-switcher-content-list.php:26
 msgid "Device"
-msgstr ""
-
-#: templates/tab-misc.php:6
-msgid "Miscellaneous"
-msgstr ""
-
-#: templates/tab-misc.php:116 templates/tab-misc.php:119
-msgid "Optimize wp-settings.php"
 msgstr ""

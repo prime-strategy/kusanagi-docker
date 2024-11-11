@@ -1,19 +1,23 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class KUSANAGI_Security_Check {
 
-	private $messages = array();
-	private $wp_config_path = '';
+	private $messages        = array();
+	private $wp_config_path  = '';
+	private $server_software = '';
 
 	public function __construct() {
-		add_action( 'plugins_loaded'            , array( $this, 'load_text' )                               , 99 );
-		add_action( 'wp_dashboard_setup'        , array( $this, 'kusanagi_security_information_widgets' )   , 0  );
+		add_action( 'plugins_loaded', array( $this, 'load_text' ), 99 );
+		add_action( 'wp_dashboard_setup', array( $this, 'kusanagi_security_information_widgets' ), 0 );
 	}
 
 	public function load_text() {
+		// phpcs:disable WordPress.WP.I18n.MissingTranslatorsComment
 		$this->messages = array(
-			'wp_config_locate' => array(
+			'wp_config_locate'     => array(
 				0   => __( 'wp-config.php is in the correct directory.', 'wp-kusanagi' ),
 				1   => __( 'wp-config.php exist in the public folder. Please move wp-config.php to DocumentRoot and improve security.', 'wp-kusanagi' ),
 				2   => __( 'WordPress installed the sub-directory. You can improve security by including wp-config.php.', 'wp-kusanagi' ),
@@ -22,44 +26,53 @@ class KUSANAGI_Security_Check {
 			'wp_config_permission' => array(
 				0   => __( 'wp-config.php permission is %1s.', 'wp-kusanagi' ),
 				1   => __( 'wp-config.php permission is %1s. Recommend permission is 440.', 'wp-kusanagi' ),
-				2   => __( 'Administrator of wp-config.php is %1s.%2s.', 'wp-kusanagi' ),
-				3   => __( 'Administrator of wp-config.php is %1s.%2s. Recommend administrator is kusanagi.www.', 'wp-kusanagi' ),
+				2   => __( 'Administrator of wp-config.php is %1$1s.%2$2s.', 'wp-kusanagi' ),
+				3   => __( 'Administrator of wp-config.php is %1$1s.%2$2s. Recommend administrator is kusanagi.www.', 'wp-kusanagi' ),
 				999 => __( 'wp-config.php not found.', 'wp-kusanagi' ),
 			),
-			'uploads_htaccess' => array(
-				0   => __( '%1s.htaccess permission is %2s.', 'wp-kusanagi' ),
-				1   => __( '%1s.htaccess permission is %2s. Recommend permission is 644.', 'wp-kusanagi' ),
-				2   => __( 'Administrator of %1s.htaccess is %2s.%3s.', 'wp-kusanagi' ),
-				3   => __( 'Administrator of %1s.htaccess is %2s.%3s. Recommend administrator is kusanagi.kusanagi.', 'wp-kusanagi' ),
+			'uploads_htaccess'     => array(
+				0   => __( '%1$1s.htaccess permission is %2$2s.', 'wp-kusanagi' ),
+				1   => __( '%1$1s.htaccess permission is %2$2s. Recommend permission is 644.', 'wp-kusanagi' ),
+				2   => __( 'Administrator of %1$1s.htaccess is %2$2s.%3$3s.', 'wp-kusanagi' ),
+				3   => __( 'Administrator of %1$1s.htaccess is %2$2s.%3$3s. Recommend administrator is kusanagi.www.', 'wp-kusanagi' ),
 				999 => __( 'Move configuration file .htaccess to %1s.', 'wp-kusanagi' ),
 			),
-			'wp_content_dir' => array(
+			'wp_content_dir'       => array(
 				0   => __( 'wp-content/ permission is %1s.', 'wp-kusanagi' ),
-				1   => __( 'wp-content/ permission is %1s. Recommend permission is 755.', 'wp-kusanagi' ),
-				2   => __( 'Administrator of wp-content/ is %1s.%2s.', 'wp-kusanagi' ),
-				3   => __( 'Administrator of wp-content/ is %1s.%2s. Recommend administrator is kusanagi.kusanagi.', 'wp-kusanagi' ),
+				1   => __( 'wp-content/ permission is %1s. Recommend permission is 775.', 'wp-kusanagi' ),
+				2   => __( 'Administrator of wp-content/ is %1$1s.%2$2s.', 'wp-kusanagi' ),
+				3   => __( 'Administrator of wp-content/ is %1$1s.%2$2s. Recommend administrator is kusanagi.www.', 'wp-kusanagi' ),
 				999 => __( 'wp-content/ not found.', 'wp-kusanagi' ),
 			),
-			'phpinfo' => array(
-				0   => __( 'HHVM/%1s', 'wp-kusanagi' ),
-				1   => __( 'PHP/%1s', 'wp-kusanagi' ),
+			'phpinfo'              => array(
+				0 => __( 'HHVM/%1s', 'wp-kusanagi' ),
+				1 => __( 'PHP/%1s', 'wp-kusanagi' ),
 			),
-			'webserverinfo' => array(
+			'webserverinfo'        => array(
 				0   => __( 'Nginx/%1s', 'wp-kusanagi' ),
 				1   => __( 'Apache/%1s', 'wp-kusanagi' ),
 				999 => __( 'Web server information not found.', 'wp-kusanagi' ),
 			),
 		);
+		// phpcs:enable WordPress.WP.I18n.MissingTranslatorsComment
 	}
 
 	public function kusanagi_security_information_widgets() {
-		wp_add_dashboard_widget( 'kusanagi-security-information', __('Current security setting', 'wp-kusanagi'), array( $this, 'kusanagi_security_information' ) );
+		wp_add_dashboard_widget(
+			'kusanagi-security-information',
+			__( 'Current security setting', 'wp-kusanagi' ),
+			array(
+				$this,
+				'kusanagi_security_information',
+			)
+		);
 	}
 
 
 	public function kusanagi_security_information() {
-
-?>
+		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:disable WordPress.WP.I18n.MissingTranslatorsComment
+		?>
 		<style>
 			.kusanagi-security p{
 				padding: 5px 5px 5px 10px;
@@ -76,63 +89,63 @@ class KUSANAGI_Security_Check {
 			}
 		</style>
 		<div class="kusanagi-security">
-			<p class="ok"><?php printf( __( 'PHP status : %1s', 'wp-kusanagi' ), $this->get_phpinfo() ); ?></p>
-			<p class="ok"><?php printf( __( 'Web server : %1s', 'wp-kusanagi' ), $this->get_webserverinfo() ); ?></p>
+			<p class="ok"><?php echo esc_html( sprintf( __( 'PHP status : %1s', 'wp-kusanagi' ), $this->get_phpinfo() ) ); ?></p>
+			<p class="ok"><?php echo esc_html( sprintf( __( 'Web server : %1s', 'wp-kusanagi' ), $this->get_webserverinfo() ) ); ?></p>
 			<?php echo $this->check_locate_wp_config(); ?>
 			<?php echo $this->check_permission_wp_config(); ?>
-			<?php if ( $this->server_software === 'apache' ) echo $this->check_uploads_htaccess(); ?>
+			<?php echo 'apache' === $this->server_software ? $this->check_uploads_htaccess() : ''; ?>
 			<?php echo $this->check_wp_content_dir(); ?>
 		</div>
 		<?php
+		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:disable WordPress.WP.I18n.MissingTranslatorsComment
 	}
 
 	private function check_locate_wp_config() {
 
 		$message = '';
-		if ( isset($_SERVER['DOCUMENT_ROOT']) && $_SERVER['DOCUMENT_ROOT'] == untrailingslashit( ABSPATH ) ) {
+		if ( isset( $_SERVER['DOCUMENT_ROOT'] ) && untrailingslashit( ABSPATH ) === $_SERVER['DOCUMENT_ROOT'] ) {
 			if ( file_exists( ABSPATH . 'wp-config.php' ) ) {
 				$this->wp_config_path = ABSPATH . 'wp-config.php';
-				$message .= '<p class="alter">'.$this->get_message( 'wp_config_locate', 1 ).'</p>';
-			} elseif( file_exists( dirname( ABSPATH  ) . '/wp-config.php' ) ) {
-				$this->wp_config_path = dirname( ABSPATH  ) . '/wp-config.php';
-				$message .= '<p class="ok">'.$this->get_message( 'wp_config_locate', 0 ).'</p>';
+				$message             .= '<p class="alter">' . $this->get_message( 'wp_config_locate', 1 ) . '</p>';
+			} elseif ( file_exists( dirname( ABSPATH ) . '/wp-config.php' ) ) {
+				$this->wp_config_path = dirname( ABSPATH ) . '/wp-config.php';
+				$message             .= '<p class="ok">' . $this->get_message( 'wp_config_locate', 0 ) . '</p>';
 			}
-		} else {
-			if ( file_exists( ABSPATH . 'wp-config.php' ) ) {
+		} elseif ( file_exists( ABSPATH . 'wp-config.php' ) ) {
 				$this->wp_config_path = ABSPATH . 'wp-config.php';
-				$message .= '<p class="alter">'.$this->get_message( 'wp_config_locate', 2 ).'</p>';
-			} elseif( file_exists( dirname( ABSPATH  ) . '/wp-config.php' ) ) {
-				$this->wp_config_path = dirname( ABSPATH  ) . '/wp-config.php';
-				$message .= '<p class="alter">'.$this->get_message( 'wp_config_locate', 2 ).'</p>';
-			}
+				$message             .= '<p class="alter">' . $this->get_message( 'wp_config_locate', 2 ) . '</p>';
+		} elseif ( file_exists( dirname( ABSPATH ) . '/wp-config.php' ) ) {
+			$this->wp_config_path = dirname( ABSPATH ) . '/wp-config.php';
+			$message             .= '<p class="alter">' . $this->get_message( 'wp_config_locate', 2 ) . '</p>';
 		}
 
-		if ( !$this->wp_config_path ) {
-			$message .= '<p class="alter">'.$this->get_message( 'wp_config_locate', 999 ).'</p>';
+		if ( ! $this->wp_config_path ) {
+			$message .= '<p class="alter">' . $this->get_message( 'wp_config_locate', 999 ) . '</p>';
 		}
 
 		return $message;
 	}
 
 	private function check_permission_wp_config() {
-		$path = false;
+		$path    = false;
 		$message = '';
 
-		if ( !$this->wp_config_path ) {
+		if ( ! $this->wp_config_path ) {
 			return false;
 		}
 
-		$message = '';
+		$message   = '';
 		$file_info = $this->get_file_info( $this->wp_config_path );
 		if ( '440' === $file_info['permission'] ) {
-			$message .= '<p class="ok">'.sprintf( $this->get_message( 'wp_config_permission', 0 ), $file_info['permission'] ).'</p>';
+			$message .= '<p class="ok">' . sprintf( $this->get_message( 'wp_config_permission', 0 ), $file_info['permission'] ) . '</p>';
 		} else {
-			$message .= '<p class="alter">'.sprintf( $this->get_message( 'wp_config_permission', 1 ), $file_info['permission'] ).'</p>';
+			$message .= '<p class="alter">' . sprintf( $this->get_message( 'wp_config_permission', 1 ), $file_info['permission'] ) . '</p>';
 		}
 		if ( 'www' === $file_info['group'] && 'kusanagi' === $file_info['owner'] ) {
-			$message .= '<p class="ok">'.sprintf( $this->get_message( 'wp_config_permission', 2 ), $file_info['owner'], $file_info['group'] ).'</p>';
+			$message .= '<p class="ok">' . sprintf( $this->get_message( 'wp_config_permission', 2 ), $file_info['owner'], $file_info['group'] ) . '</p>';
 		} else {
-			$message .= '<p class="alter">'.sprintf( $this->get_message( 'wp_config_permission', 3 ), $file_info['owner'], $file_info['group'] ).'</p>';
+			$message .= '<p class="alter">' . sprintf( $this->get_message( 'wp_config_permission', 3 ), $file_info['owner'], $file_info['group'] ) . '</p>';
 		}
 
 		return $message;
@@ -141,24 +154,24 @@ class KUSANAGI_Security_Check {
 	private function check_uploads_htaccess() {
 
 		$upload_dir = wp_upload_dir();
-		$filename = $upload_dir['basedir']. '/.htaccess';
-		$message = '';
+		$filename   = $upload_dir['basedir'] . '/.htaccess';
+		$message    = '';
 		if ( file_exists( $filename ) ) {
-			$upload_base_dir = str_replace( ABSPATH , '', $upload_dir['basedir']).'/';
-			$file_info = $this->get_file_info( $filename );
+			$upload_base_dir = str_replace( ABSPATH, '', $upload_dir['basedir'] ) . '/';
+			$file_info       = $this->get_file_info( $filename );
 			if ( '644' === $file_info['permission'] ) {
-				$message .= '<p class="ok">'.sprintf( $this->get_message( 'uploads_htaccess', 0 ), $upload_base_dir, $file_info['permission'] ).'</p>';
+				$message .= '<p class="ok">' . sprintf( $this->get_message( 'uploads_htaccess', 0 ), $upload_base_dir, $file_info['permission'] ) . '</p>';
 			} else {
-				$message .= '<p class="alter">'.sprintf( $this->get_message( 'uploads_htaccess', 1 ), $upload_base_dir, $file_info['permission'] ).'</p>';
+				$message .= '<p class="alter">' . sprintf( $this->get_message( 'uploads_htaccess', 1 ), $upload_base_dir, $file_info['permission'] ) . '</p>';
 			}
-			if ( 'kusanagi' === $file_info['group'] && 'kusanagi' === $file_info['owner'] ) {
-				$message .= '<p class="ok">'.sprintf( $this->get_message( 'uploads_htaccess', 2 ), $upload_base_dir, $file_info['owner'], $file_info['group'] ).'</p>';
+			if ( 'www' === $file_info['group'] && 'kusanagi' === $file_info['owner'] ) {
+				$message .= '<p class="ok">' . sprintf( $this->get_message( 'uploads_htaccess', 2 ), $upload_base_dir, $file_info['owner'], $file_info['group'] ) . '</p>';
 			} else {
-				$message .= '<p class="alter">'.sprintf( $this->get_message( 'uploads_htaccess', 3 ), $upload_base_dir, $file_info['owner'], $file_info['group'] ).'</p>';
+				$message .= '<p class="alter">' . sprintf( $this->get_message( 'uploads_htaccess', 3 ), $upload_base_dir, $file_info['owner'], $file_info['group'] ) . '</p>';
 			}
 		} else {
-			$upload_base_dir = str_replace( ABSPATH , '', $upload_dir['basedir']).'/';
-			$message .= '<p class="alter">'.sprintf( $this->get_message( 'uploads_htaccess', 999 ), $upload_base_dir ).'</p>';
+			$upload_base_dir = str_replace( ABSPATH, '', $upload_dir['basedir'] ) . '/';
+			$message        .= '<p class="alter">' . sprintf( $this->get_message( 'uploads_htaccess', 999 ), $upload_base_dir ) . '</p>';
 		}
 
 		return $message;
@@ -169,15 +182,15 @@ class KUSANAGI_Security_Check {
 		$message = '';
 		if ( file_exists( WP_CONTENT_DIR ) ) {
 			$file_info = $this->get_file_info( WP_CONTENT_DIR );
-			if ( '755' === $file_info['permission'] ) {
-				$message .= '<p class="ok">'.sprintf( $this->get_message( 'wp_content_dir', 0 ), $file_info['permission'] ).'</p>';
+			if ( '775' === $file_info['permission'] ) {
+				$message .= '<p class="ok">' . sprintf( $this->get_message( 'wp_content_dir', 0 ), $file_info['permission'] ) . '</p>';
 			} else {
-				$message .= '<p class="alter">'.sprintf( $this->get_message( 'wp_content_dir', 1 ), $file_info['permission'] ).'</p>';
+				$message .= '<p class="alter">' . sprintf( $this->get_message( 'wp_content_dir', 1 ), $file_info['permission'] ) . '</p>';
 			}
-			if ( 'kusanagi' === $file_info['group'] && 'kusanagi' === $file_info['owner'] ) {
-				$message .= '<p class="ok">'.sprintf( $this->get_message( 'wp_content_dir', 2 ), $file_info['group'], $file_info['owner'] ).'</p>';
+			if ( 'www' === $file_info['group'] && 'kusanagi' === $file_info['owner'] ) {
+				$message .= '<p class="ok">' . sprintf( $this->get_message( 'wp_content_dir', 2 ), $file_info['owner'], $file_info['group'] ) . '</p>';
 			} else {
-				$message .= '<p class="alter">'.sprintf( $this->get_message( 'wp_content_dir', 3 ), $file_info['group'], $file_info['owner'] ).'</p>';
+				$message .= '<p class="alter">' . sprintf( $this->get_message( 'wp_content_dir', 3 ), $file_info['owner'], $file_info['group'] ) . '</p>';
 			}
 		}
 
@@ -203,16 +216,17 @@ class KUSANAGI_Security_Check {
 	 */
 	private function get_webserverinfo() {
 		$this->server_software = '';
-		$server_software = isset($_SERVER['SERVER_SOFTWARE']) ? strtolower($_SERVER['SERVER_SOFTWARE']) : '';
+		$server_software       = isset( $_SERVER['SERVER_SOFTWARE'] ) ? strtolower( $_SERVER['SERVER_SOFTWARE'] ) : '';
 		if ( $server_software && false !== strpos( $server_software, 'nginx' ) ) {
 			$this->server_software = 'nginx';
+
 			return sprintf( $this->get_message( 'webserverinfo', 0 ), str_replace( 'nginx/', '', $server_software ) );
 		} elseif ( $server_software && false !== strpos( $server_software, 'apache' ) ) {
 			$this->server_software = 'apache';
 			if ( preg_match( '|Apache/([\d\.]*?) |', @shell_exec( '/usr/sbin/httpd -v 2>&1' ), $version ) ) {
 				return sprintf( $this->get_message( 'webserverinfo', 1 ), $version[1] );
 			} else {
-				return sprintf( $this->get_message( 'webserverinfo', 1 ), __( 'Failed to get version information.', 'wp-kusanagi' ) );;
+				return sprintf( $this->get_message( 'webserverinfo', 1 ), __( 'Failed to get version information.', 'wp-kusanagi' ) );
 			}
 		} else {
 			return $this->get_message( 'webserverinfo', 999 );
@@ -225,11 +239,15 @@ class KUSANAGI_Security_Check {
 			return false;
 		}
 
-		$file_info = array( 'permission' => '', 'group' => '', 'owner' => '' );
-		$file_info['permission'] = substr( sprintf( '%o', fileperms( $path ) ), -3 );
+		$file_info               = array(
+			'permission' => '',
+			'group'      => '',
+			'owner'      => '',
+		);
+		$file_info['permission'] = substr( sprintf( '%o', fileperms( $path ) ), - 3 );
 
-		$file_group = posix_getgrgid( filegroup( $path ) );
-		$file_owner = posix_getpwuid( fileowner( $path ) );
+		$file_group         = posix_getgrgid( filegroup( $path ) );
+		$file_owner         = posix_getpwuid( fileowner( $path ) );
 		$file_info['group'] = $file_group['name'];
 		$file_info['owner'] = $file_owner['name'];
 
@@ -238,10 +256,12 @@ class KUSANAGI_Security_Check {
 
 	private function get_message( $section, $code ) {
 		$ret = false;
-		if ( isset( $this->messages[$section][$code] ) ) {
-			$ret = $this->messages[$section][$code];
+		if ( isset( $this->messages[ $section ][ $code ] ) ) {
+			$ret = $this->messages[ $section ][ $code ];
 		}
+
 		return $ret;
 	}
 }
-new KUSANAGI_Security_Check;
+
+new KUSANAGI_Security_Check();
