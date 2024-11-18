@@ -57,7 +57,7 @@ function k_fcache() {
 		fi
 		;;
 	*)
-		local _t="$(grep NO_USE_FCACHE= '$TARGETDIR/.kusanagi.httpd')"
+		local _t="$(grep NO_USE_FCACHE= $TARGETDIR/.kusanagi.httpd)"
 		if [ "${_t##*=}" -eq 0 ]; then
 			k_print_info $(eval_gettext "fcache is on")
 		else
