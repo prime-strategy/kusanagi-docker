@@ -67,7 +67,7 @@ env FQDN=$FQDN \
 	$$CONFIG_IMAGE $$CERTBOT_IMAGE
 	$$HTTP_PORT $$HTTP_TLS_PORT $$DBLIB
 	$$PROFILE $$WSL1_BUILD $$WSL1_CONTEXTS $$WSL_INI $$WSL_VOL' \
-	<(cat "$LIBDIR/templates/docker.template" "$LIBDIR/templates/wpcli.template" "$LIBDIR/templates/php.template") | \
+	< <(cat "$LIBDIR/templates/docker.template" "$LIBDIR/templates/wpcli.template" "$LIBDIR/templates/php.template") | \
 	egrep -v '^\s*$' > docker-compose.yml
 
 if [[ $NO_USE_DB -eq 0 ]] ; then
