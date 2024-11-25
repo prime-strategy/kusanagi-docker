@@ -9,11 +9,13 @@ source .kusanagi.wp
 
 _wpini=".wp_mysqli.ini"
 if [[ $NO_USE_DB ]] ; then
-	echo "mysqli.default_host = $DBHOST" >  $_wpini
-	echo "mysqli.default_port = $DBPORT" >> $_wpini
-	echo "mysqli.default_name = $DBNAME" >> $_wpini
-	echo "mysqli.default_user = $DBUSER" >> $_wpini
-	echo "mysqli.default_pw   = $DBPASS" >> $_wpini
+	{
+	echo "mysqli.default_host = $DBHOST"
+	echo "mysqli.default_port = $DBPORT"
+	echo "mysqli.default_name = $DBNAME"
+	echo "mysqli.default_user = $DBUSER"
+	echo "mysqli.default_pw   = $DBPASS"
+	} >  $_wpini
 else
 	echo 'mysqli.default_socket = /var/run/mysqld/mysqld.sock' > $_wpini
 fi
@@ -65,7 +67,7 @@ env FQDN=$FQDN \
 	$$CONFIG_IMAGE $$CERTBOT_IMAGE
 	$$HTTP_PORT $$HTTP_TLS_PORT $$DBLIB
 	$$PROFILE $$WSL1_BUILD $$WSL1_CONTEXTS $$WSL_INI $$WSL_VOL' \
-	< <(cat $LIBDIR/templates/docker.template $LIBDIR/templates/wpcli.template $LIBDIR/templates/php.template) | \
+	<(cat "$LIBDIR/templates/docker.template" "$LIBDIR/templates/wpcli.template" "$LIBDIR/templates/php.template") | \
 	egrep -v '^\s*$' > docker-compose.yml
 
 if [[ $NO_USE_DB -eq 0 ]] ; then

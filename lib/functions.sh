@@ -1,4 +1,4 @@
-#
+#!/bin/bash
 # KUSANAGI functions for kusanagi-docker
 # (C)2019 Prime-Strategy Co,Ltd
 # Licenced by GNU GPL v2
@@ -12,19 +12,19 @@ export TEXTDOMAINDIR="$LIBDIR/locale"
 . $(which gettext.sh)
 
 function k_compose() {
-	"$DOCKER_COMPOSE" $@
+	"$DOCKER_COMPOSE" "$@"
 }
 
 function k_configcmd() {
 	local _dir=$1
 	shift
-	k_compose run --rm -w $_dir config $@
+	k_compose run --rm -w "$_dir" config "$@"
 }
 
 function k_configcmd_root() {
 	local _dir=$1
 	shift
-	k_compose run --rm -u 0 -w $_dir config $@
+	k_compose run --rm -u 0 -w "$_dir" config "$@"
 }
 
 function k_db_check() {
@@ -41,7 +41,7 @@ function k_mariadb_check() {
 	if [[ $NO_USE_DB ]]; then
 		OPT="-h$DBHOST -P$DBPORT"
 	fi
-	k_configcmd "/" mysqladmin status $OPT -u$DBUSER -p"$DBPASS" 2>&1 > /dev/null
+	k_compose exec db mysqladmin status $OPT -u"$DBUSER" -p"$DBPASS" > /dev/null 2>&1
 	return $?
 }
 
@@ -50,14 +50,14 @@ function k_postgresql_check() {
 	if [[ $NO_USE_DB ]] ; then
 		OPT="--dbhost=$DBHOST --port=$DBPORT"
 	fi
-	k_configcmd "/" pg_isready $OPT --username=$DBUSER --dbname=$DBNAME
+	k_configcmd "/" pg_isready "$OPT" --username="$DBUSER" --dbname="$DBNAME"
 	return $?
 }
 
 function k_php_exec() {
 	local _dir=$1
 	shift
-	k_compose exec -T --user 1000 -w $_dir php $@
+	k_compose exec -T --user 1000 -w "$_dir" php "$@"
 }
 
 function k_config_isdir() {
@@ -72,12 +72,12 @@ function k_config_isdir() {
 function k_copy() {
 	local _container_name=php
 	local _container_path=$1
-	local _container_id=$(k_compose ps -q $_container_name)
+	local _container_id="$(k_compose ps -q $_container_name)"
 	shift
 
-	for f in $@ ;
+	for f in "$@" ;
 	do
-		docker cp $f ${_container_id}:${_container_path}
+		docker cp "$f" "${_container_id}:${_container_path}"
 	done
 }
 
@@ -154,7 +154,8 @@ function k_helphelp {
 				echo '    '$(eval_gettext '[--http-port port][--tls-port port]')
 				echo '    '$(eval_gettext '[--php8.1|--php81|')
 				echo '    '$(eval_gettext ' --php8.2|--php82|')
-				echo '    '$(eval_gettext ' --php8.3|--php83|--php=version]')
+				echo '    '$(eval_gettext ' --php8.3|--php83|')
+				echo '    '$(eval_gettext ' --php8.4|--php84|--php=version]')
 				echo '    '$(eval_gettext '[--dbsystem mysql|mariadb]')
 				echo '    '$(eval_gettext '[--mariadb10.5|--mariadb105|')
 				echo '    '$(eval_gettext ' --mariadb10.6|--mariadb106|')
