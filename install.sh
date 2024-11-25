@@ -23,7 +23,8 @@ else
 	git clone https://github.com/prime-strategy/kusanagi-docker.git $KUSANAGIDIR
 fi
 cd $KUSANAGIDIR
-git checkout $version
+git stash
+git switch $version
 echo $version > $KUSANAGIDIR/.version
 KUSANAGILIBDIR=$KUSANAGIDIR/lib
 source $KUSANAGIDIR/update_version.sh
