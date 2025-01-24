@@ -29,6 +29,7 @@ class WP_KUSANAGI {
 			'misc.php',
 			'security-checker.php',
 			'cache-clear.php',
+			'support.php',
 			'theme-accelerator/theme-accelerator-logic.php',
 		);
 		foreach ( $files as $file ) {
@@ -38,6 +39,8 @@ class WP_KUSANAGI {
 		add_action( 'admin_menu', array( $this, 'add_menu' ) );
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 		add_filter( 'http_request_host_is_external', array( $this, 'allow_internal_request' ), 10, 2 );
+
+		add_action( 'kusanagi_admin_notices', array( $this, 'admin_released_notice' ) );
 
 		$this->load_modules();
 	}
@@ -61,7 +64,11 @@ class WP_KUSANAGI {
 	}
 
 	public function load_textdomain() {
-		load_textdomain( 'wp-kusanagi', __DIR__ . '/languages/wp-kusanagi-' . get_locale() . '.mo' );
+		$current_locale = get_locale();
+		if ( function_exists( 'determine_locale' ) ) {
+			$current_locale = determine_locale();
+		}
+		load_textdomain( 'wp-kusanagi', __DIR__ . '/languages/wp-kusanagi-' . $current_locale . '.mo' );
 	}
 
 	private function load_modules() {
@@ -116,12 +123,12 @@ class WP_KUSANAGI {
 		wp_enqueue_script( 'wp-kusanagi', plugin_dir_url( __FILE__ ) . 'js/kusanagi.js', array( 'jquery' ), $this->version, true );
 	}
 
-	public function allow_internal_request( $return, $host ) {
+	public function allow_internal_request( $allow, $host ) {
 		if ( preg_match( '/kusanagi\.tokyo$/', $host ) ) {
-			$return = true;
+			$allow = true;
 		}
 
-		return $return;
+		return $allow;
 	}
 
 	public function admin_page() {
@@ -143,6 +150,12 @@ class WP_KUSANAGI {
 			if ( isset( $_GET['tab'] ) && isset( $this->modules[ $_GET['tab'] ] ) && method_exists( $this->modules[ $_GET['tab'] ], 'save_options' ) ) {
 				$this->modules[ sanitize_text_field( $_GET['tab'] ) ]->save_options();
 			}
+		}
+	}
+
+	public function admin_released_notice() {
+		if ( file_exists( $this->templates_dir . '/admin-released-notice.php' ) ) {
+			include_once $this->templates_dir . '/admin-released-notice.php';
 		}
 	}
 } // class end.

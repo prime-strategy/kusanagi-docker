@@ -69,8 +69,10 @@ class KUSANAGI_Page_Cache {
 
 
 	public function add_tab() {
-		global $WP_KUSANAGI;
-		$WP_KUSANAGI->add_tab( 'page-cache', __( 'Page Cache', 'wp-kusanagi' ) );
+		if ( ! is_plugin_active( 'wp-sitemanager/wp-sitemanager.php' ) ) {
+			global $WP_KUSANAGI;
+			$WP_KUSANAGI->add_tab( 'page-cache', __( 'Page Cache', 'wp-kusanagi' ) );
+		}
 	}
 
 
@@ -325,6 +327,7 @@ AND		`hash` IN ( '{$hashes}' )
 			switch ( $life_time['update'] ) {
 				case 'with-front':
 					$this->clear_front_cache();
+					$this->clear_single_cache( $post );
 					break;
 				case 'single':
 					$this->clear_single_cache( $post );
@@ -334,6 +337,7 @@ AND		`hash` IN ( '{$hashes}' )
 					break;
 				case 'none':
 				default:
+					break;
 			}
 		}
 	}

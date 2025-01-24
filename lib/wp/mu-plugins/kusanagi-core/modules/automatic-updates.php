@@ -66,6 +66,7 @@ class KUSANAGI_Automatic_Updates {
 		}
 
 		add_action( 'admin_init', array( $this, 'add_tab' ) );
+		add_action( 'pre_auto_update', array( $this, 'preload_wp_filesystem' ), 10, 3 );
 	}
 
 	/**
@@ -393,6 +394,35 @@ class KUSANAGI_Automatic_Updates {
 	 */
 	public function get_errors() {
 		return $this->errors;
+	}
+
+	/**
+	 * wp_filesystemをプリロードする
+	 *
+	 * @param string $type
+	 * @param object $item
+	 * @param string $context
+	 * @return void
+	 */
+	public function preload_wp_filesystem( $type, $item, $context ) {
+		global $wp_version, $wp_filesystem;
+
+		// WordPress 6.6 より前の環境では問題ないのでスキップ
+		if ( version_compare( $wp_version, '6.6', '<' ) ) {
+			return;
+		}
+
+		if ( ! $wp_filesystem ) {
+			if ( ! function_exists( 'WP_Filesystem' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/file.php';
+			}
+			ob_start();
+			$credentials = request_filesystem_credentials( '' );
+			ob_end_clean();
+			if ( false !== $credentials ) {
+				WP_Filesystem( $credentials );
+			}
+		}
 	}
 }
 

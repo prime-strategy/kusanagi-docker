@@ -3,10 +3,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$settings = $this->modules[ sanitize_text_field( $_GET['tab'] ) ]->settings;
+$settings         = $this->modules[ sanitize_text_field( $_GET['tab'] ) ]->settings;
 $cache_clear_link = add_query_arg(
 	array(
-		'cache_force_delete' => '1',
+		'cache_force_delete'              => '1',
 		'_translation_delete_cache_nonce' => wp_create_nonce( 'translate_accelerator_delete_cache_action' ),
 	)
 );
@@ -39,9 +39,11 @@ $cache_clear_link = add_query_arg(
 				<th><?php esc_html_e( 'Translated text displayed in your site', 'wp-kusanagi' ); ?></th>
 				<td>
 					<select name="frontend">
-						<option value="cache"<?php echo 'cache' === $settings['frontend'] ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Enable cache', 'wp-kusanagi' ); ?></option>
 						<option value="cutoff"<?php echo 'cutoff' === $settings['frontend'] ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Disable translation', 'wp-kusanagi' ); ?></option>
 						<option value="default"<?php echo 'default' === $settings['frontend'] ? ' selected="selected"' : ''; ?>><?php esc_html_e( "Use language file's for translation", 'wp-kusanagi' ); ?></option>
+<?php if ( 'cache' === $settings['frontend'] || version_compare( get_bloginfo( 'version' ), '6.3', '<' ) ) { ?>
+							<option value="cache" <?php echo version_compare( get_bloginfo( 'version' ), '6.3', '>=' ) ? 'disabled' : ''; ?> selected="selected"><?php esc_html_e( 'Enable cache', 'wp-kusanagi' ); ?></option>
+<?php } ?>
 					</select>
 				</td>
 			</tr>
@@ -49,9 +51,11 @@ $cache_clear_link = add_query_arg(
 				<th><?php esc_html_e( 'Login/signup page translation', 'wp-kusanagi' ); ?></th>
 				<td>
 					<select name="wp-login">
-						<option value="cache"<?php echo 'cache' === $settings['wp-login'] ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Enable cache', 'wp-kusanagi' ); ?></option>
 						<option value="cutoff"<?php echo 'cutoff' === $settings['wp-login'] ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Disable translation', 'wp-kusanagi' ); ?></option>
 						<option value="default"<?php echo 'default' === $settings['wp-login'] ? ' selected="selected"' : ''; ?>><?php esc_html_e( "Use language file's for translation", 'wp-kusanagi' ); ?></option>
+<?php if ( 'cache' === $settings['wp-login'] ) { ?>
+							<option value="cache" <?php echo version_compare( get_bloginfo( 'version' ), '6.3', '>=' ) ? 'disabled' : ''; ?> selected="selected"><?php esc_html_e( 'Enable cache', 'wp-kusanagi' ); ?></option>
+<?php } ?>
 					</select>
 				</td>
 			</tr>
@@ -59,9 +63,11 @@ $cache_clear_link = add_query_arg(
 				<th><?php esc_html_e( 'Admin pages translation', 'wp-kusanagi' ); ?></th>
 				<td>
 					<select name="admin">
-						<option value="cache"<?php echo 'cache' === $settings['admin'] ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Enable cache', 'wp-kusanagi' ); ?></option>
 						<option value="cutoff"<?php echo 'cutoff' === $settings['admin'] ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Disable translation', 'wp-kusanagi' ); ?></option>
 						<option value="default"<?php echo 'default' === $settings['admin'] ? ' selected="selected"' : ''; ?>><?php esc_html_e( "Use language file's for translation", 'wp-kusanagi' ); ?></option>
+<?php if ( 'cache' === $settings['admin'] ) { ?>
+							<option value="cache" <?php echo version_compare( get_bloginfo( 'version' ), '6.3', '>=' ) ? 'disabled' : ''; ?> selected="selected"><?php esc_html_e( 'Enable cache', 'wp-kusanagi' ); ?></option>
+<?php } ?>
 					</select>
 				</td>
 			</tr>

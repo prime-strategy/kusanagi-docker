@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP KUSANAGI\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-20T05:54:17+00:00\n"
+"POT-Creation-Date: 2025-01-21T02:42:03+00:00\n"
 "PO-Revision-Date: 2023-11-07 15:45+0900\n"
 "Last-Translator: Prime Strategy Co.,Ltd.\n"
 "Language-Team: Prime Strategy Co.,Ltd.\n"
@@ -11,51 +11,51 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: modules/automatic-updates.php:166 templates/tab-automatic-updates.php:37
+#: modules/automatic-updates.php:167 templates/tab-automatic-updates.php:37
 #: templates/tab-automatic-updates.php:133
 msgid "Automatic Updates"
 msgstr "自動更新"
 
-#: modules/automatic-updates.php:202 modules/misc.php:522
-#: modules/page-cache.php:199 modules/theme-switcher.php:61
-#: modules/theme-switcher.php:121 modules/translate-accelerator.php:218
+#: modules/automatic-updates.php:203 modules/misc.php:522
+#: modules/page-cache.php:201 modules/theme-switcher.php:61
+#: modules/theme-switcher.php:121 modules/translate-accelerator.php:222
 msgid "Update settings successfully."
 msgstr "正常に更新されました。"
 
 #. translators: 1: the definition.
-#: modules/automatic-updates.php:232
+#: modules/automatic-updates.php:233
 msgid "Background updates are disabled. Change to define %1$s or comment out the definition."
 msgstr "バックグラウンド更新が無効になっています。%sに変更またはコメントアウトしてください"
 
-#: modules/automatic-updates.php:236
+#: modules/automatic-updates.php:237
 msgid "WP is installing"
 msgstr "WPインストール中"
 
-#: modules/automatic-updates.php:240
+#: modules/automatic-updates.php:241
 msgid "Automatic update is disabled. The constant AUTOMATIC_UPDATER_DISABLED is set."
 msgstr "自動更新は無効です。「AUTOMATIC_UPDATER_DISABLED」定数が設定されています。"
 
-#: modules/automatic-updates.php:244
+#: modules/automatic-updates.php:245
 msgid "Automatic update is disabled. The \"automatic_updater_disabled\" filter is set."
 msgstr "自動更新は無効です。「automatic_updater_disabled」フィルターが設定されています。"
 
-#: modules/automatic-updates.php:249
+#: modules/automatic-updates.php:250
 msgid "Automatic updates are disabled. The \"DISABLE_WP_CRON\" constant is set."
 msgstr "自動更新は無効です。「DISABLE_WP_CRON」定数が設定されています。"
 
 #. translators: %s: defined constant.
-#: modules/automatic-updates.php:262 modules/automatic-updates.php:267
-#: modules/automatic-updates.php:272
+#: modules/automatic-updates.php:263 modules/automatic-updates.php:268
+#: modules/automatic-updates.php:273
 msgid "Add %s to the wp-config.php file."
 msgstr "%s をwp-config.phpファイルに追加してください。"
 
 #. translators: 1: defined constant, 2: login password.
-#: modules/automatic-updates.php:277
+#: modules/automatic-updates.php:278
 msgid "Add %1$s to the wp-config.php file and change %2$s part to login password."
 msgstr "%1$sをwp-config.phpファイルに追加し、%2$s部分をログインパスワードに変更してください。"
 
 #. translators: %s: credential hostname.
-#: modules/automatic-updates.php:295
+#: modules/automatic-updates.php:296
 msgid "Failed to connect to FTP Server %s. If you do not remember your credentials, you should contact your web host."
 msgstr "FTP サーバー  %s への接続に失敗しました。接続情報が思い出せない場合は、ホスティング担当者に問い合わせてください。"
 
@@ -63,7 +63,7 @@ msgstr "FTP サーバー  %s への接続に失敗しました。接続情報が
 msgid "Misc."
 msgstr "その他"
 
-#: modules/page-cache.php:73 templates/tab-home.php:17
+#: modules/page-cache.php:74 templates/tab-home.php:36
 #: templates/tab-page-cache.php:23
 msgid "Page Cache"
 msgstr "ページキャッシュ"
@@ -176,7 +176,11 @@ msgstr "Webサーバ : %1s"
 msgid "Failed to get version information."
 msgstr "バージョン情報取得できません。"
 
-#: modules/theme-switcher.php:45 templates/tab-home.php:32
+#: modules/support.php:19
+msgid "Support"
+msgstr "サポート"
+
+#: modules/theme-switcher.php:45 templates/tab-home.php:52
 #: templates/tab-theme-switcher.php:7
 msgid "Device Theme Switcher"
 msgstr "デバイス切替"
@@ -224,10 +228,31 @@ msgstr "キーワード"
 msgid "Group"
 msgstr "グループ"
 
-#: modules/translate-accelerator.php:50 templates/tab-home.php:47
+#: modules/translate-accelerator.php:50 templates/tab-home.php:67
 #: templates/tab-translate-accelerator.php:14
 msgid "Translate Accelerator"
 msgstr "翻訳アクセラレーター"
+
+#. translators: 1: Latest version.
+#: templates/admin-released-notice.php:21
+msgid "A new version of the KUSANAGI plugin, \"%s\", has been released."
+msgstr "KUSANAGIプラグインの新しいバージョン「%s」が公開されました。"
+
+#: templates/admin-released-notice.php:25
+msgid "The module update can be applied with the following command:"
+msgstr "モジュールのアップデートについては、以下のコマンドで適用可能です。"
+
+#: templates/admin-released-notice.php:26
+msgid "# dnf upgrade kusanagi kusanagi-wp-plugins"
+msgstr "# dnf upgrade kusanagi kusanagi-wp-plugins"
+
+#: templates/admin-released-notice.php:28
+msgid "After module update, please update KUSANAGI plugin of the profile with the following command:"
+msgstr "その後、以下のコマンドでプロファイルのKUSANAGIプラグインを更新してください。"
+
+#: templates/admin-released-notice.php:29
+msgid "# kusanagi update plugin profile"
+msgstr "# kusanagi update plugin プロファイル"
 
 #: templates/tab-automatic-updates.php:22
 msgid "You don't have permission to update."
@@ -390,34 +415,50 @@ msgctxt "automatic updates"
 msgid "Not supported"
 msgstr "サポートされていません"
 
-#: templates/tab-home.php:7
-msgid "https://kusanagi.tokyo/en/feed/"
-msgstr "https://kusanagi.tokyo/feed/"
-
-#: templates/tab-home.php:14
+#: templates/tab-home.php:32
 msgid "Modules"
 msgstr "モジュール"
 
-#: templates/tab-home.php:22
+#: templates/tab-home.php:41
 msgid "<p>Page cache is a function for saving an HTML to display as a temporary data and reusing it in order to improve the WordPress performance.</p>"
 msgstr "<p>ページキャッシュは、WordPressパフォーマンス向上のため、表示するHTMLを一時データとして保存し再利用する機能です。</p>"
 
-#: templates/tab-home.php:28 templates/tab-home.php:43
-#: templates/tab-home.php:58
+#: templates/tab-home.php:47 templates/tab-home.php:63
+#: templates/tab-home.php:78
 msgid "Settings"
 msgstr "設定"
 
-#: templates/tab-home.php:37
+#: templates/tab-home.php:57
 msgid "<p>Device switching is a function to change and optimize a theme to display for mobile terminals such as a smartphone.</p>"
 msgstr "<p>デバイス切替は、スマートフォンなどのモバイル端末に対して表示するテーマを変更し、最適化を図るための機能です。</p>"
 
-#: templates/tab-home.php:52
+#: templates/tab-home.php:72
 msgid "<p>Translate Accelerator makes the translation cache files, and shortens the execution time to display your WordPress site.</p>"
 msgstr "<p>翻訳の読み込みを高速化し、表示までにかかる実行時間を短縮します。</p>"
 
-#: templates/tab-home.php:63
+#: templates/tab-home.php:83
 msgid "Information"
 msgstr "インフォメーション"
+
+#: templates/tab-home.php:84
+msgid "https://kusanagi.tokyo/en/feed/"
+msgstr "https://kusanagi.tokyo/feed/"
+
+#: templates/tab-home.php:85
+msgid "KUSANAGI Tech Column"
+msgstr "KUSANAGI Tech Column"
+
+#: templates/tab-home.php:86
+msgid "https://www.prime-strategy.co.jp/column/feed/"
+msgstr "https://www.prime-strategy.co.jp/column/feed/"
+
+#: templates/tab-home.php:87
+msgid "Events and Seminars"
+msgstr "イベント・セミナー"
+
+#: templates/tab-home.php:88
+msgid "https://www.prime-strategy.co.jp/information-category/event_and_seminars/feed/"
+msgstr "https://www.prime-strategy.co.jp/information-category/event_and_seminars/feed/"
 
 #: templates/tab-misc.php:22
 msgid "Image Optimizer"
@@ -582,6 +623,84 @@ msgstr "advanced-cache.phpを生成する"
 msgid "You do not have a write permission to write in advanced-cache.php or %1s. To regenerate advanced-cache.php, please set the write permission."
 msgstr "advanced-cache.php、または %1s に書き込み権限がありません。advanced-cache.phpの再生成を行うには、書き込み権限を設定してください。"
 
+#: templates/tab-support.php:13
+msgid "Documentation"
+msgstr "ドキュメント"
+
+#: templates/tab-support.php:17
+#, fuzzy
+msgid "Documentation: <a target=\"_blank\" href=\"https://kusanagi.tokyo/en/document/\">https://kusanagi.tokyo/en/document/</a>"
+msgstr "ドキュメント： <a target=\"_blank\" href=\"https://kusanagi.tokyo/document/\">https://kusanagi.tokyo/document/</a>"
+
+#: templates/tab-support.php:23
+#, fuzzy
+msgid "Official FAQ: <a target=\"_blank\" href=\"https://kusanagi.tokyo/en/faq/\">https://kusanagi.tokyo/en/faq/</a>"
+msgstr "公式サイトFAQ： <a target=\"_blank\" href=\"https://kusanagi.tokyo/faq/\">https://kusanagi.tokyo/faq/</a>"
+
+#: templates/tab-support.php:28
+msgid "Community"
+msgstr "コミュニティ"
+
+#: templates/tab-support.php:32
+#, fuzzy
+msgid "The KUSANAGI User Forum is a free technical support and user community. (Japanese Only)<br>KUSANAGI User Forum: <a target=\"_blank\" href=\"https://users.kusanagi.tokyo/\">https://users.kusanagi.tokyo/</a>"
+msgstr "KUSANAGIユーザーフォーラムは無償での技術サポート、ユーザー同士のコミュニティです。<br>KUSANAGIユーザーフォーラム: <a target=\"_blank\" href=\"https://users.kusanagi.tokyo/\">https://users.kusanagi.tokyo/</a>"
+
+#: templates/tab-support.php:38
+msgid "Mail Magazine"
+msgstr "メールマガジン"
+
+#: templates/tab-support.php:42
+#, fuzzy
+msgid "We publish two newsletters, “KUSANAGI Monthly” and “KUSANAGI Technology Monthly”.<br>Mail Magazine Subscription: <a target=\"_blank\" href=\"https://www.prime-strategy.co.jp/mail-magazine/\">https://www.prime-strategy.co.jp/mail-magazine/</a>"
+msgstr "「月刊KUSANAGI」「月刊KUSANAGI技術」の２つのメルマガを発行しています。<br>メールマガジン申し込み： <a target=\"_blank\" target=\"_blank\" href=\"https://www.prime-strategy.co.jp/mail-magazine/\">https://www.prime-strategy.co.jp/mail-magazine/</a>"
+
+#: templates/tab-support.php:48
+msgid "SNS"
+msgstr "SNS"
+
+#: templates/tab-support.php:52
+#, fuzzy
+msgid "Kusanagi Saya Official X: <a target=\"_blank\" href=\"https://twitter.com/kusanagi_saya\">https://twitter.com/kusanagi_saya</a>"
+msgstr "草薙沙耶公式X： <a target=\"_blank\" href=\"https://twitter.com/kusanagi_saya\">https://twitter.com/kusanagi_saya</a>"
+
+#: templates/tab-support.php:56
+msgid "Developer SNS"
+msgstr "開発元SNS"
+
+#: templates/tab-support.php:60
+#, fuzzy
+msgid "Official Facebook: <a target=\"_blank\" href=\"https://www.facebook.com/primestrategy/\">https://www.facebook.com/primestrategy/</a>"
+msgstr "公式Facebook： <a target=\"_blank\" href=\"https://www.facebook.com/primestrategy/\">https://www.facebook.com/primestrategy/</a>"
+
+#: templates/tab-support.php:66
+#, fuzzy
+msgid "Official X: <a target=\"_blank\" href=\"https://twitter.com/primestrategyjp/\">https://twitter.com/primestrategyjp/</a>"
+msgstr "公式X： <a target=\"_blank\" href=\"https://twitter.com/primestrategyjp/\">https://twitter.com/primestrategyjp/</a>"
+
+#: templates/tab-support.php:72
+#, fuzzy
+msgid "Official Instagram: <a target=\"_blank\" href=\"https://www.instagram.com/primestrategy/\">https://www.instagram.com/primestrategy/</a>"
+msgstr "公式Instagram： <a target=\"_blank\" href=\"https://www.instagram.com/primestrategy/\">https://www.instagram.com/primestrategy/</a>"
+
+#: templates/tab-support.php:79
+msgid "Paid Support"
+msgstr "有償サポート"
+
+#: templates/tab-support.php:83
+#, fuzzy
+msgid "KUSANAGI Managed Services: <a target=\"_blank\" href=\"https://www.prime-strategy.co.jp/services/kusanagi-managed-service/\">https://www.prime-strategy.co.jp/services/kusanagi-managed-service/</a><br>Paid support by KUSANAGI developer."
+msgstr "KUSANAGIマネージドサービス： <a target=\"_blank\" href=\"https://www.prime-strategy.co.jp/services/kusanagi-managed-service/\">https://www.prime-strategy.co.jp/services/kusanagi-managed-service/</a><br>KUSANAGI開発元による有償サポート"
+
+#: templates/tab-support.php:89
+msgid "KUSANAGI Editions"
+msgstr "KUSANAGIのエディションについて"
+
+#: templates/tab-support.php:93
+#, fuzzy
+msgid "KUSANAGI has a Business Edition for business use and a Premium Edition for even higher speed.<br>In addition to using the higher editions directly in the provided cloud, you can upgrade to these higher editions.<br><a target=\"_blank\" href=\"https://kusanagi.tokyo/en/edition_and_upgrade/\">https://kusanagi.tokyo/en/edition_and_upgrade/</a>"
+msgstr "KUSANAGIにはビジネスユースを目的としたBusiness Editionとさらなる高速化を実現するPremium Editionがあります。<br>提供クラウドで直接上位版を利用するほか、これらの上位版にアップグレードすることができます。<br><a target=\"_blank\" href=\"https://kusanagi.tokyo/edition_and_upgrade/\">https://kusanagi.tokyo/edition_and_upgrade/</a>"
+
 #: templates/tab-theme-switcher.php:9
 msgid "Back"
 msgstr "戻る"
@@ -607,36 +726,36 @@ msgid "Translated text displayed in your site"
 msgstr "サイトに表示される翻訳された文章"
 
 #: templates/tab-translate-accelerator.php:42
-#: templates/tab-translate-accelerator.php:52
-#: templates/tab-translate-accelerator.php:62
-msgid "Enable cache"
-msgstr "キャッシュを使用"
-
-#: templates/tab-translate-accelerator.php:43
-#: templates/tab-translate-accelerator.php:53
-#: templates/tab-translate-accelerator.php:63
+#: templates/tab-translate-accelerator.php:54
+#: templates/tab-translate-accelerator.php:66
 msgid "Disable translation"
 msgstr "翻訳を停止"
 
-#: templates/tab-translate-accelerator.php:44
-#: templates/tab-translate-accelerator.php:54
-#: templates/tab-translate-accelerator.php:64
+#: templates/tab-translate-accelerator.php:43
+#: templates/tab-translate-accelerator.php:55
+#: templates/tab-translate-accelerator.php:67
 msgid "Use language file's for translation"
 msgstr "通常翻訳"
 
-#: templates/tab-translate-accelerator.php:49
+#: templates/tab-translate-accelerator.php:45
+#: templates/tab-translate-accelerator.php:57
+#: templates/tab-translate-accelerator.php:69
+msgid "Enable cache"
+msgstr "キャッシュを使用"
+
+#: templates/tab-translate-accelerator.php:51
 msgid "Login/signup page translation"
 msgstr "ログイン/サインアップ画面の翻訳"
 
-#: templates/tab-translate-accelerator.php:59
+#: templates/tab-translate-accelerator.php:63
 msgid "Admin pages translation"
 msgstr "管理画面の翻訳"
 
-#: templates/tab-translate-accelerator.php:70
+#: templates/tab-translate-accelerator.php:76
 msgid "Delete cache"
 msgstr "キャッシュを削除"
 
-#: templates/tab-translate-accelerator.php:71
+#: templates/tab-translate-accelerator.php:77
 msgid "Force deletion of all cache"
 msgstr "キャッシュの強制削除を行う"
 

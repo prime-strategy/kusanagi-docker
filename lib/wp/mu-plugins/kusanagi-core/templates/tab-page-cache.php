@@ -1,5 +1,5 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) || ! isset( $this->modules['page-cache'] ) ) {
 	exit;
 }
 

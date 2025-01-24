@@ -11,6 +11,8 @@ $current_tab = sanitize_text_field( $current_tab );
 <div class="wrap">
 	<h2>KUSANAGI Settings</h2>
 
+	<?php do_action( 'kusanagi_admin_notices' ); ?>
+
 	<ul class="tab-menu">
 		<li class="<?php echo $current_tab && 'home' === $current_tab ? 'current' : 'tab-item'; ?>">
 			<a href="<?php echo esc_url( $this->home_url ); ?>">HOME</a>

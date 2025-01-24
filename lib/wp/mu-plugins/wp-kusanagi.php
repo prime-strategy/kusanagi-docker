@@ -3,7 +3,7 @@
 Plugin Name: WP KUSANAGI
 Plugin URI: http://en.kusanagi.tokyo/
 Description: Page Cache, Translate Cache and Device Theme Switch for KUSANAGI.
-Version: 1.3.3
+Version: 1.3.5
 Author: Prime Strategy Co.,LTD.
 Author URI: http://www.prime-strategy.co.jp/
 License: GPLv2 or later

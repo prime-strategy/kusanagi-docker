@@ -19,7 +19,7 @@ class KUSANAGI_Cache_Clear {
 			$this->cache_key = $_SERVER['REQUEST_URI'];
 		}
 		if ( ! is_dir( $this->fcache_dir ) ) {
-			$this->fcache_dir = '/var/opt/kusanagi/cache/nginx/wordpress';
+			$this->fcache_dir = '/var/opt/kusanagi/cache/nginx*/wordpress';
 		}
 	}
 
@@ -97,23 +97,26 @@ class KUSANAGI_Cache_Clear {
 	}
 
 	public function clear_fcache( $key = '' ) {
-		if ( ! is_dir( $this->fcache_dir ) ) {
-			return;
-		}
-		$files       = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator( $this->fcache_dir, FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::SKIP_DOTS )
-		);
-		$quoted_home = preg_quote( get_option( 'home' ), '#' );
-		foreach ( $files as $file_path ) {
-			if ( $key ) {
-				$html = file_get_contents( $file_path );
-				if ( preg_match( '#KEY\:.*' . $quoted_home . '(.*)#', $html, $m ) ) {
-					if ( strcasecmp( $m[1], $key ) === 0 ) {
-						unlink( $file_path );
+		$directories = glob( $this->fcache_dir, GLOB_ONLYDIR );
+		foreach ( $directories as $dir ) {
+			if ( ! is_dir( $dir ) ) {
+				continue;
+			}
+			$files       = new RecursiveIteratorIterator(
+				new RecursiveDirectoryIterator( $dir, FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::SKIP_DOTS )
+			);
+			$quoted_home = preg_quote( get_option( 'home' ), '#' );
+			foreach ( $files as $file_path ) {
+				if ( $key ) {
+					$html = file_get_contents( $file_path );
+					if ( preg_match( '#KEY\:.*' . $quoted_home . '(.*)#', $html, $m ) ) {
+						if ( strcasecmp( $m[1], $key ) === 0 ) {
+							unlink( $file_path );
+						}
 					}
+				} else {
+					unlink( $file_path );
 				}
-			} else {
-				unlink( $file_path );
 			}
 		}
 	}

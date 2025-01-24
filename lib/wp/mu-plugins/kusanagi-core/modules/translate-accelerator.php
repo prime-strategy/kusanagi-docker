@@ -18,9 +18,9 @@ class KUSANAGI_Translate_Accelerator {
 		$this->default = array(
 			'activate'       => '1',
 			'cache_type'     => 'file',
-			'frontend'       => 'cache',
-			'wp-login'       => 'cache',
-			'admin'          => 'cache',
+			'frontend'       => 'default',
+			'wp-login'       => 'default',
+			'admin'          => 'default',
 			'file_cache_dir' => '',
 			'error_mes'      => false,
 		);
@@ -109,8 +109,13 @@ class KUSANAGI_Translate_Accelerator {
 		if ( 'cutoff' === $s[ $segment ] ) {
 			return true;
 		} elseif ( 'cache' === $s[ $segment ] ) {
-			if ( false !== $this->cache_control( $domain, $mofile ) ) {
-				return true;
+			if ( version_compare( get_bloginfo( 'version' ), '6.3', '<' ) ) {
+				if ( false !== $this->cache_control( $domain, $mofile ) ) {
+					return true;
+				}
+			} else {
+				$s[ $segment ] = 'default';
+				update_option( 'kusanagi-translate-accelerator-settings', $s );
 			}
 		}
 
@@ -188,8 +193,7 @@ class KUSANAGI_Translate_Accelerator {
 	}
 
 	public function clear_cache_control() {
-		if ( isset( $_GET['_translation_delete_cache_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_translation_delete_cache_nonce'] ) ), 'translate_accelerator_delete_cache_action' ) &&
-			 isset( $_GET['cache_force_delete'] ) && '1' === sanitize_text_field( wp_unslash( $_GET['cache_force_delete'] ) )
+		if ( isset( $_GET['_translation_delete_cache_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_translation_delete_cache_nonce'] ) ), 'translate_accelerator_delete_cache_action' ) && isset( $_GET['cache_force_delete'] ) && '1' === sanitize_text_field( wp_unslash( $_GET['cache_force_delete'] ) )
 		) {
 			$this->delete_cache();
 			$redirect = remove_query_arg( array( 'cache_force_delete', '_translation_delete_cache_nonce' ) );
