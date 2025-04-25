@@ -1,4 +1,3 @@
-#
 # KUSANAGI provision for kusanagi-docker
 # (C)2019 Prime-Strategy Co,Ltd
 # Licenced by GNU GPL v2
@@ -455,6 +454,10 @@ function k_provision () {
 				;;
 			--nginx1.27|--nginx127)
 				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX127_IMAGE
+				OPT_NGINX=1
+				;;
+			--nginx1.28|--nginx128)
+				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX128_IMAGE
 				OPT_NGINX=1
 				;;
 			'--nginx')

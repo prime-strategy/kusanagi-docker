@@ -1,29 +1,30 @@
-##
+#
 # KUSANAGI WordPres Deployment for kusanagi-docker
 # (C)2019 Prime-Strategy Co,Ltd
 # Licenced by GNU GPL v2
 #
 
-function wp_lang() {
+WP='php -d memory_limit=256M /usr/local/bin/wp'
+wp_lang() {
 	if [ ${1} != "en_US" ] ; then
-		wp language core install ${WP_LANG} && \
-		wp language plugin install --all ${WP_LANG} && \
-		wp language theme install --all ${WP_LANG} && \
-		wp site switch-language ${WP_LANG} 
+		$WP language core install ${WP_LANG} && \
+		$WP language plugin install --all ${WP_LANG} && \
+		$WP language theme install --all ${WP_LANG} && \
+		$WP site switch-language ${WP_LANG}
 	fi
 }
 
 EXTRAPHP=$BASEDIR/wp-config-sample/$WP_LANG/wp-config-extra.php
 [ -f $EXTRAPHP ] || EXTRAPHP=$BASEDIR/wp-config-sample/en_US/wp-config-extra.php
-wp core download \
+php -d memory_limit=256M /usr/local/bin/wp core download \
 && sleep 1 \
-&& wp core config \
+&& $WP core config \
 	--dbhost=${DBHOST} \
 	--dbname="${DBNAME}" --dbuser="${DBUSER}" --dbpass="${DBPASS}" \
 	${DBPREFIX:+--dbprefix $DBPREFIX} \
 	--dbcharset=${MYSQL_CHARSET:-utf8mb4} --extra-php < $EXTRAPHP \
 && sleep 1 \
-&& wp core install --url=http://${FQDN} \
+&& $WP core install --url=http://${FQDN} \
 	--title="${WP_TITLE}" --admin_user="${ADMIN_USER}" \
 	--admin_password="${ADMIN_PASSWORD}" --admin_email="${ADMIN_EMAIL}" \
 && wp_lang $WP_LANG \
