@@ -1,23 +1,19 @@
-#!
-set -e
+#!/bin/bash
+set -ex
 
 function deploy_drupal() {
 	local _ver=$1
-	[ $_ver -ge 7 -a $_ver -le 10 ] || _ver=9
+	[[ $_ver -lt 10 ]] && _ver=10
 	WORKDIR=$(mktemp -d)
 	cd $WORKDIR
 	local PROJ="project/drupal/releases"
-	local REL=$(wget -O - https://www.drupal.org/$PROJ/ 2> /dev/null | egrep '<h2><a href="/'$PROJ'/'$_ver'\.[0-9]+\.[0-9]+">' | awk -F\" 'NR==1 {print $2}')
-	[ "x$REL" = "x" ] && REL=$(wget -O - https://www.drupal.org/$PROJ/ 2> /dev/null | egrep '<a href="/'$PROJ'/'$_ver'\.[0-9]+">' | awk -F\" 'NR==1 {print $2}')
-	local VER=$(basename $REL)
+	local REL="$(wget -O - https://www.drupal.org/$PROJ/ 2> /dev/null | grep -E '<h2><a href="/'$PROJ'/'$_ver'\.[0-9]+\.[0-9]+">' | awk -F\" 'NR==1 {print $2}')"
+	[[ -z "$REL" ]] && REL="$(wget -O - https://www.drupal.org/$PROJ/ 2> /dev/null | grep -E '<a href="/'$PROJ'/'$_ver'\.[0-9]+">' | awk -F\" 'NR==1 {print $2}')"
+	local VER="$(basename $REL)"
 
-	wget https://ftp.drupal.org/files/projects/drupal-${VER}.tar.gz
-	tar xf drupal-${VER}.tar.gz
+	wget "https://ftp.drupal.org/files/projects/drupal-${VER}.tar.gz"
+	tar xf "drupal-${VER}.tar.gz"
 	mv drupal-${VER}/* drupal-${VER}/.[^.]* $DOCUMENTROOT
-	if [ $_ver -eq 7 ] ; then
-		wget https://ftp.drupal.org/files/projects/l10n_update-7.x-2.2.tar.gz
-		tar xf l10n_update-7.x-2.2.tar.gz -C $DOCUMENTROOT/sites/all/modules/
-	fi
 	cd $DOCUMENTROOT
 
 	rm -rf $WORKDIR
