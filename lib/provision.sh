@@ -1,3 +1,4 @@
+#!/bin/bash
 # KUSANAGI provision for kusanagi-docker
 # (C)2019 Prime-Strategy Co,Ltd
 # Licenced by GNU GPL v2
@@ -50,7 +51,7 @@ function k_check_wplang() {
 		echo "$OPT"
 		;;
 	*)
-		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input legal language.")
+		k_print_error "$(eval_gettext 'option:') $PRE_OPT $OPT: $(eval_gettext 'please input legal language.')"
 		;;
 	esac
 }
@@ -61,7 +62,7 @@ function k_check_fqdn() {
 	if [[ $OPT =~ ^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]))+\.?$ ]] && [[ $OPT =~ ^[a-zA-Z0-9\.\-]{3,253}$ ]] ; then
 		echo "$OPT"
 	else
-		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input valid hostname.")
+		k_print_error "$(eval_gettext 'option:') $PRE_OPT $OPT: $(eval_gettext 'please input valid hostname.')"
 	fi
 }
 
@@ -71,7 +72,7 @@ function k_check_email() {
 	if [[ "${OPT,,}" =~ ^[a-z0-9!$\&*.=^\`|~#%\'+\/?_{}-]+@([a-z0-9_-]+\.)+(xx--[a-z0-9]+|[a-z]{2,})$ ]] ; then #'`
 		echo "$OPT"
 	else
-		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input valid email address.")
+		k_print_error "$(eval_gettext 'option:') $PRE_OPT $OPT: $(eval_gettext 'please input valid email address.')"
 	fi
 }
 function k_check_port() {
@@ -80,7 +81,7 @@ function k_check_port() {
 	if [[ "$OPT" =~ ^[0-9]+ ]] && [ $OPT -gt 0 -a $OPT -lt 65536 ] ; then
 		echo "$OPT"
 	else
-		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input valid port number.")
+		k_print_error "$(eval_gettext 'option:') $PRE_OPT $OPT: $(eval_gettext 'please input valid port number.')"
 	fi
 }
 
@@ -95,7 +96,7 @@ function k_check_host() {
 	elif [[ "$OPT" =~ ^(([0-9A-Fa-f]{0,4}::?){1,7}[0-9A-Fa-f]{0,4})$ ]] ; then
 		echo "$OPT"
 	else
-		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input valid hostname.")
+		k_print_error "$(eval_gettext 'option:') $PRE_OPT $OPT: $(eval_gettext 'please input valid hostname.')"
 	fi
 }
 
@@ -105,7 +106,7 @@ function k_check_dbname() {
 	if [[ "$OPT" =~ ^[a-zA-Z0-9._-]{3,64}$ ]]; then
 		echo "$OPT"
 	else
-		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "please input [a-zA-Z0-9._-] 3 to 64 characters.")
+		k_print_error "$(eval_gettext 'option:') $PRE_OPT $OPT: $(eval_gettext 'please input [a-zA-Z0-9._-] 3 to 64 characters.')"
 	fi
 }
 
@@ -115,7 +116,7 @@ function k_check_dbuser() {
 	if [[ "$OPT" =~ ^[a-zA-Z0-9._-]{3,16}$ ]] ; then
 		echo "$OPT"
 	else
-		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "Enter username for database. USE [a-zA-Z0-9._-] 3 to 16 characters.")
+		k_print_error "$(eval_gettext 'option:') $PRE_OPT $OPT: $(eval_gettext 'Enter username for database. USE [a-zA-Z0-9._-] 3 to 16 characters.')"
 	fi
 }
 
@@ -126,7 +127,7 @@ function k_check_dbpass() {
 	if [[ "$OPT" =~ ^[a-zA-Z0-9\.\!\#\%\+\_\-]{8,}$ ]] ; then
 		echo "$OPT"
 	else
-		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "Enter password for database user '\$USER'. USE [a-zA-Z0-9.!#%+_-] 8 characters minimum.")
+		k_print_error "$(eval_gettext 'option:') $PRE_OPT $OPT: $(eval_gettext 'Enter password for database user '\$USER'. USE [a-zA-Z0-9.!#%+_-] 8 characters minimum.')"
 	fi
 }
 
@@ -136,7 +137,7 @@ function k_check_adminuser() {
 	if [[ "$OPT" =~ ^[a-zA-Z0-9._-]{4,}$ ]] ; then
 		echo "$OPT"
 	else
-		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "Enter admin username for WordPress. USE [a-zA-Z0-9._-] 4 characters minimum.")
+		k_print_error "$(eval_gettext 'option:') $PRE_OPT $OPT: $(eval_gettext 'Enter admin username for WordPress. USE [a-zA-Z0-9._-] 4 characters minimum.')"
 	fi
 }
 
@@ -144,19 +145,19 @@ function k_check_dbsystem() {
 	local PRE_OPT="$1"
 	local OPT="$2"
 	local DB="$3"
-	if [ "x$DB" = "x" ] ; then
-		k_print_notice $(eval_gettext "option:") $OPT: $(eval_gettext "can not be specified with another db system.")
+	if [[ -z $DB ]] ; then
+		k_print_notice "$(eval_gettext 'option:') $OPT: $(eval_gettext 'can not be specified with another db system.')"
 	fi
 	case "$OPT" in
 	'mysql'|'mariadb')
 		echo MariaDB
 		;;
 	'postgresql'|'pgsql')
-		k_print_error $(eval_gettext "not implemented.")
+		k_print_error "$(eval_gettext 'not implemented.')"
 		# echo PostgreSQL
 		;;
 	'*')
-		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "can not be specified.")
+		k_print_error "$(eval_gettext 'option:') $PRE_OPT $OPT: $(eval_gettext 'can not be specified.')"
 	esac
 }
 
@@ -167,7 +168,7 @@ function k_check_passwd() {
 	if [[ "$OPT" =~ ^[a-zA-Z0-9\.\!\#\%\+\_\-]{8,}$ ]] ; then
 		echo "$OPT"
 	else
-		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "Enter \$USER password for WordPress. USE [a-zA-Z0-9.!#%+_-] 8 characters minimum.")
+		k_print_error "$(eval_gettext 'option:') $PRE_OPT $OPT: $(eval_gettext 'Enter $USER password for WordPress. USE [a-zA-Z0-9.!#%+_-] 8 characters minimum.')"
 	fi
 }
 
@@ -177,7 +178,7 @@ function k_check_title() {
 	if [[ "$OPT" =~ ^.{1,}$ ]] ; then
 		echo "$OPT"
 	else
-		k_print_error $(eval_gettext "option:") $PRE_OPT $OPT: $(eval_gettext "Enter Title for for WordPress. USE 1 characters minimum.")
+		k_print_error "$(eval_gettext 'option:') $PRE_OPT $OPT: $(eval_gettext 'Enter Title for for WordPress. USE 1 characters minimum.')"
 	fi
 }
 
@@ -286,41 +287,41 @@ function k_provision () {
 			case "$OPT" in
 			'--woo'|'--WooCommerce')
 				export OPT_WOO=0
-					k_print_notice $(eval_gettext "option:") $OPT: $(eval_gettext "not implemented.")
+					k_print_notice "$(eval_gettext 'option:') $OPT: $(eval_gettext 'not implemented.')"
 				;;
 			'--wp'|'--wordpress'|'--WordPress')
 				if [ "x$APP" != "x" ] ; then
-					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
+					k_print_error "$(eval_gettext 'option:') $OPT: $(eval_gettext 'can not specified with another application.')"
 				fi
 				APP='wp'
 				KUSANAGI_DB_SYSTEM=MariaDB
 				;;
 			'--c5'|'--concrete5'|'--concrete')
 				if [ "x$APP" != "x" ] ; then
-					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
+					k_print_error "$(eval_gettext 'option:') $OPT: $(eval_gettext 'can not specified with another application.')"
 				fi
 				APP='c5'
 				;;
 			'--lamp'|'--LAMP')
 				if [ "x$APP" != "x" ] ; then
-					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
+					k_print_error "$(eval_gettext 'option:') $OPT: $(eval_gettext 'can not specified with another application.')"
 				fi
 				APP='lamp'
 				;;
-			'--drupal9')
-				if [ "x$APP" != "x" ] ; then
-					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
-				fi
-				APP='drupal'
-				DRUPAL_VERSION=9
-				KUSANAGI_DB_SYSTEM=MariaDB
-				;;
 			'--drupal'|'--drupal10')
 				if [ "x$APP" != "x" ] ; then
-					k_print_error $(eval_gettext "option:") $OPT: $(eval_gettext "can not specified with another application.")
+					k_print_error "$(eval_gettext 'option:') $OPT: $(eval_gettext 'can not specified with another application.')"
 				fi
 				APP='drupal'
 				DRUPAL_VERSION=10
+				KUSANAGI_DB_SYSTEM=MariaDB
+				;;
+			'--drupal11')
+				if [ "x$APP" != "x" ] ; then
+					k_print_error "$(eval_gettext 'option:') $OPT: $(eval_gettext 'can not specified with another application.')"
+				fi
+				APP='drupal'
+				DRUPAL_VERSION=11
 				KUSANAGI_DB_SYSTEM=MariaDB
 				;;
 			'--wplang')
@@ -448,12 +449,8 @@ function k_provision () {
 			'--dbsystem')
 				OPT_DBSYSTEM=1
 				;;
-			--nginx1.26|--nginx126)
-				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX126_IMAGE
-				OPT_NGINX=1
-				;;
-			--nginx1.27|--nginx127)
-				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX127_IMAGE
+			--nginx1.29|--nginx129)
+				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX129_IMAGE
 				OPT_NGINX=1
 				;;
 			--nginx1.28|--nginx128)
@@ -500,6 +497,9 @@ function k_provision () {
 			--mariadb114|--mariadb11.4)
 				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL114_IMAGE
 				;;
+			--mariadb118|--mariadb11.8)
+				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL118_IMAGE
+				;;
 			--mariadb=*)
 				KUSANAGI_MYSQL_IMAGE=mariadb:"${OPT#*=}"
 				;;
@@ -508,7 +508,7 @@ function k_provision () {
 				return 0
 				;;
 			-*)	# skip other option
-				k_print_error $(eval_gettext "Cannot use option") $OPT
+				k_print_error "$(eval_gettext 'Cannot use option') $OPT"
 				return 1
 				;;
 			*)
@@ -525,13 +525,13 @@ function k_provision () {
 	if [ "x$OPT_NGINX" = "x" -a "x$OPT_HTTPD" = "x" ] ; then
 		OPT_NGINX=1
 	elif [ "x$OPT_NGINX" = "x1" -a "x$OPT_HTTPD" = "x1" ] ; then
-		k_print_error $(eval_gettext "option --nginx and --httpd is can not specify both at the same time.")
+		k_print_error "$(eval_gettext 'option --nginx and --httpd is can not specify both at the same time.')"
 		return 1
 	fi
 
 	## check profile name and directory 
 	if [[ ! $NEW_PROFILE =~ ^[a-zA-Z0-9._-]{3,24}$ ]]; then
-		k_print_error $(eval_gettext "Target name requires [a-zA-Z0-9._-] 3-24 characters.")
+		k_print_error "$(eval_gettext 'Target name requires [a-zA-Z0-9._-] 3-24 characters.')"
 		return 1
 	fi
 
@@ -542,7 +542,7 @@ function k_provision () {
 	
 	## fqdn
 	if [ -z "$FQDN" ]; then
-		k_print_error $(eval_gettext "require option --fqdn for your website. ex) kusanagi.tokyo.")
+		k_print_error "$(eval_gettext 'require option --fqdn for your website. ex) kusanagi.tokyo.')"
 		return 1
 	fi
 

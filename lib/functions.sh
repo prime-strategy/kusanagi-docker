@@ -41,7 +41,7 @@ function k_mariadb_check() {
 	if [[ $NO_USE_DB ]]; then
 		OPT="-h$DBHOST -P$DBPORT"
 	fi
-	k_compose exec db mysqladmin status $OPT -u"$DBUSER" -p"$DBPASS" > /dev/null 2>&1
+	k_compose exec db mariadb-check -c $OPT -u"$DBUSER" -p"$DBPASS" "$DBNAME" > /dev/null 2>&1
 	return $?
 }
 
@@ -147,21 +147,20 @@ function k_helphelp {
 				echo '        '$(eval_gettext ' [--admin-user admin] [--admin-pass pass] [--admin-email email]')
 				echo '        '$(eval_gettext ' [--wp-title title] [--kusanagi-pass pass] [--noftp|--no-ftp] |')
 				echo '    '$(eval_gettext ' --lamp|--c5|--concrete5|--concrete|')
-				echo '    '$(eval_gettext ' --drupal|--drupal9|--drupal10]')
+				echo '    '$(eval_gettext ' --durupal|--drupal10|--drupal11]')
 				echo '    '$(eval_gettext '[--nginx|--httpd]')
-				echo '    '$(eval_gettext '[--nginx1.26|--nginx126|')
-				echo '    '$(eval_gettext ' --nginx1.27|--nginx127|')
-				echo '    '$(eval_gettext ' --nginx1.28|--nginx128|--nginx=version]')
+				echo '    '$(eval_gettext ' --nginx1.28|--nginx128|')
+				echo '    '$(eval_gettext ' --nginx1.29|--nginx129|--nginx=version]')
 				echo '    '$(eval_gettext '[--http-port port][--tls-port port]')
 				echo '    '$(eval_gettext '[--php8.1|--php81|')
 				echo '    '$(eval_gettext ' --php8.2|--php82|')
 				echo '    '$(eval_gettext ' --php8.3|--php83|')
 				echo '    '$(eval_gettext ' --php8.4|--php84|--php=version]')
 				echo '    '$(eval_gettext '[--dbsystem mysql|mariadb]')
-				echo '    '$(eval_gettext '[--mariadb10.5|--mariadb105|')
 				echo '    '$(eval_gettext ' --mariadb10.6|--mariadb106|')
 				echo '    '$(eval_gettext ' --mariadb10.11|--mariadb1011|')
 				echo '    '$(eval_gettext ' --mariadb11.4|--mariadb114]')
+				echo '    '$(eval_gettext ' --mariadb11.8|--mariadb118]')
 				echo '    '$(eval_gettext '[--dbhost host]')
 				echo '    '$(eval_gettext '[--dbport port]')
 				echo '    '$(eval_gettext '[--dbrootpass pasword')
