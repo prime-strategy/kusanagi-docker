@@ -59,7 +59,7 @@ KUSANAGI RoDコマンドの本体は、$HOME/.kusanagi/bin/kusanagi-docker と�
 
 以下はヘルプメッセージになります。
 
-```
+```shell
 $ kusanagi-docker --help
 ///////////////////////////////////////////////////
 High-Performance WordPress VirtualMachine
@@ -87,18 +87,19 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
          [--admin-user admin] [--admin-pass pass] [--admin-email email]
          [--wp-title title] [--kusanagi-pass pass] [--noftp|--no-ftp] |
      --lamp|--c5|--concrete5|--concrete|
-     --drupal|--drupal9|--drupal10]
+     --drupal|--drupal10|--drupal11]
     [--nginx|--httpd]
-    [--nginx1.26|--nginx126|
-     --nginx1.27|--nginx127|--nginx=version]
+    [--nginx1.28|--nginx128|
+     --nginx1.29|--nginx129|--nginx=version]
     [--http-port port][--tls-port port]
     [--php8.1|--php81|
      --php8.2|--php82|
-     --php8.3|--php83|--php=version]
-    [--mariadb10.5|--mariadb105|
-     --mariadb10.6|--mariadb106|
+     --php8.3|--php83|
+     --php8.3|--php84|--php=version]
+    [--mariadb10.6|--mariadb106|
      --mariadb10.11|--mariadb1011|
      --mariadb11.4|--mariadb114]
+     --mariadb11.8|--mariadb118
     [--dbhost host]
     [--dbport port]
     [--dbrootpass pasword
@@ -174,23 +175,24 @@ provision サブコマンドのオプションは以下のとおりです。
 | --noftp/--no-ftp                          |                                  | WordPressでの更新用のftpを使用しません。                     |
 | --c5/--concrete5/--concrete               | APP=c5                           | Concreate CMS の環境を構築します。php74/php80で動作します。  |
 | --lamp/--LAMP                             | APP=lamp                         | LAMPの環境を構築します。                                     |
-| --drupal9                       | APP=drupal<br />DRUPAL_VERSION=9 | drupal9の環境を構築します。                           |
-| --drupal10/--drupal                                | APP=drupal<br />DRUPAL_VERSION=10 | drupal10の環境を構築します。                      |
+| --drupal10/--drupal                       | APP=drupal<br />DRUPAL_VERSION=10 | drupal 10の環境を構築します。                           |
+| --drupal11                                | APP=drupal<br />DRUPAL_VERSION=11 | drupal 11の環境を構築します。                      |
 | --httpd                                   |                                  | httpd(Apache 2.4)を使用します。--nginxと同時に指定できません。 |
 | --nginx                                   |                                  | nginxを使用します。--httpdと同時に指定できません。無指定時はnginxが使用されます。 |
-| --nginx1.26/--nginx126                    |                                  | nginx使用時に、kusanagi-nginx:1.26.x を使用します。 |
-| --nginx1.27/--nginx127                    |                                  | nginx使用時に、kusanagi-nginx:1.27.x を使用します。無指定時はkusanagi-nginx:1.27.xを使用します。 |
+| --nginx1.28/--nginx128                    |                                  | nginx使用時に、kusanagi-nginx:1.28.x を使用します。 |
+| --nginx1.29/--nginx129                    |                                  | nginx使用時に、kusanagi-nginx:1.29.x を使用します。無指定時はkusanagi-nginx:1.29.xを使用します。 |
 | --nginx=version                           |                                  | nginx使用時に、Docker Hub に公開されている任意のバージョンを使用します。1.25以前のバージョンを指定できますが、すでに更新していないため、自己責任でご使用ください。 |
 | --http-port num                           | HTTP_PORT                        | ホストにポートフォワードするhttpポート番号を指定します。無指定時は80が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
 | --tls-port num                            | HTTP_TLS_PORT                    | ホストにポートフォワードするhttpsポート番号を指定します。無指定時は443が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
-| --php8.3/--php81                          |                                  | kusanagi-php:8.3.xを使用します。                             |
+| --php8.4/--php81                          |                                  | kusanagi-php:8.4.xを使用します。                             |
+| --php8.3/--php81                          |                                  | kusanagi-php:8.3.xを使用します。php のバージョンを指定しない場合、kusanagi-php:8.3.x を使用します。 |
 | --php8.2/--php81                          |                                  | kusanagi-php:8.2.xを使用します。                             |
 | --php8.1/--php81                          |                                  | kusanagi-php:8.1.xを使用します。                             |
 | --php=version                             |                                  | DockerHub上にある任意のバージョンのPHPを使用します。         |
+| --mariadb11.8/--mariadb118                |                                  | DBとして、mariadb:11.8.x-noble を使用します。                 |
 | --mariadb11.4/--mariadb114                |                                  | DBとして、mariadb:11.4.x-noble を使用します。                 |
 | --mariadb10.11/--mariadb1011              |                                  | DBとして、mariadb:10.11.x-jammy を使用します。                |
 | --mariadb10.6/--mariadb106                |                                  | DBとして、mariadb:10.6.x-focal を使用します。mariadbのバージョンを指定しない場合、mariadb:10.6.x-focalを使用します。 |
-| --mariadb10.5/--mariadb105                |                                  | DBとして、mariadb:10.5.x-focal を使用します。                |
 | --dbhost host                             | DBHOST                           | 接続するDBホスト名を指定します。無指定時はlocalhostです。    |
 | --dbport port                             | DBHOST                           | 接続するDBホストのポート番号を指定します。無指定時は3306です。    |
 | --dbrootpass pass                         | DB_ROOTPASS                      | 接続するDBホストのrootパスワードを指定します。無指定時はランダム文字列となります。 |

@@ -89,18 +89,19 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
          [--admin-user admin] [--admin-pass pass] [--admin-email email]
          [--wp-title title] [--kusanagi-pass pass] [--noftp|--no-ftp] |
      --lamp|--c5|--concrete5|--concrete|
-     --drupal|--drupal9|--drupal10]
+     --drupal|--drupal10|--drupal11]
     [--nginx|--httpd]
-    [--nginx1.26|--nginx126|
-     --nginx1.27|--nginx127|--nginx=version]
+    [--nginx1.28|--nginx128|
+     --nginx1.29|--nginx129|--nginx=version]
     [--http-port port][--tls-port port]
     [--php8.1|--php81|
      --php8.2|--php82|
-     --php8.3|--php83|--php=version]
-    [--mariadb10.5|--mariadb105|
-     --mariadb10.6|--mariadb106|
+     --php8.3|--php83|
+     --php8.3|--php84|--php=version]
+    [--mariadb10.6|--mariadb106|
      --mariadb10.11|--mariadb1011|
      --mariadb11.4|--mariadb114]
+     --mariadb11.8|--mariadb118
     [--dbhost host]
     [--dbport port]
     [--dbrootpass pasword
@@ -178,23 +179,24 @@ The options for the provision subcommand are as follows.
 | --noftp/--no-ftp                          |                                  | Do not use ftp for updating in WordPress.                    |
 | --c5/--concrete5/--concrete               | APP=c5                           | Build the Concreate CMS environment. this use only php74 or php80. |
 | --lamp/--LAMP                             | APP=lamp                         | Build a LAMP environment.                                    |
-| --drupal9                               | APP=drupal<br />DRUPAL_VERSION=9 | Build a drupal9 environment.                                  |
-| --drupal10/--drupal                         | APP=drupal<br />DRUPAL_VERSION=10 | Build a drupal10 environment.                                 |
+| --drupal10/--drupal                       | APP=drupal<br />DRUPAL_VERSION=10 | Build a drupal 10 environment.                                  |
+| --drupal11                                | APP=drupal<br />DRUPAL_VERSION=11 | Build a drupal 11 environment.                                 |
 | --httpd                                   |                                  | Use httpd (Apache 2.4). Cannot be specified at the same time as the --nginx option. |
 | --nginx                                   |                                  | Use nginx. Cannot be specified at the same time as the --httpd option. If not specified, nginx will be used. |
-| --nginx1.26/--nginx126                    |                                  | When using nginx, kusanagi-nginx:1.26.x is used.             |
-| --nginx1.27/--nginx127                    |                                  | When nginx is used, kusanagi-nginx:1.27.x is used. When not specified, kusanagi-nginx:1.27.x is used. |
+| --nginx1.28/--nginx128                    |                                  | When using nginx, kusanagi-nginx:1.28.x is used.             |
+| --nginx1.29/--nginx129                    |                                  | When nginx is used, kusanagi-nginx:1.29.x is used. When not specified, kusanagi-nginx:1.29.x is used. |
 | --nginx=versions                          |                                  | When using nginx, you can use any version published on Docker Hub. Versions prior to 1.25 can be specified, but are not already updated, so use at your own risk. |
 | --http-port num                           | HTTP_PORT                        | Specifies the http port number to be port-forwarded to the host. If not specified, 80 will be specified. If you select a port that is already in use, the build will fail. |
 | --tls-port num                            | HTTP_TLS_PORT                    | Specifies the https port number to be port-forwarded to the host. If not specified, 443 will be specified. If you select a port that is already in use, the build will fail. |
-| --php8.3/--php83                          |                                  | Use kusanagi-php:8.3.x.                                      |
+| --php8.4/--php84                          |                                  | Use kusanagi-php:8.4.x.                                      |
+| --php8.3/--php83                          |                                  | Use kusanagi-php:8.3.x. If php version not specified, kusanagi-php:8.3.x will be used. |
 | --php8.2/--php82                          |                                  | Use kusanagi-php:8.2.x.                                      |
-| --php8.1/--php81                          |                                  | Use kusanagi-php:8.1. x. If not specified, kusanagi-php:8.1.x will be used. |
+| --php8.1/--php81                          |                                  | Use kusanagi-php:8.1.x. |
 | --php=version                             |                                  | Use any version of PHP that is available on DockerHub.       |
+| --mariadb11.8/--mariadb118                |                                  | Use mariadb:11.8.x-noble as the DB.                         |
 | --mariadb11.4/--mariadb114                |                                  | Use mariadb:11.4.x-noble as the DB.                         |
 | --mariadb10.11/--mariadb1011              |                                  | Use mariadb:10.11.x-jammy as the DB.                         |
 | --mariadb10.6/--mariadb106                |                                  | Use mariadb:10.6.x-focal as the DB. When not specified, mariadb:10.6.x-focal is used. |
-| --mariadb10.5/--mariadb105                |                                  | Use mariadb:10.5.x-focal as the DB                           |
 | --dbhost host                             | DBHOST                           | Specifies the DB host name to connect to. If not specified, localhost is used. |
 | --dbport port                             | DBPORT                           | Specifies the DB port nnumber to connect to. If not specified, 3306 is used. |
 | --dbrootpass pass                         | DB_ROOTPASS                      | Specifies the root password of the DB host to connect to. If not specified, it will be a random string. |
