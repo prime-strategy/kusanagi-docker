@@ -130,20 +130,6 @@ endif
 			</tr>
 			</table>
 
-			<h3><?php esc_html_e( 'Optimize wp-settings.php', 'wp-kusanagi' ); ?></h3>
-			<table class="form-table">
-			<tr>
-				<th><?php esc_html_e( 'Optimize wp-settings.php', 'wp-kusanagi' ); ?></th>
-				<td>
-					<input type="hidden" name="opt-wp-settings[enable]" value="0">
-					<label for="opt-wp-settings-enable">
-						<input type="checkbox" name="opt-wp-settings[enable]" id="opt-wp-settings-enable" value="1"<?php echo $settings['opt-wp-settings']['enable'] ? ' checked="checked"' : ''; ?>>
-						<?php esc_html_e( 'Enable', 'wp-kusanagi' ); ?>
-					</label>
-				</td>
-			</tr>
-			</table>
-
 			<h3><?php esc_html_e( 'Theme Accelerator', 'wp-kusanagi' ); ?></h3>
 			<table class="form-table">
 			<tr>

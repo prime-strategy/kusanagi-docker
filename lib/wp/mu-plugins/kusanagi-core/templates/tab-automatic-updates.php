@@ -9,6 +9,13 @@ $current_module    = $this->modules[ sanitize_text_field( $_GET['tab'] ) ];
 $settings          = $current_module->settings;
 $schedule_settings = $current_module->schedule_settings;
 $current_module->check_update_errors();
+if ( is_multisite() ) {
+	$plugins_page_url = network_admin_url( 'plugins.php' );
+	$themes_page_url  = network_admin_url( 'themes.php' );
+} else {
+	$plugins_page_url = admin_url( 'plugins.php' );
+	$themes_page_url  = admin_url( 'themes.php' );
+}
 
 $show_autoupdates = false;
 if ( function_exists( 'wp_is_auto_update_enabled_for_type' ) ) {
@@ -116,13 +123,13 @@ $error_messages = $current_module->get_errors();
 	<p>
 		<?php
 		// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-		printf( esc_html__( 'To set up individual plugin updates, please go to the %1$s.', 'wp-kusanagi' ), sprintf( '<a href="%1$s">%2$s</a>', esc_url( '/wp-admin/plugins.php' ), esc_html__( 'Plugins page', 'wp-kusanagi' ) ) );
+		printf( esc_html__( 'To set up individual plugin updates, please go to the %1$s.', 'wp-kusanagi' ), sprintf( '<a href="%1$s">%2$s</a>', esc_url( $plugins_page_url ), esc_html__( 'Plugins page', 'wp-kusanagi' ) ) );
 		?>
 	</p>
 	<p>
 		<?php
 		// phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
-		printf( esc_html__( 'To set up individual theme updates, please go to the %1$s.', 'wp-kusanagi' ), sprintf( '<a href="%1$s">%2$s</a>', esc_url( '/wp-admin/themes.php' ), esc_html__( 'Themes page', 'wp-kusanagi' ) ) );
+		printf( esc_html__( 'To set up individual theme updates, please go to the %1$s.', 'wp-kusanagi' ), sprintf( '<a href="%1$s">%2$s</a>', esc_url( $themes_page_url ), esc_html__( 'Themes page', 'wp-kusanagi' ) ) );
 		?>
 	</p>
 	<table class="wp-list-table widefat striped table-view-list" id="updates-table">

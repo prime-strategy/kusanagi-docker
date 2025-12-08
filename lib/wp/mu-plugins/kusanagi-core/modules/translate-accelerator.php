@@ -9,8 +9,12 @@ class KUSANAGI_Translate_Accelerator {
 	private $default;
 	private $file_cache_dir;
 	private $apc_mode;
+	public $cache_mode_enable;
 
 	public function __construct() {
+		if ( is_network_admin() ) {
+			return;
+		}
 		$this->settings = get_option( 'kusanagi-translate-accelerator-settings', array() );
 		if ( defined( 'WP_INSTALLING' ) && WP_INSTALLING && ! is_array( $this->settings ) ) {
 			return;
@@ -32,8 +36,21 @@ class KUSANAGI_Translate_Accelerator {
 			$this->apc_mode = false;
 		}
 
-		$this->settings = array_merge( $this->default, $this->settings );
+		$this->cache_mode_enable = version_compare( get_bloginfo( 'version' ), '6.3', '<' );
+		if ( ! $this->cache_mode_enable ) {
+			$do_update = false;
+			foreach ( array( 'frontend', 'wp-login', 'admin' ) as $key ) {
+				if ( isset( $this->settings[ $key ] ) && 'cache' === $this->settings[ $key ] ) {
+					$this->settings[ $key ] = 'default';
+					$do_update = true;
+				}
+			}
+			if ( $do_update ) {
+				update_option( 'kusanagi-translate-accelerator-settings', $this->settings );
+			}
+		}
 
+		$this->settings = array_merge( $this->default, $this->settings );
 		if ( '1' === $this->settings['activate'] ) {
 			$this->check();
 		}
@@ -54,34 +71,36 @@ class KUSANAGI_Translate_Accelerator {
 	private function check() {
 		$s =& $this->settings;
 
-		if ( 'apc' === $s['cache_type'] ) {
-			if ( false === $this->apc_mode ) {
-				$this->error_mes( 'apc is not enable.' );
+		if ( $this->cache_mode_enable ) {
+			if ( 'apc' === $s['cache_type'] ) {
+				if ( false === $this->apc_mode ) {
+					$this->error_mes( 'apc is not enable.' );
 
-				return false;
-			}
-		}
-
-		if ( 'file' === $s['cache_type'] ) {
-			if ( '' === $s['file_cache_dir'] ) {
-				$dir = WP_CONTENT_DIR . '/translate-accelerator';
-				if ( ! file_exists( $dir ) ) {
-					@mkdir( $dir );
+					return false;
 				}
-			} else {
-				$dir = $s['file_cache_dir'];
 			}
-			if ( ! file_exists( $dir ) || ! is_dir( $dir ) ) {
-				$this->error_mes( 'file_cache_dir is not exists.' );
 
-				return false;
-			}
-			if ( ! is_writable( $dir ) ) {
-				$this->error_mes( 'file_cache_dir is not writable.' );
+			if ( 'file' === $s['cache_type'] ) {
+				if ( '' === $s['file_cache_dir'] ) {
+					$dir = WP_CONTENT_DIR . '/translate-accelerator';
+					if ( ! file_exists( $dir ) ) {
+						@mkdir( $dir );
+					}
+				} else {
+					$dir = $s['file_cache_dir'];
+				}
+				if ( ! file_exists( $dir ) || ! is_dir( $dir ) ) {
+					$this->error_mes( 'file_cache_dir is not exists.' );
 
-				return false;
+					return false;
+				}
+				if ( ! is_writable( $dir ) ) {
+					$this->error_mes( 'file_cache_dir is not writable.' );
+
+					return false;
+				}
+				$this->file_cache_dir = $dir;
 			}
-			$this->file_cache_dir = $dir;
 		}
 
 		add_filter( 'override_load_textdomain', array( $this, 'load_textdomain' ), 10, 3 );
@@ -109,13 +128,10 @@ class KUSANAGI_Translate_Accelerator {
 		if ( 'cutoff' === $s[ $segment ] ) {
 			return true;
 		} elseif ( 'cache' === $s[ $segment ] ) {
-			if ( version_compare( get_bloginfo( 'version' ), '6.3', '<' ) ) {
+			if ( $this->cache_mode_enable ) {
 				if ( false !== $this->cache_control( $domain, $mofile ) ) {
 					return true;
 				}
-			} else {
-				$s[ $segment ] = 'default';
-				update_option( 'kusanagi-translate-accelerator-settings', $s );
 			}
 		}
 
@@ -213,7 +229,11 @@ class KUSANAGI_Translate_Accelerator {
 				$post_data['activate'] = false;
 			}
 			if ( 'error_mes' !== $key ) {
-				$settings[ $key ] = $post_data[ $key ];
+				if ( isset( $post_data[ $key ] ) ) {
+					$settings[ $key ] = $post_data[ $key ];
+				} else {
+					$settings[ $key ] = $this->default[ $key ];
+				}
 			}
 		}
 		$this->settings = $settings;

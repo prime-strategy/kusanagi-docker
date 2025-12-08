@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 $current_tab = 'home';
-if ( isset( $_GET['tab'] ) && ! empty( $_GET['tab'] ) ) {
+if ( isset( $_GET['tab'] ) && ! empty( $_GET['tab'] ) && isset( $this->setting_tabs[ $_GET['tab'] ] ) ) {
 	$current_tab = $_GET['tab'];
 }
 $current_tab = sanitize_text_field( $current_tab );

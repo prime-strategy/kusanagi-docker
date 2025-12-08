@@ -41,7 +41,7 @@ foreach ($ret as $row) {
 								echo sprintf( 'FAILURE: %s cache could not be deleted', $hash->device_url ) . PHP_EOL;
 							}
 						} else {
-							echo sprintf( "cache clear path option only '--dryrun'" ) . PHP_EOL;
+							echo "cache clear path option only '--dryrun'" . PHP_EOL;
 							exit(0);
 						}
 					}

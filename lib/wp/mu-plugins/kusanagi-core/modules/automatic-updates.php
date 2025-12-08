@@ -27,7 +27,6 @@ class KUSANAGI_Automatic_Updates {
 	 * Construct the KUSANAGI_Automatic_Updates.
 	 */
 	public function __construct() {
-
 		$this->defaults = array(
 			'translation' => 'enable',
 			'plugin'      => 'disable',
@@ -36,8 +35,17 @@ class KUSANAGI_Automatic_Updates {
 		);
 		$this->keys     = array_keys( $this->defaults );
 
-		$this->settings = wp_parse_args( get_option( $this->option_key, array() ), $this->defaults );
-
+		if ( is_multisite() ) {
+			if ( false === get_site_option( $this->option_key ) ) {
+				switch_to_blog( get_main_site_id() );
+				$this->settings = wp_parse_args( get_option( $this->option_key, array() ), $this->defaults );
+				restore_current_blog();
+			} else {
+				$this->settings = wp_parse_args( get_site_option( $this->option_key, array() ), $this->defaults );
+			}
+		} else {
+			$this->settings = wp_parse_args( get_option( $this->option_key, array() ), $this->defaults );
+		}
 		$this->some_enable = false;
 
 		foreach ( $this->settings as $type => $status ) {
@@ -52,7 +60,17 @@ class KUSANAGI_Automatic_Updates {
 			'hour'     => 0,
 			'min'      => 0,
 		);
-		$this->schedule_settings = wp_parse_args( get_option( $this->option_schedule_key, array() ), $this->schedules );
+		if ( is_multisite() ) {
+			if ( false === get_site_option( $this->option_schedule_key ) ) {
+				switch_to_blog( get_main_site_id() );
+				$this->schedule_settings = wp_parse_args( get_option( $this->option_schedule_key, array() ), $this->schedules );
+				restore_current_blog();
+			} else {
+				$this->schedule_settings = wp_parse_args( get_site_option( $this->option_schedule_key, array() ), $this->schedules );
+			}
+		} else {
+			$this->schedule_settings = wp_parse_args( get_option( $this->option_schedule_key, array() ), $this->schedules );
+		}
 		$this->schedule_hooks    = array(
 			'wp_version_check',
 			'wp_update_plugins',
@@ -64,9 +82,10 @@ class KUSANAGI_Automatic_Updates {
 			$this->next_schedule_time = $this->get_next_schedule_time();
 			add_action( 'schedule_event', array( $this, 'schedule_auto_update_event' ) );
 		}
-
-		add_action( 'admin_init', array( $this, 'add_tab' ) );
-		add_action( 'pre_auto_update', array( $this, 'preload_wp_filesystem' ), 10, 3 );
+		if ( ! is_multisite() || ( is_multisite() && is_network_admin() ) ) {
+			add_action( 'admin_init', array( $this, 'add_tab' ) );
+		}
+		add_action( 'wp_maybe_auto_update', array( $this, 'preload_wp_filesystem' ), 9 );
 	}
 
 	/**
@@ -188,7 +207,7 @@ class KUSANAGI_Automatic_Updates {
 			}
 			$this->settings[ $key ] = $status;
 		}
-		$ret = update_option( $this->option_key, $this->settings );
+		$ret = update_site_option( $this->option_key, $this->settings );
 
 		foreach ( $this->schedules as $key => $value ) {
 			if ( isset( $post_data[ $key ] ) ) {
@@ -196,7 +215,7 @@ class KUSANAGI_Automatic_Updates {
 			}
 			$this->schedule_settings[ $key ] = $value;
 		}
-		$schedule_ret = update_option( $this->option_schedule_key, $this->schedule_settings );
+		$schedule_ret = update_site_option( $this->option_schedule_key, $this->schedule_settings );
 		$this->clear_auto_update_cron();
 
 		if ( $ret && $schedule_ret ) {
@@ -404,7 +423,7 @@ class KUSANAGI_Automatic_Updates {
 	 * @param string $context
 	 * @return void
 	 */
-	public function preload_wp_filesystem( $type, $item, $context ) {
+	public function preload_wp_filesystem() {
 		global $wp_version, $wp_filesystem;
 
 		// WordPress 6.6 より前の環境では問題ないのでスキップ
@@ -412,16 +431,14 @@ class KUSANAGI_Automatic_Updates {
 			return;
 		}
 
-		if ( ! $wp_filesystem ) {
-			if ( ! function_exists( 'WP_Filesystem' ) ) {
-				require_once ABSPATH . 'wp-admin/includes/file.php';
-			}
-			ob_start();
-			$credentials = request_filesystem_credentials( '' );
-			ob_end_clean();
-			if ( false !== $credentials ) {
-				WP_Filesystem( $credentials );
-			}
+		if ( ! function_exists( 'WP_Filesystem' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+		}
+		ob_start();
+		$credentials = request_filesystem_credentials( '' );
+		ob_end_clean();
+		if ( false !== $credentials ) {
+			WP_Filesystem( $credentials );
 		}
 	}
 }

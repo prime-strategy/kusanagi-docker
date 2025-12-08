@@ -470,9 +470,6 @@ function k_provision () {
 				OPT_HTTPD=1
 				KUSANAGI_HTTPD_IMAGE=primestrategy/kusanagi-httpd:"${OPT#*=}"
 				;;
-			--php8.1|--php81)
-				KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP81_IMAGE
-				;;
 			--php8.2|--php82)
 				KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP82_IMAGE
 				;;
@@ -482,11 +479,11 @@ function k_provision () {
 			--php8.4|--php84)
 				KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP84_IMAGE
 				;;
+			--php8.5|--php85)
+				KUSANAGI_PHP_IMAGE=$KUSANAGI_PHP85_IMAGE
+				;;
 			--php=*)
 				KUSANAGI_PHP_IMAGE=primestrategy/kusanagi-php:"${OPT#*=}"
-				;;
-			--mariadb105|--mariadb10.5)
-				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL105_IMAGE
 				;;
 			--mariadb106|--mariadb10.6)
 				KUSANAGI_MYSQL_IMAGE=$KUSANAGI_MYSQL106_IMAGE

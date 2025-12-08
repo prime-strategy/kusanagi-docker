@@ -6,11 +6,10 @@ KUSANAGI Runs on Docker(以下RoD)は、KUSANAGIの機能をDocker composeを使
 
 RoDの利用確認済みOSは、以下のとおりです。
 
-- CentOS7 or later
-- Ubuntu18.04 or later
-- Windows10(WSL+Docker for Windows. 非推奨)
-- Windows10/Windows11(WSL2+Docker for Windows)
-- Windows10/Windows11(WSL2+Docker CE)
+- CentOS(及び、その派生ディストリビューション) 9以降
+- Ubuntu18.04 以降
+- Windows11/Windows11(WSL2+Docker for Windows)
+- Windows11/Windows11(WSL2+Docker CE)
 - Mac(with Docker for mac)
 
 RoDを使用するために必要なソフトウェアは以下のものになります。
@@ -24,8 +23,8 @@ RoDを使用するために必要なソフトウェアは以下のものにな�
 - envsubst
 - curl
 - python3
-- docker(18.0x以上)
-- docker-compose
+- docker
+- docker composeプラグイン(docker-compose コマンドは非推奨になりました)
 
 
 ## KUSANAGI RoDのインストール
@@ -92,10 +91,10 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
     [--nginx1.28|--nginx128|
      --nginx1.29|--nginx129|--nginx=version]
     [--http-port port][--tls-port port]
-    [--php8.1|--php81|
-     --php8.2|--php82|
+    [-php8.2|--php82|
      --php8.3|--php83|
-     --php8.3|--php84|--php=version]
+     --php8.3|--php84|
+     --php8.5|--php85|---php=version]
     [--mariadb10.6|--mariadb106|
      --mariadb10.11|--mariadb1011|
      --mariadb11.4|--mariadb114]
@@ -184,10 +183,10 @@ provision サブコマンドのオプションは以下のとおりです。
 | --nginx=version                           |                                  | nginx使用時に、Docker Hub に公開されている任意のバージョンを使用します。1.25以前のバージョンを指定できますが、すでに更新していないため、自己責任でご使用ください。 |
 | --http-port num                           | HTTP_PORT                        | ホストにポートフォワードするhttpポート番号を指定します。無指定時は80が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
 | --tls-port num                            | HTTP_TLS_PORT                    | ホストにポートフォワードするhttpsポート番号を指定します。無指定時は443が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
-| --php8.4/--php81                          |                                  | kusanagi-php:8.4.xを使用します。                             |
-| --php8.3/--php81                          |                                  | kusanagi-php:8.3.xを使用します。php のバージョンを指定しない場合、kusanagi-php:8.3.x を使用します。 |
-| --php8.2/--php81                          |                                  | kusanagi-php:8.2.xを使用します。                             |
-| --php8.1/--php81                          |                                  | kusanagi-php:8.1.xを使用します。                             |
+| --php8.5/--php85                          |                                  | kusanagi-php:8.5.xを使用します(WordPress 6.9未満は未対応です)。 |
+| --php8.4/--php84                          |                                  | kusanagi-php:8.4.xを使用します。                             |
+| --php8.3/--php83                          |                                  | kusanagi-php:8.3.xを使用します。php のバージョンを指定しない場合、kusanagi-php:8.3.x を使用します。 |
+| --php8.2/--php82                          |                                  | kusanagi-php:8.2.xを使用します。                             |
 | --php=version                             |                                  | DockerHub上にある任意のバージョンのPHPを使用します。         |
 | --mariadb11.8/--mariadb118                |                                  | DBとして、mariadb:11.8.x-noble を使用します。                 |
 | --mariadb11.4/--mariadb114                |                                  | DBとして、mariadb:11.4.x-noble を使用します。                 |
@@ -350,12 +349,10 @@ KUSANAGI RoD向けのイメージは[DockerHub](https://hub.docker.com)で公開
 | ------------------------------------------------------------ | ----------------------------------------------------------- |
 | [kusanagi-nginx](https://hub.docker.com/r/primestrategy/kusanagi-nginx) | nginxイメージ(推奨はメインラインの最新版)                   |
 | [kusanagi-httpd](https://hub.docker.com/r/primestrategy/kusanagi-httpd) | httpd(Apache 2.4) イメージ                                   |
-| [kusanagi-php](https://hub.docker.com/r/primestrategy/kusanagi-php) | PHP-FPMイメージ(推奨は7.4の最新版)                               |
+| [kusanagi-php](https://hub.docker.com/r/primestrategy/kusanagi-php) | PHP-FPMイメージ(推奨は8.3の最新版)                               |
 | [kusanagi-config](https://hub.docker.com/r/primestrategy/kusanagi-config) | kusanagi config コマンド用イメージ                          |
 | [wordpress:cli](https://hub.docker.com/_/wordpress)          | WordPress構築時用のconfig コマンドイメージ                  |
 | [kusanagi-ftpd](https://hub.docker.com/r/primestrategy/kusanagi-ftpd) | WordPress構築時のみ使用するvsftpdを起動するコンテナイメージ |
 | [mariadb](https://hub.docker.com/_/mariadb)                  | MariaDBイメージ                                               |
-| [postgresql](https://hub.docker.com/_/postgres)              | PostgreSQLイメージ                                          |
-| [certbot](https://hub.docker.com/r/certbot/certbot)          | Certbotイメージ                                             |
 
 

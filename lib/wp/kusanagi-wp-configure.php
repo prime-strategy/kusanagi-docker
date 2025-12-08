@@ -3,7 +3,7 @@
 Plugin Name: KUSANAGI Configure
 Plugin URI: http://kusanagi.tokyo/
 Description: Set up WordPress settings for KUSANAGI
-Version: 1.0
+Version: ####kusanagi_configure_version####
 Author: Prime Strategy Co.,LTD.
 Author URI: http://kusanagi.tokyo/
 License: GPLv2 or later

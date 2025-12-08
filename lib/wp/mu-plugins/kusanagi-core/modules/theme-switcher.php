@@ -18,6 +18,9 @@ class KUSANAGI_Theme_Switcher {
 	public function __construct() {
 		global $wpdb;
 
+		if ( is_network_admin() ) {
+			return;
+		}
 		$this->device_table   = $wpdb->prefix . 'sitemanager_device';
 		$this->group_table    = $wpdb->prefix . 'sitemanager_device_group';
 		$this->relation_table = $wpdb->prefix . 'sitemanager_device_relation';

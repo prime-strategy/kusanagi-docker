@@ -12,7 +12,6 @@ class KUSANAGI_Misc {
 			'enable'     => 1,
 			'capability' => 'manage_options',
 		),
-		'opt-wp-settings'    => array( 'enable' => 0 ),
 		'opt-speed-up'       => array( 'enable' => 0 ),
 		'image_optimizer'    => array(
 			'enable_image_optimize' => 0,
@@ -35,13 +34,16 @@ class KUSANAGI_Misc {
 	private $optipng  = false;
 
 	public function __construct() {
+		if ( is_network_admin() ) {
+			return;
+		}
 		$this->replace_tpl = plugin_dir_path( __DIR__ ) . 'advanced_cache_tpl/replace-class.tpl';
 
 		add_action( 'admin_bar_menu', array( $this, 'performance_information' ), 9999 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_action( 'admin_init', array( $this, 'add_tab' ) );
-		add_action( 'init', array( $this, 'compile_wp_settings_and_modify_wp_config' ) );
+		add_action( 'init', array( $this, 'cleanup_optimized_wp_settings' ) );
 		add_action( 'all_admin_notices', array( $this, 'display_warnings' ) );
 		add_action( 'admin_init', array( $this, 'optimizer_tools_check' ) );
 		add_action( 'upgrader_process_complete', array( $this, 'call_opcache_reset' ) );
@@ -50,7 +52,6 @@ class KUSANAGI_Misc {
 		add_filter( 'image_make_intermediate_size', array( $this, 'optimize_intermediate_size' ) );
 
 		$this->settings['performance-viewer'] = get_option( 'kusanagi-performance-viewer', $this->default['performance-viewer'] );
-		$this->settings['opt-wp-settings']    = get_option( 'kusanagi-opt-wp-settings', $this->default['opt-wp-settings'] );
 		$this->settings['opt-speed-up']       = get_option( 'kusanagi-opt-speed-up', $this->default['opt-speed-up'] );
 		$optimizer_settings                   = get_option( 'kusanagi-image-optimizer-settings', array() );
 		if ( is_array( $optimizer_settings ) ) {
@@ -105,37 +106,12 @@ class KUSANAGI_Misc {
 	}
 
 
-	public function compile_wp_settings_and_modify_wp_config() {
-		global $wp_version, $kusanagi_optimized_version;
+	public function cleanup_optimized_wp_settings() {
 		if ( defined( 'WP_CLI' ) && true === constant( 'WP_CLI' ) ) {
 			return;
 		}
 
-		$wp_settings_path           = ABSPATH . 'wp-settings.php';
 		$optimized_wp_settings_path = ABSPATH . 'optimized_wp_settings.php';
-
-		if ( ! isset( $this->settings['opt-wp-settings']['enable'] ) || ! $this->settings['opt-wp-settings']['enable'] ) {
-			if ( is_file( $optimized_wp_settings_path ) ) {
-				@unlink( $optimized_wp_settings_path );
-			}
-
-			return;
-		}
-
-		if ( is_file( $optimized_wp_settings_path ) ) {
-			if ( $wp_version === $kusanagi_optimized_version ) {
-				return;
-			}
-			if ( ! is_writable( $optimized_wp_settings_path ) ) {
-				$this->warnings[] = '更新ができないコンパイル済みのwp-settings.php(optimized_wp_settings.php)があります。利用中のWordPressのバージョンと相違しており、不具合を起こす可能性がありますので、httpdユーザーでの書き込みができるようファイルの権限を変更してください。';
-			}
-		} elseif ( ! is_writable( ABSPATH ) ) {
-			$this->warnings[] = 'コンパイルしたwp-settings.php(optimized_wp_settings.php)を保存できません。' . ABSPATH . ' にhttpdユーザーが書き込みできるようにディレクトリの権限を変更してください。';
-
-			return;
-		}
-
-		$wp_includes = ABSPATH . 'wp-includes';
 		if ( file_exists( ABSPATH . 'wp-config.php' ) ) {
 			$wp_config_path = ABSPATH . 'wp-config.php';
 		} elseif ( file_exists( dirname( ABSPATH ) . '/wp-config.php' ) ) {
@@ -144,97 +120,51 @@ class KUSANAGI_Misc {
 			$wp_config_path = false;
 		}
 
-		$settings_content = file_get_contents( $wp_settings_path );
-		$settings_content = preg_replace( '#/\*\*[\s]+.*?[\s]+\*/#s', '', $settings_content );
-		$settings_content = preg_replace( '#^[\s]*//.*$#m', '', $settings_content );
-		$settings_content = preg_split( '#\n#', $settings_content );
-		$files            = array();
-		$opt_settings     = array();
-		$exclude_file     = array( '/class-wp-block-parser-block.php', '/class-wp-block-parser-frame.php' );
-		foreach ( $settings_content as $line_num => $line ) {
-			if ( preg_match( '#^[\s]*$#', $line ) ) {
-				continue;
-			}
-
-			if ( preg_match( "#require(_once)? ABSPATH . WPINC . '(.*\.php)'#", $line, $m ) && ! in_array( $m[2], $exclude_file ) ) {
-				$file = $wp_includes . $m[2];
-				$str  = file_get_contents( $file );
-				$str  = preg_replace( '#^<\?php\s*#', '', $str );
-				$test = preg_replace( '#^/\*\*.*?^ \*/$#ms', '', $str );
-
-				$inc      = true;
-				$replaces = array();
-				if ( '/version.php' === $m[2] ) {
-					$inc = false;
-				}
-				if ( preg_match( '#__(DIR|FILE)__#', $test ) ) {
-					$inc      = false;
-					$replaces = array(
-						'/([\s\(.]+)__DIR__([\s\)\.]+)/m'  => '$1' . "'" . dirname( $file ) . "'" . '$2',
-						'/([\s\(.]+)__FILE__([\s\)\.]+)/m' => '$1' . "'" . $file . "'" . '$2',
-					);
-				}
-
-				$test = preg_replace( '#^(public |private |final |protected )?(function|class).*?^}$#ms', '', $test );
-				if ( preg_match( '#return\s*;#', $test ) ) {
-					$inc = false;
-				}
-
-				if ( false === $inc ) {
-					$opt_settings[] = $line;
-				} else {
-					$opt_settings[] = '###' . $line;
-					$str            = php_strip_whitespace( $file );
-					if ( $replaces ) {
-						$str = preg_replace( array_keys( $replaces ), $replaces, $str );
-					}
-					$str            = preg_replace( '#^<\?php\s*#', '', $str );
-					$opt_settings[] = $str;
+		if ( file_exists( $optimized_wp_settings_path ) ) {
+			if ( is_writable( $optimized_wp_settings_path ) ) {
+				$deleted = unlink( $optimized_wp_settings_path );
+				if ( $deleted ) {
+					$this->warnings[] = 'wp-settings.php最適化機能廃止に伴い、optimized_wp_settings.phpを削除しました。';
 				}
 			} else {
-				$opt_settings[] = $line;
-				if ( 0 === $line_num ) {
-					$opt_settings[] = "\$kusanagi_optimized_version = '" . $wp_version . "';";
-				}
+				$this->warnings[] = 'optimized_wp_settings.phpに書き込み権限がないため、ファイルを削除できません。手動で削除するか、ファイルに書き込み権限を付与してください。';
 			}
 		}
-		$opt_settings = implode( "\n", $opt_settings );
-		$written      = file_put_contents( $optimized_wp_settings_path, $opt_settings );
 
-		if ( $written ) {
-			chmod( $optimized_wp_settings_path, 0664 );
-			if ( $wp_config_path ) {
-				if ( ! is_writable( $wp_config_path ) ) {
-					$this->warnings[] = 'wp-config.phpの書き込み権限がありません。httpdユーザーが書き込みできるようにwp-config.phpの権限を変更してください。';
-
-					return;
-				}
-				$wp_config       = file_get_contents( $wp_config_path );
-				$wp_config       = preg_split( '#\n#', $wp_config );
-				$modified_config = array();
-				$modify          = true;
+		if ( $wp_config_path ) {
+			$wp_config = file_get_contents( $wp_config_path );
+			$wp_config = preg_split( '#\n#', $wp_config );
+			$modified  = false;
+			if ( is_writable( $wp_config_path ) ) {
+				$repair_config = array();
 				foreach ( $wp_config as $line ) {
 					if ( preg_match( "/^[\s]*if[\s]*\([\s]*file_exists\([\s]*ABSPATH[\s]*\.[\s]*'optimized_wp_settings.php'[\s]*\)/", $line ) ) {
-						$modify = false;
+							$modified = true;
+							$repair_config[] = "require_once(ABSPATH . 'wp-settings.php');";
+							break;
 					}
-					if ( preg_match( "/^[\s]*require_once[\s]*\([\s]*ABSPATH[\s]*\.[\s]*'wp-settings.php'[\s]*\)[\s]*;/", $line ) && $modify ) {
-						$modified_config[] = "if ( file_exists( ABSPATH . 'optimized_wp_settings.php' ) && ( ! defined( 'WP_CLI' ) || constant( 'WP_CLI' ) !== true ) ) {";
-						$modified_config[] = "\trequire_once(ABSPATH . 'optimized_wp_settings.php');";
-						$modified_config[] = '} else {';
-						$modified_config[] = "\t" . $line;
-						$modified_config[] = '}';
-					} else {
-						$modified_config[] = $line;
+					$repair_config[] = $line;
+				}
+				if ( $modified ) {
+					$repaired = file_put_contents( $wp_config_path, implode( "\n", $repair_config ) );
+					if ( $repaired ) {
+						$this->warnings[] = 'wp_config.phpから、wp-settings.php最適化機能のための変更を削除し、修復が完了しました。';
 					}
 				}
-				if ( $modify ) {
-					file_put_contents( $wp_config_path, implode( "\n", $modified_config ) );
+			} elseif ( is_admin() ) {
+				foreach ( $wp_config as $line ) {
+					if ( preg_match( "/^[\s]*if[\s]*\([\s]*file_exists\([\s]*ABSPATH[\s]*\.[\s]*'optimized_wp_settings.php'[\s]*\)/", $line ) ) {
+							$modified = true;
+							break;
+					}
+				}
+				if ( $modified ) {
+					$this->warnings[] = 'wp_config.phpに書き込み権限がないため、ファイルの修復ができません。wp-config-sample.phpを参考に手動で修復するか、ファイルに書き込み権限を付与してください。';
 				}
 			}
-		} else {
-			$this->warnings[] = 'コンパイルしたwp-settings.php(optimized_wp_settings.php)の書き込みに失敗しました。';
 		}
 	}
+
 
 	public function display_warnings() {
 		if ( ! $this->warnings ) {
@@ -435,11 +365,6 @@ class KUSANAGI_Misc {
 			$data['capability'] = in_array( $post_data['kusanagi-performance-viewer']['capability'], $caps->capabilities, false ) ? $post_data['kusanagi-performance-viewer']['capability'] : $this->settings['performance-viewer']['capability'];
 			$ret                = update_option( 'kusanagi-performance-viewer', $data );
 		}
-		if ( isset( $_POST['opt-wp-settings'] ) ) {
-			$data           = array();
-			$data['enable'] = preg_match( '/^[0-1]{1}$/', $post_data['opt-wp-settings']['enable'] ) ? $post_data['opt-wp-settings']['enable'] : $this->settings['opt-wp-settings']['enable'];
-			$ret2           = update_option( 'kusanagi-opt-wp-settings', $data );
-		}
 
 		if ( isset( $_POST['opt-speed-up'] ) ) {
 			$data           = array();
@@ -518,11 +443,10 @@ class KUSANAGI_Misc {
 			$ret4                              = update_option( 'kusanagi-image-optimizer-settings', $settings );
 		}
 
-		if ( $ret || $ret2 || $ret3 || $ret4 || $ret5 ) {
+		if ( $ret || $ret3 || $ret4 || $ret5 ) {
 			$WP_KUSANAGI->messages[] = __( 'Update settings successfully.', 'wp-kusanagi' );
 			wp_cache_delete( 'alloptions', 'options' );
 			$this->settings['performance-viewer'] = get_option( 'kusanagi-performance-viewer', $this->default['performance-viewer'] );
-			$this->settings['opt-wp-settings']    = get_option( 'kusanagi-opt-wp-settings', $this->default['opt-wp-settings'] );
 			$this->settings['opt-speed-up']       = get_option( 'kusanagi-opt-speed-up', $this->default['opt-speed-up'] );
 		}
 	}

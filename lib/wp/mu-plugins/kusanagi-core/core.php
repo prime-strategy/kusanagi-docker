@@ -26,6 +26,7 @@ class WP_KUSANAGI {
 			'theme-switcher.php',
 			'translate-accelerator.php',
 			'automatic-updates.php',
+			'security.php',
 			'misc.php',
 			'security-checker.php',
 			'cache-clear.php',
@@ -37,6 +38,9 @@ class WP_KUSANAGI {
 		}
 
 		add_action( 'admin_menu', array( $this, 'add_menu' ) );
+		if ( is_multisite() ) {
+			add_action( 'network_admin_menu', array( $this, 'add_menu' ) );
+		}
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 		add_filter( 'http_request_host_is_external', array( $this, 'allow_internal_request' ), 10, 2 );
 
@@ -46,10 +50,17 @@ class WP_KUSANAGI {
 	}
 
 	public function add_menu() {
+		if ( is_network_admin() ) {
+			$cap = 'manage_network_options';
+			$baseurl = network_admin_url( 'admin.php' );
+		} else {
+			$cap = 'manage_options';
+			$baseurl = admin_url( 'admin.php' );
+		}
 		$this->menu_slug = add_menu_page(
 			'KUSANAGI',
 			'KUSANAGI',
-			'manage_options',
+			$cap,
 			plugin_basename( __FILE__ ),
 			array(
 				$this,
@@ -60,7 +71,7 @@ class WP_KUSANAGI {
 		);
 		add_action( 'load-' . $this->menu_slug, array( $this, 'update_settings' ) );
 		add_action( 'load-' . $this->menu_slug, array( $this, 'register_enqueue' ) );
-		$this->home_url = add_query_arg( array( 'page' => plugin_basename( __FILE__ ) ), admin_url( 'admin.php' ) );
+		$this->home_url = add_query_arg( array( 'page' => plugin_basename( __FILE__ ) ), $baseurl );
 	}
 
 	public function load_textdomain() {

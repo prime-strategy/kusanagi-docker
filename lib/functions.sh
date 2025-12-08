@@ -4,8 +4,9 @@
 # Licenced by GNU GPL v2
 #
 
-DOCKER_COMPOSE=$(which docker-compose)
-[ "x$DOCKER_COMPOSE" = "x" ] && DOCKER_COMPOSE=$(which docker-compose.exe)
+[[ $(docker compose version) ]] && DOCKER_COMPOSE="$(which docker) compose"
+[[ -z "$DOCKER_COMPOSE" ]] && DOCKER_COMPOSE=$(which docker-compose)
+[[ -z "$DOCKER_COMPOSE" ]] && DOCKER_COMPOSE=$(which docker-compose.exe)
 LOCAL_KUSANAGI_FILE=.kusanagi
 export TEXTDOMAIN="kusanagi-docker"
 export TEXTDOMAINDIR="$LIBDIR/locale"
@@ -152,10 +153,10 @@ function k_helphelp {
 				echo '    '$(eval_gettext ' --nginx1.28|--nginx128|')
 				echo '    '$(eval_gettext ' --nginx1.29|--nginx129|--nginx=version]')
 				echo '    '$(eval_gettext '[--http-port port][--tls-port port]')
-				echo '    '$(eval_gettext '[--php8.1|--php81|')
 				echo '    '$(eval_gettext ' --php8.2|--php82|')
 				echo '    '$(eval_gettext ' --php8.3|--php83|')
-				echo '    '$(eval_gettext ' --php8.4|--php84|--php=version]')
+				echo '    '$(eval_gettext ' --php8.4|--php84|')
+				echo '    '$(eval_gettext '[--php8.5|--php85|--php=version]')
 				echo '    '$(eval_gettext '[--dbsystem mysql|mariadb]')
 				echo '    '$(eval_gettext ' --mariadb10.6|--mariadb106|')
 				echo '    '$(eval_gettext ' --mariadb10.11|--mariadb1011|')
@@ -396,7 +397,6 @@ function k_print_yellow () {
 	local OUT="${1}"
 	k_is_tty && echo -e "\e[33m${OUT}\e[m" || echo "$OUT" 1>&2
 }
-		
 
 # check if a file descriptor is a tty.
 function k_is_tty () {

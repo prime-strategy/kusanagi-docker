@@ -189,7 +189,11 @@ class KUSANAGI_Theme_Accelerator_Logic {
 		add_action( 'wp_head', array( self::class, 'head_not_cache' ), self::HOOKSEQ1 );
 	}
 
-	public static function theme_accelerator_first() {
+	public static function theme_accelerator_first( ...$args ) {
+		$hook = current_filter();
+		if ( function_exists( 'doing_filter' ) && doing_filter( $hook ) ) {
+			return isset( $args[0] ) ? $args[0] : null;
+		}
 		$current_action = current_action();
 		$cacheData      = self::$ApcuInstance->get( $current_action . self::$RequestUri );
 		//rss no cache
@@ -214,7 +218,9 @@ class KUSANAGI_Theme_Accelerator_Logic {
 	}
 
 	public static function theme_accelerator_end() {
-		ob_end_flush();
+		if ( ob_get_level() > 0 ) {
+			ob_end_flush();
+		}
 	}
 
 	/**
@@ -259,7 +265,7 @@ class KUSANAGI_Theme_Accelerator_Logic {
 			function ( $a, $b, $c ) {
 				$cache_key = '';
 				$result    = array();
-				if ( ! empty( $b ) ) {
+				if ( ! empty( $b ) && is_array( $b ) ) {
 					array_walk_recursive(
 						$b,
 						function ( $v, $key ) use ( &$result ) {
@@ -285,7 +291,7 @@ class KUSANAGI_Theme_Accelerator_Logic {
 			function ( $a, $b, $c ) {
 				$cache_key = '';
 				$result    = array();
-				if ( ! empty( $b ) ) {
+				if ( ! empty( $b ) && is_array( $b ) ) {
 					array_walk_recursive(
 						$b,
 						function ( $v, $key ) use ( &$result ) {
@@ -308,7 +314,7 @@ class KUSANAGI_Theme_Accelerator_Logic {
 			function ( $a, $b, $c ) {
 				$cache_key = '';
 				$result    = array();
-				if ( ! empty( $b ) ) {
+				if ( ! empty( $b ) && is_array( $b ) ) {
 					array_walk_recursive(
 						$b,
 						function ( $v, $key ) use ( &$result ) {
@@ -334,7 +340,7 @@ class KUSANAGI_Theme_Accelerator_Logic {
 			function ( $a, $b, $c ) {
 				$cache_key = '';
 				$result    = array();
-				if ( ! empty( $b ) ) {
+				if ( ! empty( $b ) && is_array( $b ) ) {
 					array_walk_recursive(
 						$b,
 						function ( $v, $key ) use ( &$result ) {
@@ -380,7 +386,7 @@ class KUSANAGI_Theme_Accelerator_Logic {
 				}
 				$cache_key = '';
 				$result    = array();
-				if ( ! empty( $attributes ) ) {
+				if ( ! empty( $attributes ) && is_array( $attributes ) ) {
 					array_walk_recursive(
 						$attributes,
 						function ( $v, $key ) use ( &$result ) {
@@ -430,7 +436,7 @@ class KUSANAGI_Theme_Accelerator_Logic {
 				}
 				$cache_key = '';
 				$result    = array();
-				if ( ! empty( $attributes ) ) {
+				if ( ! empty( $attributes ) && is_array( $attributes ) ) {
 					array_walk_recursive(
 						$attributes,
 						function ( $v, $key ) use ( &$result ) {
@@ -461,10 +467,11 @@ class KUSANAGI_Theme_Accelerator_Logic {
 	}
 
 	public static function is_block_templates() {
-		if ( ! function_exists( 'wp_is_block_theme' ) || ! function_exists( 'wp_theme_has_theme_json' ) ) {
+		$theme = wp_get_theme();
+		if ( ! method_exists( $theme, 'is_block_theme' ) || ! function_exists( 'wp_theme_has_theme_json' ) ) {
 			return false;
 		}
-		if ( wp_is_block_theme() || wp_theme_has_theme_json() ) {
+		if ( $theme->is_block_theme() || wp_theme_has_theme_json() ) {
 			return true;
 		}
 

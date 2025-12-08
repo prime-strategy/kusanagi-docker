@@ -15,6 +15,9 @@ class KUSANAGI_Page_Cache {
 
 	public function __construct() {
 		global $cache_db, $wpdb, $table_prefix;
+		if ( is_network_admin() ) {
+			return;
+		}
 		$this->advance_cache_tpl = plugin_dir_path( __DIR__ ) . 'advanced_cache_tpl/advanced-cache.tpl';
 		$this->regex_include_tpl = plugin_dir_path( __DIR__ ) . 'advanced_cache_tpl/regex_include.tpl';
 		$this->replace_tpl       = plugin_dir_path( __DIR__ ) . 'advanced_cache_tpl/replace-class.tpl';

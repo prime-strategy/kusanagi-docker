@@ -14,10 +14,10 @@ And simple help is run kusanagi-docker help.
 
 ## Recommends or Requires
 ### Recommends OS
-- CentOS7 or later
-- Ubuntu18.04 or later
-- Windows10/Windows11(WSL2 + DockerCE)
-- Windows10/Windows11(WSL2 + Docker Desktop for Windows)
+- CentOS9(and its compatible distributions + Docker CE)
+- Ubuntu18.04 or later(Docker CE)
+- Windows11(WSL2 + Docker CE)
+- Windows11(WSL2 + Docker Desktop for Windows)
 - Mac(with Docker Desktop for mac)
 
 ### Requre commands.
@@ -28,6 +28,6 @@ And simple help is run kusanagi-docker help.
 - grep
 - gettext(gettext.sh, envsubst)
 - curl
-- docker(over 18.0x)
-- docker-compose
+- docker
+- docker compose plugin
 

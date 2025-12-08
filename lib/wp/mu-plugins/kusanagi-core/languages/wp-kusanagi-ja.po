@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP KUSANAGI\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-21T02:42:03+00:00\n"
+"POT-Creation-Date: 2025-04-07T08:56:54+00:00\n"
 "PO-Revision-Date: 2023-11-07 15:45+0900\n"
 "Last-Translator: Prime Strategy Co.,Ltd.\n"
 "Language-Team: Prime Strategy Co.,Ltd.\n"
@@ -11,59 +11,60 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: modules/automatic-updates.php:167 templates/tab-automatic-updates.php:37
-#: templates/tab-automatic-updates.php:133
+#: modules/automatic-updates.php:186 templates/tab-automatic-updates.php:44
+#: templates/tab-automatic-updates.php:140
 msgid "Automatic Updates"
 msgstr "自動更新"
 
-#: modules/automatic-updates.php:203 modules/misc.php:522
-#: modules/page-cache.php:201 modules/theme-switcher.php:61
-#: modules/theme-switcher.php:121 modules/translate-accelerator.php:222
+#: modules/automatic-updates.php:222 modules/misc.php:447
+#: modules/page-cache.php:204 modules/security.php:80
+#: modules/theme-switcher.php:64 modules/theme-switcher.php:124
+#: modules/translate-accelerator.php:242
 msgid "Update settings successfully."
 msgstr "正常に更新されました。"
 
 #. translators: 1: the definition.
-#: modules/automatic-updates.php:233
+#: modules/automatic-updates.php:252
 msgid "Background updates are disabled. Change to define %1$s or comment out the definition."
 msgstr "バックグラウンド更新が無効になっています。%sに変更またはコメントアウトしてください"
 
-#: modules/automatic-updates.php:237
+#: modules/automatic-updates.php:256
 msgid "WP is installing"
 msgstr "WPインストール中"
 
-#: modules/automatic-updates.php:241
+#: modules/automatic-updates.php:260
 msgid "Automatic update is disabled. The constant AUTOMATIC_UPDATER_DISABLED is set."
 msgstr "自動更新は無効です。「AUTOMATIC_UPDATER_DISABLED」定数が設定されています。"
 
-#: modules/automatic-updates.php:245
+#: modules/automatic-updates.php:264
 msgid "Automatic update is disabled. The \"automatic_updater_disabled\" filter is set."
 msgstr "自動更新は無効です。「automatic_updater_disabled」フィルターが設定されています。"
 
-#: modules/automatic-updates.php:250
+#: modules/automatic-updates.php:269
 msgid "Automatic updates are disabled. The \"DISABLE_WP_CRON\" constant is set."
 msgstr "自動更新は無効です。「DISABLE_WP_CRON」定数が設定されています。"
 
 #. translators: %s: defined constant.
-#: modules/automatic-updates.php:263 modules/automatic-updates.php:268
-#: modules/automatic-updates.php:273
+#: modules/automatic-updates.php:282 modules/automatic-updates.php:287
+#: modules/automatic-updates.php:292
 msgid "Add %s to the wp-config.php file."
 msgstr "%s をwp-config.phpファイルに追加してください。"
 
 #. translators: 1: defined constant, 2: login password.
-#: modules/automatic-updates.php:278
+#: modules/automatic-updates.php:297
 msgid "Add %1$s to the wp-config.php file and change %2$s part to login password."
 msgstr "%1$sをwp-config.phpファイルに追加し、%2$s部分をログインパスワードに変更してください。"
 
 #. translators: %s: credential hostname.
-#: modules/automatic-updates.php:296
+#: modules/automatic-updates.php:315
 msgid "Failed to connect to FTP Server %s. If you do not remember your credentials, you should contact your web host."
 msgstr "FTP サーバー  %s への接続に失敗しました。接続情報が思い出せない場合は、ホスティング担当者に問い合わせてください。"
 
-#: modules/misc.php:66
+#: modules/misc.php:67
 msgid "Misc."
 msgstr "その他"
 
-#: modules/page-cache.php:74 templates/tab-home.php:36
+#: modules/page-cache.php:77 templates/tab-home.php:40
 #: templates/tab-page-cache.php:23
 msgid "Page Cache"
 msgstr "ページキャッシュ"
@@ -176,60 +177,64 @@ msgstr "Webサーバ : %1s"
 msgid "Failed to get version information."
 msgstr "バージョン情報取得できません。"
 
+#: modules/security.php:51 templates/tab-security.php:23
+msgid "Security"
+msgstr "セキュリティ"
+
 #: modules/support.php:19
 msgid "Support"
 msgstr "サポート"
 
-#: modules/theme-switcher.php:45 templates/tab-home.php:52
+#: modules/theme-switcher.php:48 templates/tab-home.php:56
 #: templates/tab-theme-switcher.php:7
 msgid "Device Theme Switcher"
 msgstr "デバイス切替"
 
-#: modules/theme-switcher.php:376
+#: modules/theme-switcher.php:379
 msgid "Tablet"
 msgstr "タブレット"
 
-#: modules/theme-switcher.php:377
+#: modules/theme-switcher.php:380
 msgid "Smart Phone"
 msgstr "スマートフォン"
 
-#: modules/theme-switcher.php:693 templates/theme-switcher-content-group.php:20
+#: modules/theme-switcher.php:696 templates/theme-switcher-content-group.php:20
 msgid "Group Name"
 msgstr "グループ名"
 
-#: modules/theme-switcher.php:694 templates/theme-switcher-content-group.php:24
+#: modules/theme-switcher.php:697 templates/theme-switcher-content-group.php:24
 msgid "Theme"
 msgstr "テーマ"
 
-#: modules/theme-switcher.php:695 templates/theme-switcher-content-group.php:48
+#: modules/theme-switcher.php:698 templates/theme-switcher-content-group.php:48
 msgid "Slug"
 msgstr "スラッグ"
 
-#: modules/theme-switcher.php:696 templates/theme-switcher-content-group.php:52
+#: modules/theme-switcher.php:699 templates/theme-switcher-content-group.php:52
 msgid "Priority"
 msgstr "優先度"
 
-#: modules/theme-switcher.php:697
+#: modules/theme-switcher.php:700
 msgid "Devices"
 msgstr "デバイス"
 
-#: modules/theme-switcher.php:817
+#: modules/theme-switcher.php:820
 #: templates/theme-switcher-content-device.php:24
 msgid "Device Name"
 msgstr "デバイス名"
 
-#: modules/theme-switcher.php:818
+#: modules/theme-switcher.php:821
 msgid "Keywords"
 msgstr "キーワード"
 
-#: modules/theme-switcher.php:819
+#: modules/theme-switcher.php:822
 #: templates/theme-switcher-content-device.php:32
 #: templates/theme-switcher-content-list.php:24
 msgid "Group"
 msgstr "グループ"
 
-#: modules/translate-accelerator.php:50 templates/tab-home.php:67
-#: templates/tab-translate-accelerator.php:14
+#: modules/translate-accelerator.php:67 templates/tab-home.php:71
+#: templates/tab-translate-accelerator.php:15
 msgid "Translate Accelerator"
 msgstr "翻訳アクセラレーター"
 
@@ -254,209 +259,209 @@ msgstr "その後、以下のコマンドでプロファイルのKUSANAGIプラ�
 msgid "# kusanagi update plugin profile"
 msgstr "# kusanagi update plugin プロファイル"
 
-#: templates/tab-automatic-updates.php:22
+#: templates/tab-automatic-updates.php:29
 msgid "You don't have permission to update."
 msgstr "アップデートの権限がありません"
 
-#: templates/tab-automatic-updates.php:40
+#: templates/tab-automatic-updates.php:47
 msgctxt "automatic updates"
 msgid "Translations"
 msgstr "翻訳"
 
-#: templates/tab-automatic-updates.php:43
+#: templates/tab-automatic-updates.php:50
 msgctxt "automatic updates"
 msgid "Disable"
 msgstr "無効"
 
-#: templates/tab-automatic-updates.php:44
+#: templates/tab-automatic-updates.php:51
 msgctxt "automatic updates"
 msgid "Enable - Default"
 msgstr "有効 - デフォルト"
 
-#: templates/tab-automatic-updates.php:49
+#: templates/tab-automatic-updates.php:56
 msgctxt "automatic updates"
 msgid "Plugins"
 msgstr "プラグイン"
 
-#: templates/tab-automatic-updates.php:52
-#: templates/tab-automatic-updates.php:62
+#: templates/tab-automatic-updates.php:59
+#: templates/tab-automatic-updates.php:69
 msgctxt "automatic updates"
 msgid "Disable all - KUSANAGI Default"
 msgstr "すべて無効 - KUSANAGIのデフォルト"
 
-#: templates/tab-automatic-updates.php:53
-#: templates/tab-automatic-updates.php:63
+#: templates/tab-automatic-updates.php:60
+#: templates/tab-automatic-updates.php:70
 msgctxt "automatic updates"
 msgid "Set individually - WordPress Default"
 msgstr "個別に設定 -  WordPressのデフォルト"
 
-#: templates/tab-automatic-updates.php:54
-#: templates/tab-automatic-updates.php:64
+#: templates/tab-automatic-updates.php:61
+#: templates/tab-automatic-updates.php:71
 msgctxt "automatic updates"
 msgid "Enable all"
 msgstr "すべて有効"
 
-#: templates/tab-automatic-updates.php:59
+#: templates/tab-automatic-updates.php:66
 msgctxt "automatic updates"
 msgid "Themes"
 msgstr "テーマ"
 
-#: templates/tab-automatic-updates.php:69
+#: templates/tab-automatic-updates.php:76
 msgctxt "automatic updates"
 msgid "WordPress core"
 msgstr "WordPressコア"
 
-#: templates/tab-automatic-updates.php:72
+#: templates/tab-automatic-updates.php:79
 msgctxt "automatic updates"
 msgid "Disable all"
 msgstr "すべて無効"
 
-#: templates/tab-automatic-updates.php:73
+#: templates/tab-automatic-updates.php:80
 msgctxt "automatic updates"
 msgid "Enable minor updates - KUSANAGI Default"
 msgstr "マイナー更新有効 - KUSANAGIのデフォルト"
 
-#: templates/tab-automatic-updates.php:74
+#: templates/tab-automatic-updates.php:81
 msgctxt "automatic updates"
 msgid "Enable major updates - WordPress Default"
 msgstr "メジャー更新有効 - WordPressのデフォルト"
 
-#: templates/tab-automatic-updates.php:79
+#: templates/tab-automatic-updates.php:86
 msgctxt "automatic updates"
 msgid "Automatic update schedule"
 msgstr "自動更新スケジュール"
 
-#: templates/tab-automatic-updates.php:81
+#: templates/tab-automatic-updates.php:88
 msgctxt "automatic updates"
 msgid "Enable schedule settings"
 msgstr "スケジュール設定有効"
 
-#: templates/tab-automatic-updates.php:82
+#: templates/tab-automatic-updates.php:89
 msgctxt "automatic updates"
 msgid "* If this field is unchecked, Automatic updates will be performed with the default schedule."
 msgstr "※有効ではない場合デフォルトのスケジュールで自動更新を行います。"
 
-#: templates/tab-automatic-updates.php:88
+#: templates/tab-automatic-updates.php:95
 msgctxt "automatic updates"
 msgid "Sunday"
 msgstr "日曜日"
 
-#: templates/tab-automatic-updates.php:89
+#: templates/tab-automatic-updates.php:96
 msgctxt "automatic updates"
 msgid "Monday"
 msgstr "月曜日"
 
-#: templates/tab-automatic-updates.php:90
+#: templates/tab-automatic-updates.php:97
 msgctxt "automatic updates"
 msgid "Tuesday"
 msgstr "火曜日"
 
-#: templates/tab-automatic-updates.php:91
+#: templates/tab-automatic-updates.php:98
 msgctxt "automatic updates"
 msgid "Wednesday"
 msgstr "水曜日"
 
-#: templates/tab-automatic-updates.php:92
+#: templates/tab-automatic-updates.php:99
 msgctxt "automatic updates"
 msgid "Thursday"
 msgstr "木曜日"
 
-#: templates/tab-automatic-updates.php:93
+#: templates/tab-automatic-updates.php:100
 msgctxt "automatic updates"
 msgid "Friday"
 msgstr "金曜日"
 
-#: templates/tab-automatic-updates.php:94
+#: templates/tab-automatic-updates.php:101
 msgctxt "automatic updates"
 msgid "Saturday"
 msgstr "土曜日"
 
-#: templates/tab-automatic-updates.php:115
+#: templates/tab-automatic-updates.php:122
 msgid "Automatic updates status of themes and plugins in use"
 msgstr "使用中のテーマとプラグインの自動更新ステータス"
 
-#: templates/tab-automatic-updates.php:119
+#: templates/tab-automatic-updates.php:126
 msgid "To set up individual plugin updates, please go to the %1$s."
 msgstr "個々のプラグインの更新を設定するには、%1$sにアクセスしてください。"
 
-#: templates/tab-automatic-updates.php:119
+#: templates/tab-automatic-updates.php:126
 msgid "Plugins page"
 msgstr "プラグインのページ"
 
-#: templates/tab-automatic-updates.php:125
+#: templates/tab-automatic-updates.php:132
 msgid "To set up individual theme updates, please go to the %1$s."
 msgstr "個々のテーマの更新を設定するには、%1$sにアクセスしてください。"
 
-#: templates/tab-automatic-updates.php:125
+#: templates/tab-automatic-updates.php:132
 msgid "Themes page"
 msgstr "テーマのページ"
 
-#: templates/tab-automatic-updates.php:131
+#: templates/tab-automatic-updates.php:138
 msgid "Name"
 msgstr "名前"
 
-#: templates/tab-automatic-updates.php:132
-#: templates/tab-translate-accelerator.php:26
+#: templates/tab-automatic-updates.php:139
+#: templates/tab-translate-accelerator.php:28
 msgid "Type"
 msgstr "タイプ"
 
-#: templates/tab-automatic-updates.php:145
+#: templates/tab-automatic-updates.php:152
 msgctxt "automatic updates"
 msgid "Enabled"
 msgstr "有効"
 
-#: templates/tab-automatic-updates.php:147
+#: templates/tab-automatic-updates.php:154
 msgctxt "automatic updates"
 msgid "Disabled"
 msgstr "無効"
 
-#: templates/tab-automatic-updates.php:150
+#: templates/tab-automatic-updates.php:157
 msgctxt "automatic updates"
 msgid "Not supported"
 msgstr "サポートされていません"
 
-#: templates/tab-home.php:32
+#: templates/tab-home.php:36
 msgid "Modules"
 msgstr "モジュール"
 
-#: templates/tab-home.php:41
+#: templates/tab-home.php:45
 msgid "<p>Page cache is a function for saving an HTML to display as a temporary data and reusing it in order to improve the WordPress performance.</p>"
 msgstr "<p>ページキャッシュは、WordPressパフォーマンス向上のため、表示するHTMLを一時データとして保存し再利用する機能です。</p>"
 
-#: templates/tab-home.php:47 templates/tab-home.php:63
-#: templates/tab-home.php:78
+#: templates/tab-home.php:51 templates/tab-home.php:67
+#: templates/tab-home.php:82
 msgid "Settings"
 msgstr "設定"
 
-#: templates/tab-home.php:57
+#: templates/tab-home.php:61
 msgid "<p>Device switching is a function to change and optimize a theme to display for mobile terminals such as a smartphone.</p>"
 msgstr "<p>デバイス切替は、スマートフォンなどのモバイル端末に対して表示するテーマを変更し、最適化を図るための機能です。</p>"
 
-#: templates/tab-home.php:72
+#: templates/tab-home.php:76
 msgid "<p>Translate Accelerator makes the translation cache files, and shortens the execution time to display your WordPress site.</p>"
 msgstr "<p>翻訳の読み込みを高速化し、表示までにかかる実行時間を短縮します。</p>"
 
-#: templates/tab-home.php:83
+#: templates/tab-home.php:87
 msgid "Information"
 msgstr "インフォメーション"
 
-#: templates/tab-home.php:84
+#: templates/tab-home.php:88
 msgid "https://kusanagi.tokyo/en/feed/"
 msgstr "https://kusanagi.tokyo/feed/"
 
-#: templates/tab-home.php:85
+#: templates/tab-home.php:90
 msgid "KUSANAGI Tech Column"
 msgstr "KUSANAGI Tech Column"
 
-#: templates/tab-home.php:86
+#: templates/tab-home.php:91
 msgid "https://www.prime-strategy.co.jp/column/feed/"
 msgstr "https://www.prime-strategy.co.jp/column/feed/"
 
-#: templates/tab-home.php:87
+#: templates/tab-home.php:92
 msgid "Events and Seminars"
 msgstr "イベント・セミナー"
 
-#: templates/tab-home.php:88
+#: templates/tab-home.php:93
 msgid "https://www.prime-strategy.co.jp/information-category/event_and_seminars/feed/"
 msgstr "https://www.prime-strategy.co.jp/information-category/event_and_seminars/feed/"
 
@@ -469,8 +474,7 @@ msgid "Enable Image Optimizer"
 msgstr "画像最適化を有効にする"
 
 #: templates/tab-misc.php:30 templates/tab-misc.php:117
-#: templates/tab-misc.php:141 templates/tab-misc.php:155
-#: templates/tab-translate-accelerator.php:21
+#: templates/tab-misc.php:141 templates/tab-translate-accelerator.php:22
 msgid "Enable"
 msgstr "有効"
 
@@ -530,19 +534,15 @@ msgstr "管理バーにパフォーマンスを表示する"
 msgid "Required capability to display performance"
 msgstr "パフォーマンスを表示する権限"
 
-#: templates/tab-misc.php:133 templates/tab-misc.php:136
-msgid "Optimize wp-settings.php"
-msgstr "wp-settings.php の最適化"
-
-#: templates/tab-misc.php:147
+#: templates/tab-misc.php:133
 msgid "Theme Accelerator"
 msgstr "テーマアクセラレーター"
 
-#: templates/tab-misc.php:150
+#: templates/tab-misc.php:136
 msgid "Enable Theme Accelerator"
 msgstr "テーマアクセラレーターの有効化"
 
-#: templates/tab-misc.php:158
+#: templates/tab-misc.php:144
 msgid "Theme Accelerator caches functions that need to be accelerated. At the same time, it will speed up themes that supports FSE."
 msgstr "テーマアクセラレーターは高速化が必要な関数をキャッシュにする機能です。同時にFSE対応のテーマに対しても高速化を実施します。"
 
@@ -622,6 +622,31 @@ msgstr "advanced-cache.phpを生成する"
 #: templates/tab-page-cache.php:95
 msgid "You do not have a write permission to write in advanced-cache.php or %1s. To regenerate advanced-cache.php, please set the write permission."
 msgstr "advanced-cache.php、または %1s に書き込み権限がありません。advanced-cache.phpの再生成を行うには、書き込み権限を設定してください。"
+
+#: templates/tab-security.php:26
+msgid "XML-RPC"
+msgstr "XML-RPC"
+
+#: templates/tab-security.php:29
+msgid "XML-RPC is disabled by KUSANAGI configuration of Network Admin"
+msgstr "XML-RPC機能はサイトネットワーク管理のKUSANAGI設定で無効化されています。"
+
+#: templates/tab-security.php:34 templates/tab-security.php:48
+#, fuzzy
+msgid "Disable"
+msgstr "無効"
+
+#: templates/tab-security.php:40
+msgid "WordPress REST API endpoint for requesting user resources"
+msgstr "WP REST API ユーザーエンドポイント"
+
+#: templates/tab-security.php:43
+msgid "WordPress REST API endpoint for requesting user resources is disabled by KUSANAGI configuration of Network Admin"
+msgstr "WP REST APIのユーザーエンドポイントはサイトネットワーク管理のKUSANAGI設定にて無効化されています。"
+
+#: templates/tab-security.php:55
+msgid "XML-RPM and WordPress REST API endpoint for requesting user resources will be disabled for all Network Sites if you disable in Network Admin Screen. If you want to disable them individually for a Site, you need to configure in the Site Admin Screen you want disable them instead of disabling them in the Network Admin Screen."
+msgstr "サイトネットワーク管理で、XML-RPC、WP REST APIのユーザーエンドポイントを無効化すると、全てのサイトで無効化されます。サイト個別に無効化したい場合は、サイトネットワーク管理では無効化せず、サイトの設定でおこなってください。"
 
 #: templates/tab-support.php:13
 msgid "Documentation"
@@ -705,57 +730,57 @@ msgstr "KUSANAGIにはビジネスユースを目的としたBusiness Editionと
 msgid "Back"
 msgstr "戻る"
 
-#: templates/tab-translate-accelerator.php:17
+#: templates/tab-translate-accelerator.php:18
 msgid "Enable Translate Accelerator"
 msgstr "高速化を有効にする"
 
-#: templates/tab-translate-accelerator.php:29
+#: templates/tab-translate-accelerator.php:31
 msgid "Files"
 msgstr "ファイル"
 
-#: templates/tab-translate-accelerator.php:30
+#: templates/tab-translate-accelerator.php:32
 msgid "Cache directory :"
 msgstr "キャッシュのディレクトリ："
 
-#: templates/tab-translate-accelerator.php:33
+#: templates/tab-translate-accelerator.php:35
 msgid "APC"
 msgstr "APC"
 
-#: templates/tab-translate-accelerator.php:39
+#: templates/tab-translate-accelerator.php:42
 msgid "Translated text displayed in your site"
 msgstr "サイトに表示される翻訳された文章"
-
-#: templates/tab-translate-accelerator.php:42
-#: templates/tab-translate-accelerator.php:54
-#: templates/tab-translate-accelerator.php:66
-msgid "Disable translation"
-msgstr "翻訳を停止"
-
-#: templates/tab-translate-accelerator.php:43
-#: templates/tab-translate-accelerator.php:55
-#: templates/tab-translate-accelerator.php:67
-msgid "Use language file's for translation"
-msgstr "通常翻訳"
 
 #: templates/tab-translate-accelerator.php:45
 #: templates/tab-translate-accelerator.php:57
 #: templates/tab-translate-accelerator.php:69
+msgid "Disable translation"
+msgstr "翻訳を停止"
+
+#: templates/tab-translate-accelerator.php:46
+#: templates/tab-translate-accelerator.php:58
+#: templates/tab-translate-accelerator.php:70
+msgid "Use language file's for translation"
+msgstr "通常翻訳"
+
+#: templates/tab-translate-accelerator.php:48
+#: templates/tab-translate-accelerator.php:60
+#: templates/tab-translate-accelerator.php:72
 msgid "Enable cache"
 msgstr "キャッシュを使用"
 
-#: templates/tab-translate-accelerator.php:51
+#: templates/tab-translate-accelerator.php:54
 msgid "Login/signup page translation"
 msgstr "ログイン/サインアップ画面の翻訳"
 
-#: templates/tab-translate-accelerator.php:63
+#: templates/tab-translate-accelerator.php:66
 msgid "Admin pages translation"
 msgstr "管理画面の翻訳"
 
-#: templates/tab-translate-accelerator.php:76
+#: templates/tab-translate-accelerator.php:80
 msgid "Delete cache"
 msgstr "キャッシュを削除"
 
-#: templates/tab-translate-accelerator.php:77
+#: templates/tab-translate-accelerator.php:81
 msgid "Force deletion of all cache"
 msgstr "キャッシュの強制削除を行う"
 
@@ -783,3 +808,4 @@ msgstr "新規追加"
 #: templates/theme-switcher-content-list.php:26
 msgid "Device"
 msgstr "デバイス"
+

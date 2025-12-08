@@ -6,11 +6,10 @@ KUSANAGI Runs on Docker (RoD) provides the functionality of KUSANAGI using Docke
 
 The following operating systems have been confirmed for use with RoD.
 
-- CentOS7 or later
-- Ubuntu18.04 or later
-- Windows10(WSL+Docker for Windows. NOT Recommended)
-- Windows10/Windows11(WSL2+Docker for Windows.)
-- Windows10/Windows11(WSL2+Docker CE)
+- CentOS(and its compatible distributions) 9 or later
+- Ubuntu18.04 or later(Docker CE)
+- Windows11/Windows11(WSL2+Docker for Windows.)
+- Windows11/Windows11(WSL2+Docker CE)
 - Mac(with Docker for mac)
 
 The software required to use RoD will be the following.
@@ -24,8 +23,8 @@ The software required to use RoD will be the following.
 - envsubst
 - curl
 - python3
-- docker(18.0x and above)
-- docker-compose
+- docker
+- docker compose plugin(docker-compose is now deprecated)
 
 
 ## Installing the KUSANAGI RoD
@@ -94,10 +93,10 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
     [--nginx1.28|--nginx128|
      --nginx1.29|--nginx129|--nginx=version]
     [--http-port port][--tls-port port]
-    [--php8.1|--php81|
-     --php8.2|--php82|
+    [--php8.2|--php82|
      --php8.3|--php83|
-     --php8.3|--php84|--php=version]
+     --php8.3|--php84|
+     --php8.5|--php85|--php=version]
     [--mariadb10.6|--mariadb106|
      --mariadb10.11|--mariadb1011|
      --mariadb11.4|--mariadb114]
@@ -188,10 +187,10 @@ The options for the provision subcommand are as follows.
 | --nginx=versions                          |                                  | When using nginx, you can use any version published on Docker Hub. Versions prior to 1.25 can be specified, but are not already updated, so use at your own risk. |
 | --http-port num                           | HTTP_PORT                        | Specifies the http port number to be port-forwarded to the host. If not specified, 80 will be specified. If you select a port that is already in use, the build will fail. |
 | --tls-port num                            | HTTP_TLS_PORT                    | Specifies the https port number to be port-forwarded to the host. If not specified, 443 will be specified. If you select a port that is already in use, the build will fail. |
+| --php8.5/--php85                          |                                  | Use kusanagi-php:8.5.x. WordPress versions prior to 6.9 are not supported.|
 | --php8.4/--php84                          |                                  | Use kusanagi-php:8.4.x.                                      |
 | --php8.3/--php83                          |                                  | Use kusanagi-php:8.3.x. If php version not specified, kusanagi-php:8.3.x will be used. |
 | --php8.2/--php82                          |                                  | Use kusanagi-php:8.2.x.                                      |
-| --php8.1/--php81                          |                                  | Use kusanagi-php:8.1.x. |
 | --php=version                             |                                  | Use any version of PHP that is available on DockerHub.       |
 | --mariadb11.8/--mariadb118                |                                  | Use mariadb:11.8.x-noble as the DB.                         |
 | --mariadb11.4/--mariadb114                |                                  | Use mariadb:11.4.x-noble as the DB.                         |
@@ -362,12 +361,10 @@ To use the recommended version (the current latest version), please run $HOME/.k
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | [kusanagi-nginx](https://hub.docker.com/r/primestrategy/kusanagi-nginx) | nginx image (recommended is the latest version of mainline). |
 | [kusanagi-httpd](https://hub.docker.com/r/primestrategy/kusanagi-httpd) | httpd(Apache 2.4) image.                                     |
-| [kusanagi-php](https://hub.docker.com/r/primestrategy/kusanagi-php) | PHP-FPM image (recommended is the latest version of 7.4)     |
+| [kusanagi-php](https://hub.docker.com/r/primestrategy/kusanagi-php) | PHP-FPM image (recommended is the latest version of 8.3)     |
 | [kusanagi-config](https://hub.docker.com/r/primestrategy/kusanagi-config) | Image for kusanagi config command                            |
 | [wordpress:cli](https://hub.docker.com/_/wordpress)          | Config command image for building WordPress                  |
 | [kusanagi-ftpd](https://hub.docker.com/r/primestrategy/kusanagi-ftpd) | Container image to run vsftpd, used only when building WordPress. |
 | [mariadb](https://hub.docker.com/_/mariadb)                  | MariaDB image                                                  |
-| [postgresql](https://hub.docker.com/_/postgres)              | Postgresql image                                             |
-| [certbot](https://hub.docker.com/r/certbot/certbot)          | Certbot image                                                |
 
 
