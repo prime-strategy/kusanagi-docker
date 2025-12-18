@@ -13,7 +13,7 @@ export TEXTDOMAINDIR="$LIBDIR/locale"
 . $(which gettext.sh)
 
 function k_compose() {
-	"$DOCKER_COMPOSE" "$@"
+	$DOCKER_COMPOSE "$@"
 }
 
 function k_configcmd() {
