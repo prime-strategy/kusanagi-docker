@@ -89,7 +89,9 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
      --drupal|--drupal10|--drupal11]
     [--nginx|--httpd]
     [--nginx1.28|--nginx128|
-     --nginx1.29|--nginx129|--nginx=version]
+    [--nginx1.29|--nginx129|
+    [--nginx1.30|--nginx130|
+     --nginx1.31|--nginx131|--nginx=version]
     [--http-port port][--tls-port port]
     [-php8.2|--php82|
      --php8.3|--php83|
@@ -179,7 +181,9 @@ provision サブコマンドのオプションは以下のとおりです。
 | --httpd                                   |                                  | httpd(Apache 2.4)を使用します。--nginxと同時に指定できません。 |
 | --nginx                                   |                                  | nginxを使用します。--httpdと同時に指定できません。無指定時はnginxが使用されます。 |
 | --nginx1.28/--nginx128                    |                                  | nginx使用時に、kusanagi-nginx:1.28.x を使用します。 |
-| --nginx1.29/--nginx129                    |                                  | nginx使用時に、kusanagi-nginx:1.29.x を使用します。無指定時はkusanagi-nginx:1.29.xを使用します。 |
+| --nginx1.29/--nginx129                    |                                  | nginx使用時に、kusanagi-nginx:1.29.x を使用します。 |
+| --nginx1.30/--nginx130                    |                                  | nginx使用時に、kusanagi-nginx:1.30.x を使用します。 |
+| --nginx1.31/--nginx131                    |                                  | nginx使用時に、kusanagi-nginx:1.31.x を使用します。無指定時はkusanagi-nginx:1.31.xを使用します。 |
 | --nginx=version                           |                                  | nginx使用時に、Docker Hub に公開されている任意のバージョンを使用します。1.25以前のバージョンを指定できますが、すでに更新していないため、自己責任でご使用ください。 |
 | --http-port num                           | HTTP_PORT                        | ホストにポートフォワードするhttpポート番号を指定します。無指定時は80が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |
 | --tls-port num                            | HTTP_TLS_PORT                    | ホストにポートフォワードするhttpsポート番号を指定します。無指定時は443が指定されます。使用済みのポートを選択した場合、構築に失敗します。 |

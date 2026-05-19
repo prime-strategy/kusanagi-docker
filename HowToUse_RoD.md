@@ -91,7 +91,9 @@ provision [options] --fqdn domainname target(like kusanagi.tokyo)
      --drupal|--drupal10|--drupal11]
     [--nginx|--httpd]
     [--nginx1.28|--nginx128|
-     --nginx1.29|--nginx129|--nginx=version]
+    [--nginx1.29|--nginx129|
+    [--nginx1.30|--nginx130|
+     --nginx1.31|--nginx131|--nginx=version]
     [--http-port port][--tls-port port]
     [--php8.2|--php82|
      --php8.3|--php83|
@@ -183,7 +185,10 @@ The options for the provision subcommand are as follows.
 | --httpd                                   |                                  | Use httpd (Apache 2.4). Cannot be specified at the same time as the --nginx option. |
 | --nginx                                   |                                  | Use nginx. Cannot be specified at the same time as the --httpd option. If not specified, nginx will be used. |
 | --nginx1.28/--nginx128                    |                                  | When using nginx, kusanagi-nginx:1.28.x is used.             |
-| --nginx1.29/--nginx129                    |                                  | When nginx is used, kusanagi-nginx:1.29.x is used. When not specified, kusanagi-nginx:1.29.x is used. |
+| --nginx1.28/--nginx128                    |                                  | When using nginx, kusanagi-nginx:1.28.x is used.             |
+| --nginx1.29/--nginx129                    |                                  | When using nginx, kusanagi-nginx:1.29.x is used.             |
+| --nginx1.30/--nginx130                    |                                  | When using nginx, kusanagi-nginx:1.30.x is used.             |
+| --nginx1.31/--nginx131                    |                                  | When nginx is used, kusanagi-nginx:1.31.x is used. When not specified, kusanagi-nginx:1.31.x is used. |
 | --nginx=versions                          |                                  | When using nginx, you can use any version published on Docker Hub. Versions prior to 1.25 can be specified, but are not already updated, so use at your own risk. |
 | --http-port num                           | HTTP_PORT                        | Specifies the http port number to be port-forwarded to the host. If not specified, 80 will be specified. If you select a port that is already in use, the build will fail. |
 | --tls-port num                            | HTTP_TLS_PORT                    | Specifies the https port number to be port-forwarded to the host. If not specified, 443 will be specified. If you select a port that is already in use, the build will fail. |

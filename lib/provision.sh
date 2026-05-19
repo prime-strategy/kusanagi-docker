@@ -449,6 +449,14 @@ function k_provision () {
 			'--dbsystem')
 				OPT_DBSYSTEM=1
 				;;
+			--nginx1.31|--nginx131)
+				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX131_IMAGE
+				OPT_NGINX=1
+				;;
+			--nginx1.30|--nginx130)
+				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX130_IMAGE
+				OPT_NGINX=1
+				;;
 			--nginx1.29|--nginx129)
 				KUSANAGI_NGINX_IMAGE=$KUSANAGI_NGINX129_IMAGE
 				OPT_NGINX=1

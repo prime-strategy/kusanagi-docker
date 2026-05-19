@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kusanagi-docker 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-17 13:22+0900\n"
+"POT-Creation-Date: 2026-05-19 15:05+0900\n"
 "PO-Revision-Date: 2019-02-11 00:00+0900\n"
 "Last-Translator: Satoru MIYAZAKI<satoru@prime-strategy.co.jp>\n"
 "Language-Team: Satoru MIYAZAKI<satoru@prime-strategy.co.jp>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: lib/c5.sh:55 lib/drupal.sh:56 lib/lamp.sh:53 lib/lamp.sh:65 lib/wp.sh:112
+#: lib/c5.sh:55 lib/drupal.sh:56 lib/lamp.sh:53 lib/lamp.sh:65 lib/wp.sh:114
 #, sh-format
 msgid "could not connect to."
 msgstr "へ接続することができません。"
@@ -26,57 +26,57 @@ msgstr "へ接続することができません。"
 msgid "Provision Concrete5"
 msgstr "Concrete5 を配置します"
 
-#: lib/config.sh:15 lib/config.sh:21
+#: lib/config.sh:14 lib/config.sh:20
 #, sh-format
 msgid "WordPress is not provision."
 msgstr "WordPressがプロビジョンされていません。"
 
-#: lib/config.sh:24
+#: lib/config.sh:23
 #, sh-format
 msgid "bcache is on"
 msgstr "bcache は有効です"
 
-#: lib/config.sh:26
+#: lib/config.sh:25
 #, sh-format
 msgid "bcache is off"
 msgstr "bcache は無効です"
 
-#: lib/config.sh:28
+#: lib/config.sh:27
 #, sh-format
 msgid "bcache is clear"
 msgstr "bcache をクリアしました"
 
-#: lib/config.sh:44 lib/config.sh:64
+#: lib/config.sh:42 lib/config.sh:62
 #, sh-format
 msgid "fcache is on"
 msgstr "fcache は有効です"
 
-#: lib/config.sh:50 lib/config.sh:66
+#: lib/config.sh:48 lib/config.sh:64
 #, sh-format
 msgid "fcache is off"
 msgstr "fcache は無効です"
 
-#: lib/config.sh:55
+#: lib/config.sh:53
 #, sh-format
 msgid "fcache can not clear"
 msgstr "fcache をクリアできませんでした"
 
-#: lib/config.sh:58
+#: lib/config.sh:56
 #, sh-format
 msgid "fcache is clear"
 msgstr "fcache をクリアしました"
 
-#: lib/config.sh:83 lib/config.sh:94
+#: lib/config.sh:80 lib/config.sh:91
 #, sh-format
 msgid "naxsi is on"
 msgstr "naxsi は有効です"
 
-#: lib/config.sh:89 lib/config.sh:96
+#: lib/config.sh:86 lib/config.sh:93
 #, sh-format
 msgid "naxsi is off"
 msgstr "naxsi は無効です"
 
-#: lib/config.sh:256 lib/ssl.sh:16
+#: lib/config.sh:249 lib/ssl.sh:16
 #, sh-format
 msgid "is unknown subcommand."
 msgstr "無効なサブコマンドです"
@@ -86,275 +86,300 @@ msgstr "無効なサブコマンドです"
 msgid "Provision Drupal"
 msgstr "Drupal を配置します"
 
-#: lib/functions.sh:143
+#: lib/functions.sh:144
 #, sh-format
 msgid "provision [options] --fqdn domainname target(like kusanagi.tokyo)"
 msgstr ""
 
-#: lib/functions.sh:144
+#: lib/functions.sh:145
 #, sh-format
 msgid "[--wp|--wordpress|--WordPress [WPOPTION]|"
 msgstr ""
 
-#: lib/functions.sh:145
+#: lib/functions.sh:146
 #, sh-format
 msgid "WPOPTION:"
 msgstr ""
 
-#: lib/functions.sh:146
+#: lib/functions.sh:147
 #, sh-format
 msgid " --wplang lang(like en_US, ja)]"
 msgstr ""
 
-#: lib/functions.sh:147
+#: lib/functions.sh:148
 #, sh-format
 msgid " [--admin-user admin] [--admin-pass pass] [--admin-email email]"
 msgstr ""
 
-#: lib/functions.sh:148
+#: lib/functions.sh:149
 #, sh-format
 msgid " [--wp-title title] [--kusanagi-pass pass] [--noftp|--no-ftp] |"
 msgstr ""
 
-#: lib/functions.sh:149
+#: lib/functions.sh:150
 #, sh-format
 msgid " --lamp|--c5|--concrete5|--concrete|"
 msgstr ""
 
-#: lib/functions.sh:150
-#, sh-format
-msgid " --drupal|--drupal9|--drupal10]"
-msgstr ""
-
 #: lib/functions.sh:151
 #, sh-format
-msgid "[--nginx|--httpd]"
+msgid " --durupal|--drupal10|--drupal11]"
 msgstr ""
 
 #: lib/functions.sh:152
 #, sh-format
-msgid "[--nginx1.24|--nginx124|"
+msgid "[--nginx|--httpd]"
 msgstr ""
 
 #: lib/functions.sh:153
 #, sh-format
-msgid " --nginx1.25|--nginx125|--nginx=version]"
+msgid " --nginx1.28|--nginx128|"
 msgstr ""
 
 #: lib/functions.sh:154
 #, sh-format
-msgid "[--http-port port][--tls-port port]"
+msgid " --nginx1.29|--nginx129|"
 msgstr ""
 
 #: lib/functions.sh:155
 #, sh-format
-msgid "[--php8.1|--php81|"
+msgid " --nginx1.30|--nginx130|"
 msgstr ""
 
 #: lib/functions.sh:156
 #, sh-format
-msgid " --php8.2|--php82|--php=version]"
+msgid " --nginx1.31|--nginx131|--nginx=version]"
 msgstr ""
 
 #: lib/functions.sh:157
 #, sh-format
-msgid "[--dbsystem mysql|mariadb]"
+msgid "[--http-port port][--tls-port port]"
 msgstr ""
 
 #: lib/functions.sh:158
 #, sh-format
-msgid "[--mariadb10.5|--mariadb105|"
+msgid " --php8.2|--php82|"
 msgstr ""
 
 #: lib/functions.sh:159
 #, sh-format
-msgid " --mariadb10.6|--mariadb106|"
+msgid " --php8.3|--php83|"
 msgstr ""
 
 #: lib/functions.sh:160
 #, sh-format
-msgid " --mariadb10.11|--mariadb1011]"
+msgid " --php8.4|--php84|"
 msgstr ""
 
 #: lib/functions.sh:161
 #, sh-format
-msgid "[--dbhost host]"
+msgid "[--php8.5|--php85|--php=version]"
 msgstr ""
 
 #: lib/functions.sh:162
 #, sh-format
-msgid "[--dbport port]"
+msgid "[--dbsystem mysql|mariadb]"
 msgstr ""
 
 #: lib/functions.sh:163
 #, sh-format
-msgid "[--dbrootpass pasword"
+msgid " --mariadb10.6|--mariadb106|"
 msgstr ""
 
 #: lib/functions.sh:164
 #, sh-format
-msgid "[--dbname dbname]"
+msgid " --mariadb10.11|--mariadb1011|"
 msgstr ""
 
 #: lib/functions.sh:165
 #, sh-format
-msgid "[--dbuser username]"
+msgid " --mariadb11.4|--mariadb114]"
 msgstr ""
 
 #: lib/functions.sh:166
 #, sh-format
-msgid "[--dbpass password]"
+msgid " --mariadb11.8|--mariadb118]"
+msgstr ""
+
+#: lib/functions.sh:167
+#, sh-format
+msgid "[--dbhost host]"
+msgstr ""
+
+#: lib/functions.sh:168
+#, sh-format
+msgid "[--dbport port]"
 msgstr ""
 
 #: lib/functions.sh:169
 #, sh-format
-msgid "config command "
+msgid "[--dbrootpass pasword"
 msgstr ""
 
 #: lib/functions.sh:170
 #, sh-format
-msgid "bcache [on|off]"
+msgid "[--dbname dbname]"
 msgstr ""
 
 #: lib/functions.sh:171
 #, sh-format
-msgid "fcache [on|off]"
+msgid "[--dbuser username]"
 msgstr ""
 
 #: lib/functions.sh:172
 #, sh-format
-msgid "pull"
-msgstr ""
-
-#: lib/functions.sh:173
-#, sh-format
-msgid "push"
-msgstr ""
-
-#: lib/functions.sh:174
-#, sh-format
-msgid "dbdump [file]"
+msgid "[--dbpass password]"
 msgstr ""
 
 #: lib/functions.sh:175
 #, sh-format
-msgid "dbrestore [file]"
+msgid "config command "
 msgstr ""
 
 #: lib/functions.sh:176
 #, sh-format
-msgid "backup"
+msgid "bcache [on|off]"
 msgstr ""
 
 #: lib/functions.sh:177
 #, sh-format
-msgid "restore"
+msgid "fcache [on|off]"
 msgstr ""
 
-#: lib/functions.sh:178 lib/functions.sh:187
+#: lib/functions.sh:178
 #, sh-format
-msgid "[--help|help]"
+msgid "pull"
+msgstr ""
+
+#: lib/functions.sh:179
+#, sh-format
+msgid "push"
+msgstr ""
+
+#: lib/functions.sh:180
+#, sh-format
+msgid "dbdump [file]"
 msgstr ""
 
 #: lib/functions.sh:181
 #, sh-format
-msgid "ssl [options]"
+msgid "dbrestore [file]"
 msgstr ""
 
 #: lib/functions.sh:182
 #, sh-format
-msgid "[--cert file --key file]"
+msgid "backup"
 msgstr ""
 
 #: lib/functions.sh:183
 #, sh-format
+msgid "restore"
+msgstr ""
+
+#: lib/functions.sh:184 lib/functions.sh:193
+#, sh-format
+msgid "[--help|help]"
+msgstr ""
+
+#: lib/functions.sh:187
+#, sh-format
+msgid "ssl [options]"
+msgstr ""
+
+#: lib/functions.sh:188
+#, sh-format
+msgid "[--cert file --key file]"
+msgstr ""
+
+#: lib/functions.sh:189
+#, sh-format
 msgid "[--redirect|--noredirect]"
-msgstr ""
-
-#: lib/functions.sh:184
-#, sh-format
-msgid "[--hsts  [on|off]]"
-msgstr ""
-
-#: lib/functions.sh:185
-#, sh-format
-msgid "[--oscp  [on|off]]"
-msgstr ""
-
-#: lib/functions.sh:186
-#, sh-format
-msgid "[--ct  [on|off]]"
 msgstr ""
 
 #: lib/functions.sh:190
 #, sh-format
+msgid "[--hsts  [on|off]]"
+msgstr ""
+
+#: lib/functions.sh:191
+#, sh-format
+msgid "[--oscp  [on|off]]"
+msgstr ""
+
+#: lib/functions.sh:192
+#, sh-format
+msgid "[--ct  [on|off]]"
+msgstr ""
+
+#: lib/functions.sh:196
+#, sh-format
 msgid "remove [-y] [target]"
 msgstr ""
 
-#: lib/functions.sh:193
+#: lib/functions.sh:199
 #, sh-format
 msgid "Invalid Parameters. Try 'kusanagi -h'"
 msgstr ""
 
-#: lib/functions.sh:213
+#: lib/functions.sh:219
 #, sh-format
 msgid "not found."
 msgstr "見つかりません"
 
-#: lib/functions.sh:222
+#: lib/functions.sh:228
 #, sh-format
 msgid "TARGET has not been set."
 msgstr "TARGET が指定されていません"
 
-#: lib/functions.sh:250 lib/functions.sh:278
+#: lib/functions.sh:249
 #, sh-format
 msgid "is not found."
 msgstr "見つかりません"
 
-#: lib/functions.sh:296
+#: lib/functions.sh:267
 #, sh-format
 msgid "service not found."
 msgstr "サービスが見つかりません。"
 
-#: lib/functions.sh:329 lib/functions.sh:332 lib/functions.sh:335
-#: lib/provision.sh:684
+#: lib/functions.sh:298 lib/functions.sh:301 lib/functions.sh:304
+#: lib/provision.sh:693
 #, sh-format
 msgid "is not implemented."
 msgstr "実装されていません。"
 
-#: lib/functions.sh:344 lib/functions.sh:354 lib/functions.sh:364
+#: lib/functions.sh:313 lib/functions.sh:323 lib/functions.sh:333
 #: lib/provision.sh:54 lib/provision.sh:65 lib/provision.sh:75
 #: lib/provision.sh:84 lib/provision.sh:99 lib/provision.sh:109
 #: lib/provision.sh:119 lib/provision.sh:130 lib/provision.sh:140
 #: lib/provision.sh:149 lib/provision.sh:160 lib/provision.sh:171
-#: lib/provision.sh:181 lib/provision.sh:294 lib/provision.sh:298
-#: lib/provision.sh:305 lib/provision.sh:311 lib/provision.sh:317
-#: lib/provision.sh:325
+#: lib/provision.sh:181 lib/provision.sh:290 lib/provision.sh:294
+#: lib/provision.sh:301 lib/provision.sh:307 lib/provision.sh:313
+#: lib/provision.sh:321
 #, sh-format
 msgid "option:"
 msgstr "オプション:"
 
-#: lib/functions.sh:344
+#: lib/functions.sh:313
 #, sh-format
 msgid "file not found."
 msgstr "ファイルが見つかりません。"
 
-#: lib/functions.sh:354 lib/provision.sh:75
+#: lib/functions.sh:323 lib/provision.sh:75
 #, sh-format
 msgid "please input valid email address."
 msgstr "有効なEメールアドレスを指定してください。"
 
-#: lib/functions.sh:364
+#: lib/functions.sh:333
 #, sh-format
 msgid "please input on/off."
 msgstr "onかoffを指定してください。"
 
-#: lib/functions.sh:384
+#: lib/functions.sh:353
 #, sh-format
 msgid "Done."
 msgstr "完了しました。"
 
-#: lib/functions.sh:387
+#: lib/functions.sh:356
 #, sh-format
 msgid "Failed."
 msgstr "失敗しました。"
@@ -391,7 +416,7 @@ msgstr "データベースユーザ名を指定してください。3～16文字
 
 #: lib/provision.sh:130
 #, sh-format
-msgid "Enter password for database user '$USER'. USE [a-zA-Z0-9.!#%+_-] 8 characters minimum."
+msgid "Enter password for database user $USER. USE [a-zA-Z0-9.!#%+_-] 8 characters minimum."
 msgstr "データベースユーザ'$USER'のパスワードを指定してください。8文字以上の[a-zA-Z0-9.!#%+_-] の文字列が使用できます。"
 
 #: lib/provision.sh:140
@@ -404,7 +429,7 @@ msgstr "WordPressの管理者ユーザを指定してください。4文字以�
 msgid "can not be specified with another db system."
 msgstr "他のDBと共に指定することは出来ません。"
 
-#: lib/provision.sh:156 lib/provision.sh:294
+#: lib/provision.sh:156 lib/provision.sh:290
 #, sh-format
 msgid "not implemented."
 msgstr "実装されていません。"
@@ -424,56 +449,49 @@ msgstr "WordPress $USER のパスワードを指定してください。8文字�
 msgid "Enter Title for for WordPress. USE 1 characters minimum."
 msgstr "WordPressのタイトルを指定してください。1文字以上の文字列が使用できます。"
 
-#: lib/provision.sh:298 lib/provision.sh:305 lib/provision.sh:311
-#: lib/provision.sh:317 lib/provision.sh:325
+#: lib/provision.sh:294 lib/provision.sh:301 lib/provision.sh:307
+#: lib/provision.sh:313 lib/provision.sh:321
 #, sh-format
 msgid "can not specified with another application."
 msgstr "他のアプリケーションと共に指定することは出来ません。"
 
-#: lib/provision.sh:504 lib/ssl.sh:105
+#: lib/provision.sh:516 lib/ssl.sh:105
 #, sh-format
 msgid "Cannot use option"
 msgstr "このオプションは使用できません。"
 
-#: lib/provision.sh:521
+#: lib/provision.sh:533
 #, sh-format
 msgid "option --nginx and --httpd is can not specify both at the same time."
 msgstr "オプション--nginxと--httpdを同時に指定することは出来ません。"
 
-#: lib/provision.sh:527
+#: lib/provision.sh:539
 #, sh-format
 msgid "Target name requires [a-zA-Z0-9._-] 3-24 characters."
 msgstr "ターゲット名には3～24文字の[a-za-z0-9._-]の文字列を指定してください。"
 
-#: lib/provision.sh:538
+#: lib/provision.sh:550
 #, sh-format
 msgid "require option --fqdn for your website. ex) kusanagi.tokyo."
 msgstr "webサイトで使用するホスト名(fqdn)を入力してください。 例) kusanagi.tokyo"
 
-#: lib/ssl.sh:120
+#: lib/ssl.sh:119
 #, sh-format
 msgid "specified in same time."
 msgstr "同時に指定してください"
 
-#: lib/ssl.sh:123
+#: lib/ssl.sh:122
 #, sh-format
 msgid "can not specified in same time."
 msgstr "同時に指定することは出来ません。"
 
-#: lib/wp.sh:117
+#: lib/wp.sh:119
 #, sh-format
 msgid "Waiting MySQL init process"
 msgstr "MYSQLの初期化を待っています"
 
-#: lib/wp.sh:141
+#: lib/wp.sh:143
 #, sh-format
 msgid "Provision WordPress"
 msgstr "WordPressを配置します"
 
-#, sh-format
-#~ msgid "Drupal 7/8 can deploy only php7.4."
-#~ msgstr "drupal 7/8 は、php7.4でのみデプロイできます。"
-
-#, sh-format
-#~ msgid "Waiting HTTPD init process"
-#~ msgstr "HTTPDの初期化を待っています"

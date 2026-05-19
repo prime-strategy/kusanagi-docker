@@ -69,7 +69,9 @@ KUSANAGILIBDIR=$KUSANAGIDIR/lib
 cat <<EOF > ${KUSANAGILIBDIR:-.}/image_versions
 KUSANAGI_NGINX128_IMAGE=${PS}-nginx:$(k_version nginx 1.28)
 KUSANAGI_NGINX129_IMAGE=${PS}-nginx:$(k_version nginx 1.29)
-KUSANAGI_NGINX_IMAGE=${PS}-nginx:$(k_version nginx 1.29)
+KUSANAGI_NGINX130_IMAGE=${PS}-nginx:$(k_version nginx 1.30)
+KUSANAGI_NGINX131_IMAGE=${PS}-nginx:$(k_version nginx 1.31)
+KUSANAGI_NGINX_IMAGE=${PS}-nginx:$(k_version nginx 1.30)
 KUSANAGI_HTTPD_IMAGE=${PS}-httpd:$(k_version httpd)
 KUSANAGI_PHP82_IMAGE=${PS}-php:$(k_version php 8.2)
 KUSANAGI_PHP83_IMAGE=${PS}-php:$(k_version php 8.3)
@@ -85,5 +87,4 @@ KUSANAGI_CONFIG_IMAGE=${PS}-config:$(k_version config)
 KUSANAGI_FTPD_IMAGE=${PS}-ftpd:$(k_version ftpd)
 POSTGRESQL_IMAGE=postgres:$(postgresql_version)
 WPCLI_IMAGE=wordpress:$(wpcli_version)
-CERTBOT_IMAGE=certbot/certbot:$(certbot_version)
 EOF
