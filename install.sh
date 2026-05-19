@@ -2,7 +2,7 @@
 
 function k_version {
 	local _ver=$(git ls-remote https://github.com/prime-strategy/kusanagi-docker | \
-		 awk -F/ '/tags/ {print $3}' | sort | tail -1 )
+		 awk -F/ '/tags/ {print $3}' | sort -V | tail -1 )
 	echo ${_ver:-master}
 }
 
